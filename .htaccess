@@ -1,0 +1,5 @@
+<ifModule mod_headers.c>
+Header set X-Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-eval'; xhr-src *; connect-src *; img-src *; media-src *; options eval-script"
+
+AddType application/x-web-app-manifest+json .webapp
+</ifModule>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" ng-app="podcasts"><!-- readd at some point: manifest="b2gPodcast.appcache" -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width" />
+    <title>Podcast</title>
+    <link rel="stylesheet" href="css/core.css"/>
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+</head>
+<body>
+<!-- TODO: move topBar into it's own partial -->
+<div class="topBar" ng-controller="TopBarCtrl">
+    <div id="pageSwitcher" class="topBarItem" hold="showPageSwitchMenu()" ng-click="changePage()">
+        <i id="pageswitch-back-arrow" class="pageswitch-icon icon-chevron-left ng-cloak" ng-show="showBackLink()"></i>
+        <i id="pageswitch-icon-settings" class="pageswitch-icon next icon-cogs"></i>
+        <i id="pageswitch-icon-feeds" class="pageswitch-icon next1 icon-rss"></i>
+        <i id="pageswitch-icon-queue" class="pageswitch-icon next2 icon-th-list"></i>
+        <i id="pageswitch-icon-info" class="pageswitch-icon icon-info-sign" ng-show="showInfoIcon"></i>
+    </div>
+    <div id="controlButton" class="topBarItem" ng-click="playPause()">
+        <i class="icon-play"></i>
+        <i class="icon-pause"></i>
+        <audio id="audioPlayer"></audio>
+    </div>
+    <div ng-click="currentInfo()" class="topBarItem">
+        <span>{{ nowPlaying.title }}</span>
+        <span ng-show="nowPlaying.duration > 0">
+            <span id="position">{{ nowPlaying.position|time:true }}</span>/<span id="duration">{{ nowPlaying.duration|time }}</span>
+        </span>
+    </div>
+    <div class="fullCurrentInfo topBarMenu" ng-show="showingFullCurrentInfo" ng-cloak>
+        {{ nowPlaying.description }}
+        {{ nowPlaying.date|date }}
+        more information about song playing (description, link to go to this feed, more controls?)
+    </div>
+    <div class="pageSwitchMenu topBarMenu" ng-show="showingPageSwitchMenu" ng-cloak>
+        <ul>
+            <li ng-click="changePage('settings')" class="icon-cogs"> Settings</li>
+            <li ng-click="changePage('feeds')" class="icon-rss"> Feeds</li>
+            <li ng-click="changePage('queue')" class="icon-cogs"> Queue</li>
+            <li ng-click="changePage('info')" class="icon-info-sign"> <span class="normalFont">App Info</span></li>
+        </ul>
+    </div>
+</div>
+
+<div ng-view></div>
+
+<script src="lib/ixDbEz.js" type="text/javascript"></script>
+
+<script src="lib/angular/angular.js"></script>
+<script src="lib/iscroll.js"></script>
+<script src="js/app.js"></script>
+<script src="js/services.js"></script>
+<script src="js/controllers.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+    "name": "Podcast",
+    "version": "0.0.1",
+    "description": "Podcast Manager for Firefox OS",
+    "icons": {
+        "128": "/b2gPodcast/blaIcon128.png"
+    },
+    "launch_path": "/b2gPodcast/index.html",
+    "developer": {
+        "name": "Colin Frei",
+        "url": "http://colinfrei.com"
+    },
+    "permissions": {
+        "storage": { "description": "Allow Podcast to store podcast information for offline use" },
+        "systemXHR": { "description": "Allow Podcast to download podcast information" },
+        "wifi-manage": { "description": "Allow downloading only when connected to Wifi" }
+    },
+    "installs_allowed_from": ["*"],
+    "default_locale": "en"
+}
