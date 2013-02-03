@@ -3,9 +3,9 @@
     "version": "0.0.1",
     "description": "Podcast Manager for Firefox OS",
     "icons": {
-        "128": "/b2gPodcast/blaIcon128.png"
+        "128": "/blaIcon128.png"
     },
-    "launch_path": "/b2gPodcast/index.html",
+    "launch_path": "/index.html",
     "developer": {
         "name": "Colin Frei",
         "url": "http://colinfrei.com"

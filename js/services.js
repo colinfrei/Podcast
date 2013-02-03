@@ -32,6 +32,21 @@ angular.module('podcasts.services', ['podcasts.database'])
             }
         }
     }])
+    .value('queueList', {
+        queue: [],
+        scope: null,
+        init: function(scope) {
+            this.scope = scope;
+            scope.queue = this.queue = [];
+
+        },
+        addToQueue: function(item) {
+            this.queue.push(item);
+            if (typeof this.scope !== "undefined") {
+                this.scope.$apply();
+            }
+        }
+    })
     .service('feedItems', ['db', function(db) {
         return {
             db: db,
@@ -61,10 +76,48 @@ angular.module('podcasts.services', ['podcasts.database'])
                 newFeedItem.date = Date.parse(searchableXml.find('pubDate').text());
                 newFeedItem.description = searchableXml.find('description').text();
                 newFeedItem.audioUrl = searchableXml.find('enclosure').attr('url');
+                newFeedItem.queued = 1;
 
                 this.db.put("feedItem", newFeedItem, undefined, function() {
                     onSuccess(newFeedItem);
                 });
+            },
+            getNextInQueue: function(feedItem) {
+                var tempQueueList = { queue: [], addToQueue: function(item) { this.queue.push(item); } };
+                var nextFeedItem = null;
+                this.listQueue(tempQueueList, function() {
+                    var returnNextValue = false;
+                    angular.forEach(tempQueueList.queue, function(key, value) {
+                        if (returnNextValue) {
+                            nextFeedItem = value;
+                            returnNextValue = false;
+                        }
+                        if (feedItem.id === value.id) {
+                            returnNextValue = true;
+                        }
+                    });
+                });
+
+                return nextFeedItem;
+            },
+            listQueue: function(queueList, done) {
+                this.db.getCursor("feedItem", function(ixDbCursorReq)
+                {
+                    if(typeof ixDbCursorReq !== "undefined") {
+                        ixDbCursorReq.onsuccess = function (e) {
+                            var cursor = ixDbCursorReq.result || e.result;
+                            if (cursor) {
+                                queueList.addToQueue(cursor.value);
+
+                                cursor.continue();
+                            } else {
+                                if (typeof done === 'function') {
+                                    done();
+                                }
+                            }
+                        }
+                    }
+                }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
             },
             list: function($scope) {
                 this.db.getCursor("feedItem", function(ixDbCursorReq)
@@ -210,7 +263,7 @@ angular.module('podcasts.services', ['podcasts.database'])
                         finishSave(newFeed);
                     });
                 }, function() {
-                    console.log('Could not fetch XML for feed, adding just URL for now');
+                    console.error('Could not fetch XML for feed, adding just URL for now');
                     var newFeed = {};
                     newFeed.url = url;
 
@@ -357,7 +410,6 @@ angular.module('podcasts.services', ['podcasts.database'])
                 }
 
                 ngModel.$render = function() {
-                    console.log(ngModel);
                     if (ngModel.$modelValue.value !== '') {
                         ngModel.$viewValue = ngModel.$modelValue.value;
                     }
@@ -446,6 +498,17 @@ angular.module('podcasts.services', ['podcasts.database'])
                     feedItem.position = Math.floor(event.target.currentTime);
                     db.put("feedItem", feedItem);
                 });
+
+                // TODO: add something here for when audio is done to remove from queue and go to next song
+                this.audio.bind('ended', function(event) {
+                    feedItem.queued = 0;
+                    feedItem.position = 0;
+                    db.put("feedItem", feedItem);
+
+                    // start next item
+                    // get next item from queue
+                    play(nextFeedItem, $scope);
+                });
             },
             pause: function() {
                 this.audio[0].pause();
@@ -497,7 +560,6 @@ angular.module('podcasts.services', ['podcasts.database'])
             },
             setBack: function(backPage) {
                 this.backPage = backPage;
-                console.log(this);
             },
             getNextPage: function(current) {
                 var nextPage,
@@ -656,6 +718,7 @@ angular.module('podcasts.database', []).
             ixDbEz.createObjStore("feedItem", "id", true);
             ixDbEz.createIndex("feedItem", "ixGuid", "guid", true);
             ixDbEz.createIndex("feedItem", "ixFeedId", "feedId");
+            ixDbEz.createIndex("feedItem", "ixQueued", "queued");
             ixDbEz.createObjStore("setting", "id", true);
             ixDbEz.createIndex("setting", "ixName", "name", true);
         });

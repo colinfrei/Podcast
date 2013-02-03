@@ -17,9 +17,11 @@
                     <option value="0">none</option>
                 </select>
             </div>
+            <h3>Description</h3>
             <div>
                 {{ feed.summary }}
             </div>
+            <h3>Episodes</h3>
             <div ng-repeat="item in feed.items | orderBy:'date'" class="listItem">
                 <div class="playButton" style="width: 50px; float: right;">
                     <span ng-click="playItem(item.id)"><i ng-class="{hasAudio: item.audio}" class="icon-play"></i></span>

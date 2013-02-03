@@ -38,6 +38,7 @@ function TopLinksCtrl($scope, feeds, feedItems, downloader) {
         newFeedItem.date = 'Date';
         newFeedItem.description = 'Long Description<br /> with HTML <b>and stuff</b>';
         newFeedItem.audioUrl = 'http://example.com/1';
+        newFeedItem.queued = 1;
 
         ixDbEz.put("feedItem", newFeedItem);
 
@@ -50,6 +51,7 @@ function TopLinksCtrl($scope, feeds, feedItems, downloader) {
         newFeedItem.date = 'Date';
         newFeedItem.description = 'Second Long Description<br /> with HTML <b>and stuff</b>';
         newFeedItem.audioUrl = 'http://example.com/2';
+        newFeedItem.queued = 0;
 
         ixDbEz.put("feedItem", newFeedItem);
     };
@@ -66,9 +68,10 @@ function FeedCtrl($scope, $routeParams, feeds, pageSwitcher) {
     pageSwitcher.setBack('feeds');
 }
 
-function QueueListCtrl($scope, $rootScope, $route, pageSwitcher, feedItems, feeds) {
+function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queueList) {
     $scope.queue = [];
-    feedItems.list($scope);
+    queueList.init($scope);
+    feedItems.listQueue(queueList);
 
     $scope.playItem = function(id) {
         feedItems.get(id, function(feedItem) {
@@ -116,7 +119,7 @@ function SettingsCtrl($scope, $route, settings, pageSwitcher) {
                     alert('already Installed');
                     // Already installed
                 } else {
-                    var manifestURL = "http://192.168.100.37/b2gPodcast/manifest.webapp";
+                    var manifestURL = "http://localhost/b2gPodcast/package.manifest";
                     var installApp = navigator.mozApps.install(manifestURL);
 
                     installApp.onsuccess = function(data) {
@@ -183,7 +186,7 @@ function TopBarCtrl($scope, player, pageSwitcher)
     };
 }
 
-function InfoCtrl($scope)
+function InfoCtrl($scope, pageSwitcher)
 {
     pageSwitcher.change('info');
 }
