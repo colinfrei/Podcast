@@ -1,7 +1,7 @@
 'use strict';
 
 /* Services */
-angular.module('podcasts.services', ['podcasts.database'])
+angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
     .service('downloader2', ['$http', '$q', 'xmlParser', function($http, $q, xmlParser) {
         return {
             downloadFile: function(url) {
@@ -141,82 +141,6 @@ angular.module('podcasts.services', ['podcasts.database'])
         return function(scope, element, attrs, feedItems) {
             var scroll = new iScroll(element[0]);
         };
-    })
-    .directive('pullToRefresh', function() {
-        return function(scope, element, attrs, feedItems) {
-            var myScroll,
-                pullDownEl, pullDownOffset;
-
-            pullDownEl = document.getElementById('pullDown');
-            pullDownOffset = pullDownEl.offsetHeight;
-
-            //TODO: get ID from context somehow?
-            myScroll = new iScroll(element[0], {
-                useTransition: true,
-                topOffset: pullDownOffset,
-                onRefresh: function () {
-                    if (pullDownEl.className.match('loading')) {
-                        pullDownEl.className = '';
-                        pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
-                    }
-                },
-                onScrollMove: function () {
-                    if (this.y > 5 && !pullDownEl.className.match('flip')) {
-                        pullDownEl.className = 'flip';
-                        pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Release to refresh...';
-                        this.minScrollY = 0;
-                    } else if (this.y < 5 && pullDownEl.className.match('flip')) {
-                        pullDownEl.className = '';
-                        pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Pull down to refresh...';
-                        this.minScrollY = -pullDownOffset;
-                    }
-                },
-                onScrollEnd: function () {
-                    if (pullDownEl.className.match('flip')) {
-                        pullDownEl.className = 'loading';
-                        pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';
-
-                        scope.downloadItems(function(feedItem, feed) {
-                            if (undefined === feed) {
-                                myScroll.refresh();
-                            } else {
-                                pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading ' + feed.title + '...';
-                            }
-                        });
-                    }
-                }
-            });
-
-            scope.$watch(
-                function() { return scope.queue; },
-                function() { myScroll.refresh(); },
-                true
-            );
-        }
-    })
-    .directive('hold', function() {
-        return function(scope, element, attrs) {
-            var startTime, moved, holdTimer = false;
-            element.bind('touchstart', function(event) {
-                startTime = new Date().getTime();
-
-                clearTimeout(holdTimer);
-                holdTimer = setTimeout(function() {
-                    scope.$eval(attrs.hold);
-                }, 500);
-            });
-            element.bind('touchmove', function() {
-                clearTimeout(holdTimer);
-            });
-            element.bind('touchend', function(event) {
-                if (new Date().getTime() - startTime > 500) {
-                    event.preventDefault();
-                } else {
-                    clearTimeout(holdTimer);
-                    element[0].click();
-                }
-            });
-        }
     })
     .service('feeds', ['db', 'downloader2', 'xmlParser', 'feedItems', function(db, downloader2, xmlParser, feedItems) {
         return {
@@ -466,7 +390,7 @@ angular.module('podcasts.services', ['podcasts.database'])
             }
         }
     }])
-    .service('player', ['db', function(db) {
+    .service('player', ['db', '$timeout', function(db, $timeout) {
         return {
             db: db,
             audio: angular.element(document.getElementById('audioPlayer')),
@@ -520,7 +444,7 @@ angular.module('podcasts.services', ['podcasts.database'])
                 this.nowPlaying.title = feedItem.title;
                 var audio = this.audio[0],
                     player = this;
-                setTimeout(function() {
+                $timeout(function() {
                     player.nowPlaying.duration = audio.duration;
                 }, 100);
                 this.nowPlaying.feedItem = feedItem;
