@@ -76,7 +76,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                 newFeedItem.date = Date.parse(searchableXml.find('pubDate').text());
                 newFeedItem.description = searchableXml.find('description').text();
                 newFeedItem.audioUrl = searchableXml.find('enclosure').attr('url');
-                newFeedItem.queued = 1;
+                newFeedItem.queued = 1; //TODO: maybe allow not adding items in a feed to the queue - would then need to check for that here
 
                 this.db.put("feedItem", newFeedItem, undefined, function() {
                     onSuccess(newFeedItem);
@@ -492,23 +492,25 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
             db: db,
             http: $http,
             settings: settings,
-            allowedToDownload: function(result) {
+            allowedToDownload: function(callback) {
                 settings.get('downloadOnWifi', function(setting) {
                     if (setting.value) {
-                        // check if we're on wifi
-                        result(false);
+                        //TODO: check if we're on wifi
+                        callback(false);
                     } else {
-                        result(true);
+                        callback(true);
                     }
                 }, function() {
-                    result(true); // Default value is "allowed" - maybe change this?
+                    callback(true); // Default value is "allowed" - maybe change this?
                 });
             },
-            downloadAll: function() {
+            downloadAll: function(silent) {
                 var downloader = this;
                 this.allowedToDownload(function(value) {
                     if (!value) {
-                        alert('not Downloading because not on WiFi');
+                        if (typeof silent !== 'undefined' && !silent) {
+                            alert('not Downloading because not on WiFi');
+                        }
                     } else {
                         var itemsToDownload = [];
                         downloader.db.getCursor("feedItem", function(ixDbCursorReq)
@@ -540,11 +542,20 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
 
                 this.http.get(item.audioUrl, {'responseType': 'blob'}).success(function(data) {
                     item.audio = data;
+                    item.duration = this.getAudioLength(data);
 
                     db.put("feedItem", item);
 
                     downloader.downloadFiles(itemsToDownload);
                 });
+            },
+            getAudioLength: function(audio) {
+                var tmpAudio = new Audio();
+                tmpAudio.autoplay = false;
+                tmpAudio.muted = true;
+                tmpAudio.src = URL.createObjectURL(audio);
+
+                return tmpAudio.duration;
             }
         };
     }])
@@ -612,12 +623,17 @@ angular.module('podcasts.database', [])
     .value('db', ixDbEz);
 
 angular.module('podcasts.updater', [])
-    .run(function($timeout) {
+    .run(['$timeout', 'update', function($timeout, update) {
         var checkFeeds = function() {
-            console.log('TODO: trigger download here');
+            update.update();
             $timeout(checkFeeds, 1800000); // run every half an hour
         };
 
         checkFeeds();
-    })
+    }])
+    .service('update', ['downloader', function(downloader) {
+        return {
+            update: function() { downloader.downloadAll(true); }
+        }
+    }])
 ;

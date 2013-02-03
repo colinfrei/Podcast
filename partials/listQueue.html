@@ -9,7 +9,7 @@
             </div>
             <div class="feedItemContent">
                 <span class="feedItemTitle">{{ feedItem.title }}</span>
-                {{ feedItem.date | timeAgo }}
+                {{ feedItem.date | timeAgo }}<span ng-show="feedItem.duration">, {{ feedItem.duration }}</span>
             </div>
         </div>
         <div ng-hide="queue.length" class="pullDownMessage">
