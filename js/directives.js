@@ -75,4 +75,45 @@ angular.module('podcast.directives', [])
             });
         }
     }])
+    .directive('scroll', function() {
+        return function(scope, element, attrs, feedItems) {
+            var scroll = new iScroll(element[0]);
+        };
+    })
+    .directive('blob', function() {
+        return function postLink(scope, element, attrs) {
+            var updateImage = function () {
+                var blob = scope.$eval(attrs.blob);
+                if (blob !== undefined) {
+                    var imgUrl = window.URL.createObjectURL(blob);
+                    element.attr('src', imgUrl);
+                    window.URL.revokeObjectURL(imgUrl);
+                }
+            };
+
+            scope.$watch(
+                function() { return scope.$eval(attrs.blob); },
+                function() { updateImage(); },
+                true
+            );
+        };
+    })
+    .directive('setting', function() {
+        return {
+            restrict: 'A',
+            require: '?ngModel',
+            priority: 1,
+            link: function(scope, element, attrs, ngModel) {
+                if (!ngModel) {
+                    return;
+                }
+
+                ngModel.$render = function() {
+                    if (ngModel.$modelValue.value !== '') {
+                        ngModel.$viewValue = ngModel.$modelValue.value;
+                    }
+                };
+            }
+        };
+    })
 ;

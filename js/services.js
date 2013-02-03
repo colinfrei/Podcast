@@ -137,11 +137,6 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
             }
         }
     }])
-    .directive('scroll', function() {
-        return function(scope, element, attrs, feedItems) {
-            var scroll = new iScroll(element[0]);
-        };
-    })
     .service('feeds', ['db', 'downloader2', 'xmlParser', 'feedItems', function(db, downloader2, xmlParser, feedItems) {
         return {
             db: db,
@@ -304,42 +299,6 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
         parse: function(data) {
             return angular.element(new window.DOMParser().parseFromString(data, "text/xml"));
         }
-    })
-    .directive('blob', function() {
-        return function postLink(scope, element, attrs) {
-            var updateImage = function () {
-                var blob = scope.$eval(attrs.blob);
-                if (blob !== undefined) {
-                    var imgUrl = window.URL.createObjectURL(blob);
-                    element.attr('src', imgUrl);
-                    window.URL.revokeObjectURL(imgUrl);
-                }
-            };
-
-            scope.$watch(
-                function() { return scope.$eval(attrs.blob); },
-                function() { updateImage(); },
-                true
-            );
-        };
-    })
-    .directive('setting', function() {
-        return {
-            restrict: 'A',
-            require: '?ngModel',
-            priority: 1,
-            link: function(scope, element, attrs, ngModel) {
-                if (!ngModel) {
-                    return;
-                }
-
-                ngModel.$render = function() {
-                    if (ngModel.$modelValue.value !== '') {
-                        ngModel.$viewValue = ngModel.$modelValue.value;
-                    }
-                };
-            }
-        };
     })
     .service('settings', ['db', function(db) {
         return {
@@ -633,8 +592,8 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
         }
     });
 
-angular.module('podcasts.database', []).
-    run(function() {
+angular.module('podcasts.database', [])
+    .run(function() {
         var dbConfig = (function () {
             //Create IndexedDB ObjectStore and Indexes via ixDbEz
             ixDbEz.createObjStore("feed", "id", true);
@@ -652,12 +611,13 @@ angular.module('podcasts.database', []).
     })
     .value('db', ixDbEz);
 
-angular.module('podcasts.updater', []).
-    run(function($timeout) {
+angular.module('podcasts.updater', [])
+    .run(function($timeout) {
         var checkFeeds = function() {
             console.log('TODO: trigger download here');
             $timeout(checkFeeds, 1800000); // run every half an hour
         };
 
         checkFeeds();
-    });
+    })
+;
