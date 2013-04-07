@@ -20,12 +20,11 @@
     <div id="controlButton" class="topBarItem" ng-click="playPause()">
         <i class="icon-play"></i>
         <i class="icon-pause"></i>
-        <audio id="audioPlayer"></audio>
     </div>
     <div ng-click="currentInfo()" class="topBarItem">
-        <span>{{ nowPlaying.title }}</span>
+        <span>{{ feedItem.title }}</span>
         <span ng-show="nowPlaying.duration > 0">
-            <span id="position">{{ nowPlaying.position|time:true }}</span>/<span id="duration">{{ nowPlaying.duration|time }}</span>
+            <span id="position">{{ audio.currentTime|time:true }}</span>/<span id="duration">{{ audio.duration|time }}</span>
         </span>
     </div>
     <div class="fullCurrentInfo topBarMenu" ng-show="showingFullCurrentInfo" ng-cloak>
@@ -43,7 +42,7 @@
     </div>
 </div>
 
-<div ng-view></div>
+<div ng-view class="main-container"></div>
 
 <script src="lib/ixDbEz.js" type="text/javascript"></script>
 

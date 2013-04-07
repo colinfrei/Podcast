@@ -1,0 +1,12 @@
+<form ng-submit="importGoogle()" class="importForm">
+    <p>Use this to import Podcasts from the Google Listen app. This will import any Feedss from your Google Reader account that are in a folder named "Listen Subscriptions".<br />
+    This is a one-time import - Podcast does not store your details at all and only uses them to download your feeds this one time.</p>
+    <label>Email:</label> <input type="email" ng-model="email" />
+    <label>Password:</label> <input type="password" ng-model="password" /> <span ng-click="twoFactor = !twoFactor">Using two factor authentication?</span>
+    <p ng-show="twoFactor">
+        If you're using Google's two-factor authentication (and you should be!), things are slightly more complicated.
+        You'll need to add an application-specific password temporarily for the import to work, and enter that in the password field above.<br />
+        You can add an application-specific password at <a href="https://accounts.google.com/IssuedAuthSubTokens" target="_blank">https://accounts.google.com/IssuedAuthSubTokens</a>.
+    </p>
+    <input type="submit" value="Import Google Listen Podcasts" />
+</form>

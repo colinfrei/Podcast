@@ -5,9 +5,9 @@
             <h2>{{ feed.author }}</h2>
             <img blob="feed.image" class="feedImage" />
             <div style="display: inline-block; width: 50%">
-                <a href="#">Delete Feed</a><br />
+                <a ng-click="delete(feed.id)">Delete Feed</a><br />
                 Number of Items to keep in Queue
-                <select>
+                <select ng-model="nrQueueItemsOptions">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>

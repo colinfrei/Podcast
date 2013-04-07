@@ -1,8 +1,8 @@
 'use strict';
 
 /* Services */
-angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
-    .service('downloader2', ['$http', '$q', 'xmlParser', function($http, $q, xmlParser) {
+angular.module('podcasts.services', [])
+    .service('downloaderBackend', ['$http', '$q', 'xmlParser', function($http, $q, xmlParser) {
         return {
             downloadFile: function(url) {
                 var deferred = $q.defer();
@@ -13,7 +13,8 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                     })
                     .error(function() {
                         deferred.reject();
-                    });
+                    })
+                ;
 
                 return deferred.promise;
             },
@@ -47,40 +48,61 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
             }
         }
     })
-    .service('feedItems', ['db', function(db) {
+    .service('feedItems', ['dbNew', 'db', '$q', function(db, oldDb, $q) {
         return {
-            db: db,
             get: function(id, onSuccess, onFailure) {
-                this.db.getCursor("feedItem", function(ixDbCursorReq)
-                {
-                    if(typeof ixDbCursorReq !== "undefined") {
-                        ixDbCursorReq.onsuccess = function (e) {
-                            var cursor = ixDbCursorReq.result || e.result;
-                            if (cursor) {
-                                onSuccess(cursor.value);
-                            }
-                            if (typeof onFailure === 'function') {
-                                onFailure();
-                            }
-                        }
-                    }
-                }, null, IDBKeyRange.only(id));
+                db.getOne("feedItem", id)
+                    .then(function(value) {
+                        onSuccess(value);
+                    }, function() {
+                        onFailure();
+                    });
             },
-            addFromXml: function(xml, feedId, onSuccess) {
+            getFeedItemFromXml: function(xml) {
                 var newFeedItem = {},
                     searchableXml = angular.element(xml);
                 newFeedItem.guid = searchableXml.find('guid').text();
-                newFeedItem.feedId = feedId;
                 newFeedItem.title = searchableXml.find('title').text();
                 newFeedItem.link = searchableXml.find('link').text();
                 newFeedItem.date = Date.parse(searchableXml.find('pubDate').text());
                 newFeedItem.description = searchableXml.find('description').text();
                 newFeedItem.audioUrl = searchableXml.find('enclosure').attr('url');
-                newFeedItem.queued = 1; //TODO: maybe allow not adding items in a feed to the queue - would then need to check for that here
 
-                this.db.put("feedItem", newFeedItem, undefined, function() {
-                    onSuccess(newFeedItem);
+                return newFeedItem;
+            },
+            delete: function(id) {
+                oldDb.delete("feedItem", id);
+            },
+            deleteByFeedId: function(feedId) {
+                oldDb.getCursor("feedItem", function(ixDbCursorReq) {
+                    if (typeof ixDbCursorReq !== "undefined") {
+                        ixDbCursorReq.onsuccess = function(e) {
+                            var cursor = ixDbCursorReq.result || e.result;
+                            if (cursor) {
+                                this.delete(cursor.value.id);
+                            }
+                        }
+                    }
+                }, null, IDBKeyRange.only(feedId), null, 'ixFeedId');
+            },
+            add: function(object) {
+                var deferred = $q.defer(),
+                    newFeedItem = {
+                    guid: object.guid,
+                    feedId: object.feedId,
+                    title: object.title,
+                    link: object.link,
+                    date: object.date,
+                    description: object.description,
+                    audioUrl: object.audioUrl,
+                    queued: object.queued
+                };
+
+                oldDb.put("feedItem", newFeedItem, undefined, function() {
+                    deferred.resolve(newFeedItem);
                 });
+
+                return deferred.promise;
             },
             getNextInQueue: function(feedItem) {
                 var tempQueueList = { queue: [], addToQueue: function(item) { this.queue.push(item); } };
@@ -101,7 +123,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                 return nextFeedItem;
             },
             listQueue: function(queueList, done) {
-                this.db.getCursor("feedItem", function(ixDbCursorReq)
+                oldDb.getCursor("feedItem", function(ixDbCursorReq)
                 {
                     if(typeof ixDbCursorReq !== "undefined") {
                         ixDbCursorReq.onsuccess = function (e) {
@@ -118,33 +140,16 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                         }
                     }
                 }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
-            },
-            list: function($scope) {
-                this.db.getCursor("feedItem", function(ixDbCursorReq)
-                {
-                    if(typeof ixDbCursorReq !== "undefined") {
-                        ixDbCursorReq.onsuccess = function (e) {
-                            var cursor = ixDbCursorReq.result || e.result;
-                            if (cursor) {
-                                $scope.queue.push(cursor.value);
-                                $scope.$apply();
-
-                                cursor.continue();
-                            }
-                        }
-                    }
-                });
             }
         }
     }])
-    .service('feeds', ['db', 'downloader2', 'xmlParser', 'feedItems', function(db, downloader2, xmlParser, feedItems) {
+    .service('feeds', ['$log', '$q', 'dbNew', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', function($log, $q, db, dbOld, downloaderBackend, xmlParser, feedItems) {
         return {
-            db: db,
             feeds: [],
             add: function(url) {
                 var feedService = this;
                 var finishSave = function(newFeed) {
-                    db.put("feed", newFeed, undefined, function(key) {
+                    dbOld.put("feed", newFeed, undefined, function(key) {
                         newFeed.id = key;
 
                         feedService.feeds.push(newFeed);
@@ -154,7 +159,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
 
                 // TODO: verify URL format somewhere
 
-                var promise = downloader2.downloadXml(url);
+                var promise = downloaderBackend.downloadXml(url);
                 promise.then(function(xml) {
                     var channelChildren = xml.find('channel').children(),
                         newFeed = {},
@@ -173,8 +178,9 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                     newFeed.url = url;
                     newFeed.title = channelChildren.find('title').text();
                     newFeed.summary = channelChildren.find('description').text();
+                    newFeed.nrQueueItems = 1;
 
-                    var file = downloader2.downloadFile(imageUrl);
+                    var file = downloaderBackend.downloadFile(imageUrl);
                     file.then(function(fileBlob) {
                         newFeed.image = fileBlob;
                         finishSave(newFeed);
@@ -182,65 +188,58 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                         finishSave(newFeed);
                     });
                 }, function() {
-                    console.error('Could not fetch XML for feed, adding just URL for now');
+                    console.warn('Could not fetch XML for feed, adding just URL for now');
                     var newFeed = {};
                     newFeed.url = url;
 
                     finishSave(newFeed);
                 });
             },
-            get: function(id, onSuccess, onFailure) {
+            get: function(id) {
                 id = parseInt(id, 10);
-                this.db.getCursor("feed", function(ixDbCursorReq)
-                {
-                    if(typeof ixDbCursorReq !== "undefined") {
-                        ixDbCursorReq.onsuccess = function (e) {
-                            var cursor = ixDbCursorReq.result || e.result;
-                            if (cursor) {
-                                var feed = cursor.value;
-                                if (typeof feed.image === 'string') {
-                                    feed.image = new Blob([feed.image]);
-                                }
+                var deferred = $q.defer();
 
-                                db.getCursor("feedItem", function(ixDbCursorReq)
-                                {
-                                    feed.items = [];
-                                    if(typeof ixDbCursorReq !== "undefined") {
-                                        ixDbCursorReq.onsuccess = function (e) {
-                                            var cursor = ixDbCursorReq.result || e.result;
-                                            if (cursor) {
-                                                feed.items.push(cursor.value);
+                db.getOne("feed", id)
+                    .then(function(feed) {
+                        if (typeof feed.image === 'string') {
+                            feed.image = new Blob([feed.image]);
+                        }
 
-                                                cursor.continue();
-                                            } else {
-                                                onSuccess(feed);
-                                            }
-                                        }
+                        dbOld.getCursor("feedItem", function(ixDbCursorReq)
+                        {
+                            feed.items = [];
+                            if(typeof ixDbCursorReq !== "undefined") {
+                                ixDbCursorReq.onsuccess = function (e) {
+                                    var cursor = ixDbCursorReq.result || e.result;
+                                    if (cursor) {
+                                        feed.items.push(cursor.value);
+
+                                        cursor.continue();
+                                    } else {
+                                        deferred.resolve(feed);
                                     }
-                                }, null, IDBKeyRange.only(feed.id), undefined, 'ixFeedId');
-
-                                //onSuccess(cursor.value);
-                            } else {
-                                onFailure(cursor);
+                                }
                             }
-                        }
+                        }, null, IDBKeyRange.only(feed.id), undefined, 'ixFeedId');
+                    }, function(value) {
+                        deferred.reject();
+                    });
 
-                        ixDbCursorReq.onerror = function (e) {
-                            onFailure(e);
-                        }
-                    }
-                }, undefined, IDBKeyRange.only(id));
+                return deferred.promise;
             },
             list: function($scope) {
                 var feeds = this.feeds;
-                db.getCursor("feed", function(ixDbCursorReq)
+                dbOld.getCursor("feed", function(ixDbCursorReq)
                 {
                     if(typeof ixDbCursorReq !== "undefined") {
                         ixDbCursorReq.onsuccess = function (e) {
                             var cursor = ixDbCursorReq.result || e.result;
                             if (cursor) {
                                 if (typeof cursor.value.image === 'string') {
-                                    cursor.value.image = new Blob([cursor.value.image], {type: 'application/octet-stream'});
+                                    cursor.value.image = new Blob(
+                                        [cursor.value.image],
+                                        {type: 'application/octet-stream'}
+                                    );
                                 }
                                 feeds.push(cursor.value);
                                 $scope.$apply();
@@ -251,6 +250,11 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                     }
                 });
             },
+            delete: function(id) {
+                $log.info('Deleting feed with ID ' + id);
+                feedItems.deleteByFeedId(id);
+                dbOld.delete("feed", id);
+            },
             /**
              *
              * @param feedItems
@@ -259,7 +263,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
              */
             downloadAllItems: function(feedItems, updateStatus) {
                 var feedService = this;
-                db.getCursor("feed", function(ixDbCursorReq)
+                dbOld.getCursor("feed", function(ixDbCursorReq)
                 {
                     if(typeof ixDbCursorReq !== "undefined") {
                         ixDbCursorReq.onsuccess = function (e) {
@@ -277,113 +281,89 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                 });
             },
             downloadItems: function(feedItem, updateStatus) {
-                var promise = downloader2.downloadXml(feedItem.url);
+                var promise = downloaderBackend.downloadXml(feedItem.url),
+                    feedObjects = [];
                 promise.then(function(data) {
                     angular.forEach(
                         data.find('item'),
                         function(element, index) {
-                            if (index < 3) { // TODO: this should be a global setting
-                                feedItems.addFromXml(element, feedItem.id, function(item) {
-                                    if (typeof updateStatus === 'function') {
-                                        updateStatus(item, feedItem);
-                                    }
-                                });
+                            if (index < 3) { // TODO: this should be a global setting and/or a per-feed setting
+                                feedObjects.push(feedItems.getFeedItemFromXml(element))
                             }
                         }
                     );
+
+                    angular.forEach(feedObjects, function(feedObject, index) {
+                        feedObject.feedId = feedItem.id;
+                        if (0 === index) {
+                            feedObject.queued = 1;
+                        } else {
+                            feedObject.queued = 0;
+                        }
+
+                        feedItems.add(feedObject)
+                            .then(function(item) {
+                                if (typeof updateStatus === 'function') {
+                                    updateStatus(item, feedItem);
+                                }
+                            });
+                    });
                 });
             }
         }
     }])
-    .value('xmlParser', {
-        parse: function(data) {
-            return angular.element(new window.DOMParser().parseFromString(data, "text/xml"));
-        }
-    })
-    .service('settings', ['db', function(db) {
-        return {
-            db: db,
-            set: function (name, value, key) {
-                if (key) {
-                    var setting = {'id': key, 'name': name, 'value': value};
-                } else {
-                    var setting = {'name': name, 'value': value};
-                }
-
-                this.db.put("setting", setting);
-            },
-            get: function (name, onSuccess, onFailure) {
-                this.db.getCursor("setting", function(ixDbCursorReq)
-                {
-                    if(typeof ixDbCursorReq !== "undefined") {
-                        ixDbCursorReq.onsuccess = function (e) {
-                            var cursor = ixDbCursorReq.result || e.result;
-                            if (cursor) {
-                                onSuccess(cursor.value);
-                            } else {
-                                onFailure();
-                            }
-                        }
-
-                        ixDbCursorReq.onerror = function (e) {
-                            onFailure();
-                        }
-                    }
-                }, undefined, IDBKeyRange.only(name), undefined, 'ixName');
-            },
-            setAllValuesInScope: function(scope) {
-                this.db.getCursor("setting", function(ixDbCursorReq)
-                {
-                    if(typeof ixDbCursorReq !== "undefined") {
-                        ixDbCursorReq.onsuccess = function (e) {
-                            var cursor = ixDbCursorReq.result || e.result;
-                            if (cursor) {
-                                scope[cursor.value.name] = cursor.value;
-                                scope.$apply();
-
-                                cursor.continue();
-                            }
-                        }
-                    }
-                });
+    .service('xmlParser', ['$window', function($window) {
+        return  {
+            parse: function(data) {
+                return angular.element(new $window.DOMParser().parseFromString(data, "text/xml"));
             }
-        }
+        };
     }])
-    .service('player', ['db', '$timeout', function(db, $timeout) {
+    .service('url', ['$window', function($window) {
+        return {
+            url: $window.URL || $window.webkitURL,
+            createObjectUrl: function(data) {
+                return this.url.createObjectUrl(data);
+            }
+        };
+    }])
+    .service('player', ['db', 'url', '$timeout', function(db, url, $timeout) {
         return {
             db: db,
-            audio: angular.element(document.getElementById('audioPlayer')),
+            audio: new Audio(),
+            feedItem: null,
             nowPlaying: {position: 0, duration: 0, title: '', description: '', feed: '', date: 0},
             play: function (feedItem, $scope) {
                 if (feedItem) {
+                    this.feedItem = feedItem;
+
                     var audioSrc;
 
                     if (feedItem.audio) {
-                        var URL = window.URL || window.webkitURL;
-                        audioSrc = URL.createObjectURL(feedItem.audio);
+                        audioSrc = url.createObjectUrl(feedItem.audio);
                     } else {
                         audioSrc = feedItem.audioUrl;
                     }
 
-                    this.audio.attr('src', audioSrc);
+                    this.audio.src = audioSrc;
                     this.updateSong(feedItem, $scope);
 
                     if (feedItem.position) {
-                        this.audio.bind('canplay', function(event) {
+                        angular.element(this.audio).bind('canplay', function(event) {
                             this.currentTime = feedItem.position;
                         });
                     }
                 }
-                this.audio[0].play();
+                this.audio.play();
 
                 var db = this.db;
-                this.audio.bind('pause', function(event) {
+                angular.element(this.audio).bind('pause', function(event) {
                     feedItem.position = Math.floor(event.target.currentTime);
                     db.put("feedItem", feedItem);
                 });
 
                 // TODO: add something here for when audio is done to remove from queue and go to next song
-                this.audio.bind('ended', function(event) {
+                angular.element(this.audio).bind('ended', function(event) {
                     feedItem.queued = 0;
                     feedItem.position = 0;
                     db.put("feedItem", feedItem);
@@ -401,7 +381,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
             },
             updateSong: function(feedItem, $scope) {
                 this.nowPlaying.title = feedItem.title;
-                var audio = this.audio[0],
+                var audio = this.audio,
                     player = this;
                 $timeout(function() {
                     player.nowPlaying.duration = audio.duration;
@@ -413,7 +393,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                 this.updatePosition($scope);
             },
             updatePosition: function($scope) {
-                var audio = this.audio[0],
+                var audio = this.audio,
                     player = this;
                 setInterval(function() {
                     player.nowPlaying.position = audio.currentTime;
@@ -487,11 +467,8 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
             }
         }
     }])
-    .service('downloader', ['db', '$http', 'settings', function(db, $http, settings) {
+    .service('downloader', ['db', 'url', '$http', 'settings', function(db, url, $http, settings) {
         return {
-            db: db,
-            http: $http,
-            settings: settings,
             allowedToDownload: function(callback) {
                 settings.get('downloadOnWifi', function(setting) {
                     if (setting.value) {
@@ -509,11 +486,11 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                 this.allowedToDownload(function(value) {
                     if (!value) {
                         if (typeof silent !== 'undefined' && !silent) {
-                            alert('not Downloading because not on WiFi');
+                            alert('not Downloading because not on WiFi'); //TODO: nicer error message?
                         }
                     } else {
                         var itemsToDownload = [];
-                        downloader.db.getCursor("feedItem", function(ixDbCursorReq)
+                        db.getCursor("feedItem", function(ixDbCursorReq)
                         {
                             if(typeof ixDbCursorReq !== "undefined") {
                                 ixDbCursorReq.onsuccess = function (e) {
@@ -529,7 +506,7 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                                     }
                                 }
                             }
-                        });
+                        }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
                     }
                 });
             },
@@ -540,20 +517,22 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
                     return;
                 }
 
-                this.http.get(item.audioUrl, {'responseType': 'blob'}).success(function(data) {
-                    item.audio = data;
-                    item.duration = this.getAudioLength(data);
+                $http.get(item.audioUrl, {'responseType': 'blob'})
+                    .success(function(data) {
+                        item.audio = data;
+                        item.duration = this.getAudioLength(data);
 
-                    db.put("feedItem", item);
+                        db.put("feedItem", item);
 
-                    downloader.downloadFiles(itemsToDownload);
-                });
+                        downloader.downloadFiles(itemsToDownload);
+                    })
+                ;
             },
             getAudioLength: function(audio) {
                 var tmpAudio = new Audio();
                 tmpAudio.autoplay = false;
                 tmpAudio.muted = true;
-                tmpAudio.src = URL.createObjectURL(audio);
+                tmpAudio.src = url.createObjectURL(audio);
 
                 return tmpAudio.duration;
             }
@@ -566,11 +545,19 @@ angular.module('podcasts.services', ['podcasts.database', 'podcast.directives'])
 
             if (seconds > 120) {
                 minutes = Math.floor(seconds/60);
+
                 seconds = seconds % 60;
+                if (seconds < 10) {
+                    seconds = '0' + seconds;
+                }
             }
             if (minutes > 60) {
-                minutes = Math.floor(minutes/60);
-                hours = minutes % 60;
+                hours = Math.floor(minutes/60);
+
+                minutes = minutes % 60;
+                if (minutes < 10) {
+                    minutes = '0' + minutes;
+                }
             }
 
             if (hours) {
@@ -618,22 +605,266 @@ angular.module('podcasts.database', [])
         });
 
         //Create or Open the local IndexedDB database via ixDbEz
-        ixDbEz.startDB("podcastDb", 7, dbConfig, undefined, undefined, false);
+        ixDbEz.startDB("podcastDb", 8, dbConfig, undefined, undefined, false);
     })
-    .value('db', ixDbEz);
+    .value('db', ixDbEz)
+    .service('dbNew', ['$q', '$rootScope', 'db', function($q, $rootScope, _db) {
+        var _getOne = function(store, identifier) {
+            var deferred = $q.defer();
 
-angular.module('podcasts.updater', [])
-    .run(['$timeout', 'update', function($timeout, update) {
-        var checkFeeds = function() {
-            update.update();
-            $timeout(checkFeeds, 1800000); // run every half an hour
+            _db.getCursor(store, function(ixDbCursorReq)
+            {
+                if(typeof ixDbCursorReq !== "undefined") {
+                    ixDbCursorReq.onsuccess = function (e) {
+                        var cursor = ixDbCursorReq.result || e.result;
+                        if (cursor) {
+                            deferred.resolve(cursor.value);
+
+                            cursor.continue();
+                        } else {
+                            //TODO: not sure if this'll work, since it may both resolve and reject.
+                            // May need to check if any were resolved or not first
+
+                            // deferred.reject();
+                        }
+                    }
+                } else {
+                    deferred.reject();
+                }
+            });
+
+            return deferred.promise;
         };
 
-        checkFeeds();
-    }])
-    .service('update', ['downloader', function(downloader) {
         return {
-            update: function() { downloader.downloadAll(true); }
+            getOne: _getOne
+        };
+    }]);
+
+angular.module('podcasts.updater', ['podcasts.settings'])
+    .run(['update', function(update) {
+        update.checkFeeds();
+    }])
+    .service('update', ['$timeout', '$log', 'settings', 'downloader', function($timeout, $log, settings, downloader) {
+        var checkFeeds = function() {
+            $log.info('Running Feed Check');
+
+            settings.get('refreshInterval', function(value) {
+                if (value.value > 0) {
+                    var refreshInterval = value.value;
+
+                    update();
+
+                    if (refreshInterval > 0) {
+                        $timeout(checkFeeds, refreshInterval);
+                    }
+                }
+            });
+        };
+
+        function update() {
+            downloader.downloadAll(true);
         }
+
+        return {
+            checkFeeds: checkFeeds,
+            update: update
+        };
+    }])
+;
+
+angular.module('podcasts.settings', ['podcasts.database'])
+    .run(['settings', function(settings) {
+        settings.init();
+    }])
+    .service('settings', ['db', function(db) {
+        var settings = {},
+            initialized = false,
+            waiting = [];
+
+        function _init() {
+            console.log('init settings');
+            db.getCursor("setting", function(ixDbCursorReq)
+            {
+                if(typeof ixDbCursorReq !== "undefined") {
+                    ixDbCursorReq.onsuccess = function (e) {
+                        var cursor = ixDbCursorReq.result || e.result;
+                        if (cursor) {
+                            settings[cursor.value.name] = cursor.value;
+
+                            cursor.continue();
+                        } else {
+                            initialized = true;
+
+                            for (var i = 0, l = waiting.length; i < l; i++) {
+                                waiting[i]();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function _set(name, value, key) {
+            var setting;
+
+            if (key) {
+                setting = {'id': key, 'name': name, 'value': value};
+                if (settings[name]['id'] === key) {
+                    settings[name] = setting;
+                } else {
+                    //TODO: name changed, go through all settings and find the setting by id, and adjust it
+                }
+            } else {
+                setting = {'name': name, 'value': value};
+                settings[name] = setting;
+                //TODO: get id after inserting into DB
+            }
+
+            db.put("setting", setting);
+        }
+
+        function _get(name, onSuccess, onFailure) {
+            if (!initialized) {
+                waiting.push(function() {
+                    _get(name, onSuccess, onFailure);
+                });
+
+                return;
+            }
+
+            if (!angular.isUndefined(settings[name])) {
+                onSuccess(settings[name]);
+            } else {
+                db.getCursor("setting", function(ixDbCursorReq)
+                {
+                    if(typeof ixDbCursorReq !== "undefined") {
+                        ixDbCursorReq.onsuccess = function (e) {
+                            var cursor = ixDbCursorReq.result || e.result;
+                            if (cursor) {
+                                onSuccess(cursor.value);
+                            } else {
+                                if (typeof onFailure === 'function') {
+                                    onFailure();
+                                }
+                            }
+                        };
+
+                        ixDbCursorReq.onerror = function (e) {
+                            console.log('didnt get setting');
+                            onFailure();
+                        };
+                    }
+                }, function() { onFailure(); }, IDBKeyRange.only(name), undefined, 'ixName');
+            }
+        }
+
+        function _setAllValuesInScope(scope) {
+            if (angular.isObject(scope.settings.refreshInterval)) { // Took random setting here
+                return;
+            }
+
+            if (!initialized) {
+                waiting.push(function() {
+                    _setAllValuesInScope(scope);
+                });
+
+                return;
+            }
+
+            angular.forEach(settings, function(setting, index) {
+                scope.settings[setting.name] = setting;
+            });
+
+            scope.$apply(); //TODO: this conflicts with digest when getting to the settings page a second time
+        }
+
+        return {
+            init: _init,
+            set: _set,
+            get: _get,
+            setAllValuesInScope: _setAllValuesInScope
+        };
+    }])
+;
+
+angular.module('podcasts.importer', [])
+    .service('google', ['$q', '$http', 'feeds', function($q, $http, feeds) {
+        return {
+            import: function(email, password) {
+                var google = this;
+
+                this.auth(email,
+                        password)
+                    .then(function(authId) {
+                        return google.fetchSubscriptions(authId)
+                    }, function() {
+                        //TODO: display error
+                    })
+                    .then(function(subscriptions) {
+                        google.addFeedsFromJsonResponse(subscriptions);
+                    })
+                ;
+            },
+            auth: function(email, password) {
+                var escapedEmail = encodeURIComponent(email),
+                    escapedPassword = encodeURIComponent(password),
+                    deferred = $q.defer();
+
+                $http.post(
+                    'https://www.google.com/accounts/ClientLogin',
+                    'Email=' + escapedEmail + '&Passwd=' + escapedPassword + '&service=reader',
+                    {'headers': {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
+                ).success(function(response) {
+                    response.split(/\r\n|\r|\n/).forEach(function(value, index) {
+                        var valueSplit = value.split('=');
+                        if ('Auth' === valueSplit[0]) {
+                            deferred.resolve(valueSplit[1]);
+                        }
+                    });
+                }).error(function(data, status, headers, config) {
+                    console.log(data, status, headers);
+                    deferred.reject();
+                });
+
+                return deferred.promise;
+            },
+            fetchSubscriptions: function(authId) {
+                var deferred = $q.defer();
+
+                $http
+                    .get(
+                        'http://www.google.com/reader/api/0/subscription/list?output=json',
+                        {'headers': {'Authorization': 'GoogleLogin auth=' + authId}}
+                    )
+                    .success(function(json) {
+                        deferred.resolve(json);
+                    })
+                    .error(function(data, status, headers, config) {
+                        deferred.reject();
+                    })
+                ;
+
+                return deferred.promise;
+            },
+            addFeedsFromJsonResponse: function(json) {
+                json.subscriptions.forEach(function(subscription, subscriptionIndex) {
+                    if (subscription.categories.length <= 0) {
+                        return false;
+                    }
+
+                    subscription.categories.forEach(function(category, categoryIndes) {
+                        if ("Listen Subscriptions" === category.label) {
+                            var feedUrl = subscription.id;
+                            if ("feed/" === feedUrl.substring(0, 5)) {
+                                feedUrl = feedUrl.substring(5);
+                            }
+
+                            feeds.add(feedUrl);
+                        }
+                    });
+                });
+            }
+        };
     }])
 ;

@@ -1,14 +1,13 @@
 <label for="refreshInterval">Refresh Subscriptions:</label>
-<select name="refreshInterval" ng-change="changeInterval()" setting ng-model="refreshInterval.value" ng-options="i.value as i.name for i in refreshIntervalOptions">
+<select name="refreshInterval" ng-change="changeInterval()" setting ng-model="settings.refreshInterval.value" ng-options="i.value as i.name for i in refreshIntervalOptions">
 </select>
 <br />
 <label for="downloadOnWifi">Only Download on Wi-Fi</label>
-<input name="downloadOnWifi" type="checkbox" ng-change="changeDownloadOnWifi()" setting ng-model="downloadOnWifi.value" />
+<input name="downloadOnWifi" type="checkbox" ng-change="changeDownloadOnWifi()" setting ng-model="settings.downloadOnWifi.value" />
 <!-- Store X Items Offline -->
 
 <div ng-controller="TopLinksCtrl">
     <button ng-click="downloadFiles()">Download Files</button>
-    <button ng-click="loadFixtures()">Load Fixtures</button>
+    <button ng-click="loadFixtures()">Load Fixtures</button><br />
+    <a href="#/import/google">Import Feeds from Google</a>
 </div>
-
-<button ng-click="installApp()">Install!</button>

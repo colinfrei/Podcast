@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 body {
     margin: 0;
     min-width: 150px;
@@ -5,6 +9,12 @@ body {
 }
 body, .normalFont {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.main-container {
+    height: 100%;
+    height: -webkit-calc(100% - 30px);
+    height: calc(100% - 30px);
 }
 
 
@@ -113,6 +123,7 @@ body, .normalFont {
 
 .fullCurrentInfo {
     width: 100%;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding: 10px;
 }
@@ -125,8 +136,16 @@ body, .normalFont {
 /* feedItemList */
 .listItem {
     border-top: 1px solid #c0c0c0;
-    min-height: 40px;
+    height: 40px;
     font-size: 12px;
+    padding: 3px;
+}
+.listItemTitle {
+    line-height: 20px;
+    vertical-align: top;
+    font-weight: bold;
+    display: inline-block;
+    padding-top: 3px;
 }
 .feedItemTitle {
     display: block;
@@ -145,4 +164,29 @@ body, .normalFont {
     vertical-align: middle;
     text-align: center;
     line-height: 40px;
+}
+
+#queueList, #scroller {
+    height: 100%;
+}
+
+/* form */
+form.importForm {
+    padding: 10px;
+}
+.importForm input {
+    width: 300px;
+    display: block;
+    border: 1px solid #999;
+    height: 25px;
+    margin: 5px 0;
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+}
+.importForm input[type="submit"] {
+    margin-top: 20px;
+}
+label {
+    display: inline-block;
 }

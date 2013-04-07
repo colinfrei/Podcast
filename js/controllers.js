@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-function FeedListCtrl($scope, feeds, pageSwitcher, $route, $location) {
+function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
     $scope.feeds = feeds.feeds = [];
     feeds.list($scope);
 
@@ -16,14 +16,14 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $route, $location) {
     pageSwitcher.change('feeds');
 }
 
-function TopLinksCtrl($scope, feeds, feedItems, downloader) {
+function TopLinksCtrl($scope, downloader, google) {
     $scope.downloadFiles = function() {
         downloader.downloadAll();
     };
 
-    $scope.loadFixtures= function() {
+    $scope.loadFixtures = function() {
         var newFeed = {};
-        newFeed.name = "Some OGG Vorbis Podcast";
+        newFeed.title = "Some OGG Vorbis Podcast";
         newFeed.url = "http://www.c3d2.de/pentacast-ogg.xml";
 
         //add new record to the local database
@@ -51,19 +51,27 @@ function TopLinksCtrl($scope, feeds, feedItems, downloader) {
         newFeedItem.date = 'Date';
         newFeedItem.description = 'Second Long Description<br /> with HTML <b>and stuff</b>';
         newFeedItem.audioUrl = 'http://example.com/2';
-        newFeedItem.queued = 0;
+        newFeedItem.queued = 1;
 
         ixDbEz.put("feedItem", newFeedItem);
     };
 }
 
-function FeedCtrl($scope, $routeParams, feeds, pageSwitcher) {
+function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
+    $scope.nrQueueItemsOptions = [1, 2, 3, 4, 5];
     $scope.feed = {};
     // show info at top and items underneath
-    feeds.get($routeParams.feedId, function(feed) {
+    feeds.get($routeParams.feedId)
+        .then(function(feed) {
         $scope.feed = feed;
-        $scope.$apply();
     });
+
+    $scope.delete = function(id) {
+        //TODO: check we're not playing anything from this feed?
+        feeds.delete(id);
+
+        $location.path('/feeds');
+    };
 
     pageSwitcher.setBack('feeds');
 }
@@ -93,15 +101,15 @@ function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queue
     pageSwitcher.change('queue');
 }
 
-function SettingsCtrl($scope, $route, settings, pageSwitcher) {
+function SettingsCtrl($scope, settings, pageSwitcher) {
     $scope.refreshIntervalOptions = [
-        {name: '1 hour', value: '1h'},
-        {name: '8 hour', value: '8h'},
-        {name: '1 day', value: '1d'},
+        {name: '10 seconds', value: '10000'},
+        {name: '1 hour', value: '3600000'},
+        {name: '8 hour', value: '28800000'},
+        {name: '1 day', value: '86400000'},
         {name: 'Manually', value: '0'}
     ];
-    $scope.refreshInterval = {'value': '', 'id': ''};
-    $scope.downloadOnWifi = {'value': '', 'id': ''};
+    $scope.settings = {};
 
     $scope.changeInterval = function() {
         settings.set('refreshInterval', $scope.refreshInterval.value, $scope.refreshInterval.id);
@@ -111,33 +119,6 @@ function SettingsCtrl($scope, $route, settings, pageSwitcher) {
         settings.set('downloadOnWifi', $scope.downloadOnWifi.value, $scope.downloadOnWifi.id);
     };
 
-    $scope.installApp = function() {
-        if (navigator.mozApps) {
-            var checkIfInstalled = navigator.mozApps.getSelf();
-            checkIfInstalled.onsuccess = function () {
-                if (checkIfInstalled.result) {
-                    alert('already Installed');
-                    // Already installed
-                } else {
-                    var manifestURL = "http://localhost/b2gPodcast/package.manifest";
-                    var installApp = navigator.mozApps.install(manifestURL);
-
-                    installApp.onsuccess = function(data) {
-                        alert('weeeh - installed!');
-                    };
-                    installApp.onerror = function() {
-                        alert("Install failed:\n\n" + installApp.error.name);
-                    };
-                }
-            };
-            checkIfInstalled.onerror = function() {
-                alert('could not check if installed');
-            };
-        } else {
-            alert("Open Web Apps are not supported");
-        }
-    };
-
     settings.setAllValuesInScope($scope);
     pageSwitcher.change('settings');
 }
@@ -145,6 +126,8 @@ function SettingsCtrl($scope, $route, settings, pageSwitcher) {
 function TopBarCtrl($scope, player, pageSwitcher)
 {
     $scope.nowPlaying = player.nowPlaying;
+    $scope.feedItem = player.feedItem;
+    $scope.audio = player.audio;
     $scope.showingPageSwitchMenu = false;
     $scope.showingFullCurrentInfo = false;
     $scope.showInfoIcon = false;
@@ -186,7 +169,17 @@ function TopBarCtrl($scope, player, pageSwitcher)
     };
 }
 
-function InfoCtrl($scope, pageSwitcher)
+function InfoCtrl(pageSwitcher)
 {
     pageSwitcher.change('info');
+}
+
+function ImportCtrl($scope, pageSwitcher, google)
+{
+    $scope.importGoogle = function() {
+        google.import($scope.email, $scope.password);
+    };
+
+    pageSwitcher.backPage = true;
+    pageSwitcher.change('settings');
 }
