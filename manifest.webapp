@@ -13,8 +13,7 @@
     "type": "privileged",
     "permissions": {
         "storage": { "description": "Allow Podcast to store podcast information for offline use" },
-        "systemXHR": { "description": "Allow Podcast to download podcast information" },
-        "wifi-manage": { "description": "Allow downloading only when connected to Wifi" }
+        "systemXHR": { "description": "Allow Podcast to download podcast information" }
     },
     "installs_allowed_from": ["*"],
     "default_locale": "en"
