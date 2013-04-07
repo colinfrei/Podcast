@@ -2,7 +2,7 @@
 <span class="hint">(filter in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/filter/filters.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>Formats <code>date</code> to a string based on the requested <code>format</code>.</p>
 
 <p><code>format</code> string can be composed of the following elements:</p>
@@ -27,8 +27,9 @@
 <li><code>'m'</code>: Minute in hour (0-59)</li>
 <li><code>'ss'</code>: Second in minute, padded (00-59)</li>
 <li><code>'s'</code>: Second in minute (0-59)</li>
+<li><code>'.sss' or ',sss'</code>: Millisecond in second, padded (000-999)</li>
 <li><code>'a'</code>: am/pm marker</li>
-<li><code>'Z'</code>: 4 digit (+sign) representation of the timezone offset (-1200-1200)</li>
+<li><code>'Z'</code>: 4 digit (+sign) representation of the timezone offset (-1200-+1200)</li>
 </ul>
 
 <p><code>format</code> string can also be one of the following predefined
@@ -61,7 +62,8 @@
 <ul class="parameters"><li><code ng:non-bindable="">date – {(Date|number|string)} – </code>
 <p>Date to format either as Date object, milliseconds (string or
 number) or various ISO 8601 datetime string formats (e.g. yyyy-MM-ddTHH:mm:ss.SSSZ and it's
-shorter versions like yyyy-MM-ddTHH:mmZ, yyyy-MM-dd or yyyyMMddTHHmmssZ).</p></li>
+shorter versions like yyyy-MM-ddTHH:mmZ, yyyy-MM-dd or yyyyMMddTHHmmssZ). If no timezone is
+specified in the string input, the time is considered to be in the local timezone.</p></li>
 <li><code ng:non-bindable="">format<i>(optional)</i> – {string=} – </code>
 <p>Formatting rules (see Description). If not specified,
 <code>mediumDate</code> is used.</p></li>
@@ -91,12 +93,12 @@ shorter versions like yyyy-MM-ddTHH:mmZ, yyyy-MM-dd or yyyyMMddTHHmmssZ).</p></l
     expect(binding("1288323623006 | date:'medium'")).
        toMatch(/Oct 2\d, 2010 \d{1,2}:\d{2}:\d{2} (AM|PM)/);
     expect(binding("1288323623006 | date:'yyyy-MM-dd HH:mm:ss Z'")).
-       toMatch(/2010\-10\-2\d \d{2}:\d{2}:\d{2} \-?\d{4}/);
+       toMatch(/2010\-10\-2\d \d{2}:\d{2}:\d{2} (\-|\+)?\d{4}/);
     expect(binding("'1288323623006' | date:'MM/dd/yyyy @ h:mma'")).
        toMatch(/10\/2\d\/2010 @ \d{1,2}:\d{2}(AM|PM)/);
   });
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-200" ng-eval-javascript=""></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-200" ng-eval-javascript=""></div></div>
 </div>

@@ -1,9 +1,10 @@
 CACHE MANIFEST
-# 2013-01-23T20:01:19.974Z
+# 2013-04-04T02:26:16.065Z
 
 # cache all of these
 CACHE:
 ../angular.min.js
+css/animations.css
 css/bootstrap.min.css
 css/doc_widgets.css
 css/docs.css
@@ -56,6 +57,7 @@ index-jq-nocache.html
 index-jq.html
 index-nocache.html
 index.html
+js/disableAnimations.js
 js/docs.js
 js/jquery.js
 js/jquery.min.js
@@ -80,12 +82,14 @@ partials/api/angular.isObject.html
 partials/api/angular.isString.html
 partials/api/angular.isUndefined.html
 partials/api/angular.lowercase.html
+partials/api/angular.mock.createMockWindow.html
 partials/api/angular.mock.dump.html
 partials/api/angular.mock.html
 partials/api/angular.mock.inject.html
 partials/api/angular.mock.module.html
 partials/api/angular.mock.TzDate.html
 partials/api/angular.module.html
+partials/api/angular.noConflict.html
 partials/api/angular.noop.html
 partials/api/angular.toJson.html
 partials/api/angular.uppercase.html
@@ -95,6 +99,9 @@ partials/api/AUTO.$provide.html
 partials/api/AUTO.html
 partials/api/index.html
 partials/api/ng.$anchorScroll.html
+partials/api/ng.$animation.html
+partials/api/ng.$animationProvider.html
+partials/api/ng.$animator.html
 partials/api/ng.$cacheFactory.html
 partials/api/ng.$compile.directive.Attributes.html
 partials/api/ng.$compile.html
@@ -136,6 +143,7 @@ partials/api/ng.directive:input.number.html
 partials/api/ng.directive:input.radio.html
 partials/api/ng.directive:input.text.html
 partials/api/ng.directive:input.url.html
+partials/api/ng.directive:ngAnimate.html
 partials/api/ng.directive:ngApp.html
 partials/api/ng.directive:ngBind.html
 partials/api/ng.directive:ngBindHtmlUnsafe.html
@@ -157,6 +165,7 @@ partials/api/ng.directive:ngHref.html
 partials/api/ng.directive:ngInclude.html
 partials/api/ng.directive:ngInit.html
 partials/api/ng.directive:ngKeydown.html
+partials/api/ng.directive:ngKeypress.html
 partials/api/ng.directive:ngKeyup.html
 partials/api/ng.directive:ngList.html
 partials/api/ng.directive:ngModel.html
@@ -197,6 +206,8 @@ partials/api/ng.html
 partials/api/ngCookies.$cookies.html
 partials/api/ngCookies.$cookieStore.html
 partials/api/ngCookies.html
+partials/api/ngMobile.directive:ngTap.html
+partials/api/ngMobile.html
 partials/api/ngMock.$exceptionHandler.html
 partials/api/ngMock.$exceptionHandlerProvider.html
 partials/api/ngMock.$httpBackend.html

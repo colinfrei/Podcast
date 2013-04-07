@@ -2,19 +2,19 @@
 <span class="hint">(directive in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/directive/ngCloak.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>The <code>ngCloak</code> directive is used to prevent the Angular html template from being briefly
 displayed by the browser in its raw (uncompiled) form while your application is loading. Use this
 directive to avoid the undesirable flicker effect caused by the html template display.</p>
 
 <p>The directive can be applied to the <code>&lt;body&gt;</code> element, but typically a fine-grained application is
-prefered in order to benefit from progressive rendering of the browser view.</p>
+preferred in order to benefit from progressive rendering of the browser view.</p>
 
 <p><code>ngCloak</code> works in cooperation with a css rule that is embedded within <code>angular.js</code> and
  <code>angular.min.js</code> files. Following is the css rule:</p>
 
 <pre class="prettyprint linenums">
-[ng\:cloak], [ng-cloak], .ng-cloak {
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none;
 }
 </pre>
@@ -61,5 +61,5 @@ as class<pre class="prettyprint linenums">&lt;ANY class="ng-cloak"&gt;
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-149" ng-eval-javascript=""></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-149" ng-eval-javascript=""></div></div>
 </div>

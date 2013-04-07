@@ -1,7 +1,7 @@
 <h1><code ng:non-bindable=""></code>
 <span class="hint"></span>
 </h1>
-<div><ul>
+<div><a href="http://github.com/angular/angular.js/edit/master/docs/content/misc/contribute.ngdoc" class="improve-docs btn btn-primary">Improve this doc</a><ul>
 <li><a href="#H1_1">License</a></li>
 <li><a href="#H1_2">Contributing to Source Code</a></li>
 <li><a href="#H1_3">Applying Code Standards</a></li>
@@ -72,13 +72,10 @@ accept code contributions. The AngularJS repository can be found at <strong><a h
 machine:</p>
 
 <ul>
-<li><p><a href="http://rake.rubyforge.org">Rake</a>: We use Rake as our build system, which is pre-installed
-on most Macintosh and Linux machines. If that is not true in your case, you can grab it from the
-Rake website.</p></li>
 <li><p>Git: The <a href="http://help.github.com/mac-git-installation">Github Guide to Installing Git</a> is
 quite a good source for information on Git.</p></li>
-<li><p><a href="http://nodejs.org">Node.js</a>: We use Node to generate the documentation and to run a
-development web server. Depending on your system, you can install Node either from source or as a
+<li><p><a href="http://nodejs.org">Node.js</a>: We use Node to generate the documentation, run a
+development web server, run tests, and generate a build. Depending on your system, you can install Node either from source or as a
 pre-packaged bundle.</p>
 
 <p>Once installed, you'll also need several npms (node packages), which you can install once you checked out a local copy
@@ -86,6 +83,9 @@ of the Angular repository (see below) with:</p>
 
 <ul><li><code>cd angular.js</code></li>
 <li><code>npm install</code></li></ul></li>
+<li><p><a href="http://gruntjs.com">Grunt</a>: We use Grunt as our build system. Install the grunt command-line tool globally with:</p>
+
+<ul><li><code>sudo npm install -g grunt-cli</code></li></ul></li>
 </ul>
 
 <h3>Creating a Github Account and Forking Angular</h3>
@@ -95,7 +95,7 @@ Afterwards, go ahead and <a href="http://help.github.com/forking">fork</a> the <
 
 <h3>Building AngularJS</h3>
 
-<p>To build AngularJS, you check out the source code and use Rake to generate the non-minified and
+<p>To build AngularJS, you check out the source code and use Grunt to generate the non-minified and
 minified AngularJS files:</p>
 
 <ol>
@@ -117,9 +117,12 @@ minified AngularJS files:</p>
 </code></pre></li>
 <li><p>To build AngularJS, run:</p>
 
-<pre><code>rake package
+<pre><code>grunt package
 </code></pre></li>
 </ol>
+
+<p>NOTE: If you're using Windows you must run your command line with administrative privileges (right click, run as
+Administrator).</p>
 
 <p>The build output can be located under the <code>build</code> directory. It consists of the following files and
 directories:</p>
@@ -145,7 +148,7 @@ made available a local web server based on Node.js.</p>
 <ol>
 <li><p>To start the web server, run:</p>
 
-<pre><code>rake webserver
+<pre><code>grunt webserver
 </code></pre></li>
 <li><p>To access the local server, go to this website:</p>
 
@@ -162,13 +165,15 @@ made available a local web server based on Node.js.</p>
 <p>Our unit and integration tests are written with Jasmine and executed with Testacular.  To run all of the
 tests once on Chrome run:</p>
 
-<pre><code>rake test:unit
+<pre><code>grunt test:unit
 </code></pre>
 
 <p>To run the tests on other browsers (Chrome, ChromeCanary, Firefox, Opera and Safari are pre-configured) use:</p>
 
-<pre><code>rake test:unit[Opera+Firefox]
+<pre><code>grunt test:unit --browsers Opera,Firefox
 </code></pre>
+
+<p>Note there should be <em>no spaces between browsers</em>. <code>Opera, Firefox</code> is INVALID.</p>
 
 <p>During development it's however more productive to continuously run unit tests every time the source or test files
 change. To execute tests in this mode run:</p>
@@ -176,7 +181,7 @@ change. To execute tests in this mode run:</p>
 <ol>
 <li><p>To start the Testacular server, capture Chrome browser and run unit tests, run:</p>
 
-<pre><code>rake autotest:jqlite
+<pre><code>grunt autotest:jqlite
 </code></pre></li>
 <li><p>To capture more browsers, open this url in the desired browser (url might be different if you have multiple instance
 of Testacular running, read Testacular's console output for the correct url):</p>
@@ -186,9 +191,9 @@ of Testacular running, read Testacular's console output for the correct url):</p
 <li><p>To re-run tests just change any source or test file.</p></li>
 </ol>
 
-<p>To learn more about all of the preconfigured Rake tasks run:</p>
+<p>To learn more about all of the preconfigured Grunt tasks run:</p>
 
-<pre><code>rake -T
+<pre><code>grunt --help
 </code></pre>
 
 <h3>Running the end-to-end Test Suite</h3>
@@ -198,7 +203,7 @@ of Testacular running, read Testacular's console output for the correct url):</p
 <ol>
 <li><p>Start the local web server if it's not running already.</p>
 
-<pre><code>rake webserver
+<pre><code>grunt webserver
 </code></pre></li>
 <li><p>In a browser, go to:</p>
 
@@ -207,9 +212,16 @@ of Testacular running, read Testacular's console output for the correct url):</p
 
 <p>or in terminal run:</p>
 
-<pre><code>rake test:e2e
+<pre><code>grunt test:end2end
 </code></pre></li>
 </ol>
+
+<p>For convenience you can also simply run:</p>
+
+<pre><code>    grunt test:e2e
+</code></pre>
+
+<p>This will start the webserver for you and run the tests.</p>
 
 <p><a name="H1_5"></a></p>
 
@@ -218,7 +230,8 @@ of Testacular running, read Testacular's console output for the correct url):</p
 <p>To create and submit a change:</p>
 
 <ol>
-<li><p>Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code changes to be
+<li><p><a name="CLA"></a>
+Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code changes to be
 accepted, the CLA must be signed. It's a quick process, we promise!</p>
 
 <p>For individuals we have a <a href="http://code.google.com/legal/individual-cla-v1.0.html">simple click-through form</a>. For

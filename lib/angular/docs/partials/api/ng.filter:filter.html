@@ -2,17 +2,17 @@
 <span class="hint">(filter in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/filter/filter.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>Selects a subset of items from <code>array</code> and returns it as a new array.</p>
 
 <p>Note: This function is used to augment the <code>Array</code> type in Angular expressions. See
 <a href="api/ng.$filter"><code>ng.$filter</code></a> for more information about Angular arrays.</p></div>
 <h2 id="Usage">Usage</h2>
 <div class="usage"><h3 id="In.HTML.Template.Binding">In HTML Template Binding</h3>
-<div class="in-html-template-binding"><code ng:non-bindable="">{{ filter_expression | filter:expression }}</code>
+<div class="in-html-template-binding"><code ng:non-bindable="">{{ filter_expression | filter:expression:comparator }}</code>
 </div>
 <h3 id="In.JavaScript">In JavaScript</h3>
-<div class="in-javascript"><code ng:non-bindable="">$filter('filter')(array, expression)</code>
+<div class="in-javascript"><code ng:non-bindable="">$filter('filter')(array, expression, comparator)</code>
 </div>
 <h3 id="Parameters">Parameters</h3>
 <ul class="parameters"><li><code ng:non-bindable="">array – {Array} – </code>
@@ -37,6 +37,22 @@ as described above.</p></li>
 called for each element of <code>array</code>. The final result is an array of those elements that
 the predicate returned true for.</p></li>
 </ul></li>
+<li><code ng:non-bindable="">comparator – {function(expected, actual)|true|undefined} – </code>
+<p>Comparator which is used in
+determining if the expected value (from the filter expression) and actual value (from
+the object in the array) should be considered a match.</p>
+
+<p>Can be one of:</p>
+
+<ul>
+<li><p><code>function(expected, actual)</code>:
+The function will be given the object value and the predicate value to compare and
+should return true if the item should be included in filtered result.</p></li>
+<li><p><code>true</code>: A shorthand for <code>function(expected, actual) { return angular.equals(expected, actual)}</code>.
+this is essentially strict comparison of expected and actual.</p></li>
+<li><p><code>false|undefined</code>: A short hand for a function which will look for a substring match in case
+insensitive way.</p></li>
+</ul></li>
 </ul>
 </div>
 <h2 id="Example">Example</h2>
@@ -49,26 +65,28 @@ the predicate returned true for.</p></li>
                            {name:'Mary', phone:'800-BIG-MARY'},
                            {name:'Mike', phone:'555-4321'},
                            {name:'Adam', phone:'555-5678'},
-                           {name:'Julie', phone:'555-8765'}]"></div>
+                           {name:'Julie', phone:'555-8765'},
+                           {name:'Juliette', phone:'555-5678'}]"></div>
 
   Search: <input ng-model="searchText">
   <table id="searchTextResults">
-    <tr><th>Name</th><th>Phone</th><tr>
+    <tr><th>Name</th><th>Phone</th></tr>
     <tr ng-repeat="friend in friends | filter:searchText">
       <td>{{friend.name}}</td>
       <td>{{friend.phone}}</td>
-    <tr>
+    </tr>
   </table>
   <hr>
   Any: <input ng-model="search.$"> <br>
   Name only <input ng-model="search.name"><br>
   Phone only <input ng-model="search.phone"å><br>
+  Equality <input type="checkbox" ng-model="strict"><br>
   <table id="searchObjResults">
-    <tr><th>Name</th><th>Phone</th><tr>
-    <tr ng-repeat="friend in friends | filter:search">
+    <tr><th>Name</th><th>Phone</th></tr>
+    <tr ng-repeat="friend in friends | filter:search:strict">
       <td>{{friend.name}}</td>
       <td>{{friend.phone}}</td>
-    <tr>
+    </tr>
   </table>
 </script>
 </div>
@@ -88,10 +106,16 @@ the predicate returned true for.</p></li>
   it('should search in specific fields when filtering with a predicate object', function() {
     input('search.$').enter('i');
     expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
-      toEqual(['Mary', 'Mike', 'Julie']);
+      toEqual(['Mary', 'Mike', 'Julie', 'Juliette']);
+  });
+  it('should use a equal comparison when comparator is true', function() {
+    input('search.name').enter('Julie');
+    input('strict').check();
+    expect(repeater('#searchObjResults tr', 'friend in friends').column('friend.name')).
+      toEqual(['Julie']);
   });
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-192" ng-eval-javascript=""></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-192" ng-eval-javascript=""></div></div>
 </div>

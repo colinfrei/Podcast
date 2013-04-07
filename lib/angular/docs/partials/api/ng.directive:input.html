@@ -2,11 +2,11 @@
 <span class="hint">(directive in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/directive/input.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>HTML input element control with angular data-binding. Input control follows HTML5 input types
 and polyfills the HTML5 validation behavior for older browsers.</p></div>
 <h2 id="Usage">Usage</h2>
-<div class="usage">as element (see <a href="guide/ie">IE restrictions</a>)<pre class="prettyprint linenums">&lt;input
+<div class="usage"><p>This directive can be used as custom element, but we aware of <a href="guide/ie">IE restrictions</a>.</p>as element:<pre class="prettyprint linenums">&lt;input
        ngModel="{string}"
        [name="{string}"]
        [required]
@@ -42,10 +42,10 @@ interaction with the input element.</p></li>
 </div>
 <h2 id="Example">Example</h2>
 <div class="example"><h4>Source</h4>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-128" source-edit-css="" source-edit-js="script.js-127" source-edit-unit="" source-edit-scenario="scenario.js-129"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-137" source-edit-css="" source-edit-js="script.js-136" source-edit-unit="" source-edit-scenario="scenario.js-138"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-128" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-128">
+<pre class="prettyprint linenums" ng-set-text="index.html-137" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-137">
  
  <div ng-controller="Ctrl">
    <form name="myForm">
@@ -73,16 +73,16 @@ interaction with the input element.</p></li>
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-127"></pre>
-<script type="text/ng-template" id="script.js-127">
+<pre class="prettyprint linenums" ng-set-text="script.js-136"></pre>
+<script type="text/ng-template" id="script.js-136">
    function Ctrl($scope) {
      $scope.user = {name: 'guest', last: 'visitor'};
    }
  </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-129"></pre>
-<script type="text/ng-template" id="scenario.js-129">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-138"></pre>
+<script type="text/ng-template" id="scenario.js-138">
   it('should initialize to model', function() {
     expect(binding('user')).toEqual('{"name":"guest","last":"visitor"}');
     expect(binding('myForm.userName.$valid')).toEqual('true');
@@ -122,5 +122,5 @@ interaction with the input element.</p></li>
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-128" ng-eval-javascript="script.js-127"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-137" ng-eval-javascript="script.js-136"></div></div>
 </div>

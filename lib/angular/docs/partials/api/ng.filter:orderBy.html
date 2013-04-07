@@ -2,11 +2,11 @@
 <span class="hint">(filter in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/filter/orderBy.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>Orders a specified <code>array</code> by the <code>expression</code> predicate.</p>
 
 <p>Note: this function is used to augment the <code>Array</code> type in Angular expressions. See
-<a href="api/ng.$filter"><code>ng.$filter</code></a> for more informaton about Angular arrays.</p></div>
+<a href="api/ng.$filter"><code>ng.$filter</code></a> for more information about Angular arrays.</p></div>
 <h2 id="Usage">Usage</h2>
 <div class="usage"><pre class="prettyprint linenums">filter:orderBy(array, expression[, reverse]);</pre>
 <h3 id="Parameters">Parameters</h3>
@@ -51,12 +51,12 @@ is used for sorting, but when two items are equivalent, the next predicate is us
             (<a href ng-click="predicate = '-name'; reverse=false">^</a>)</th>
         <th><a href="" ng-click="predicate = 'phone'; reverse=!reverse">Phone Number</a></th>
         <th><a href="" ng-click="predicate = 'age'; reverse=!reverse">Age</a></th>
-      <tr>
+      </tr>
       <tr ng-repeat="friend in friends | orderBy:predicate:reverse">
         <td>{{friend.name}}</td>
         <td>{{friend.phone}}</td>
         <td>{{friend.age}}</td>
-      <tr>
+      </tr>
     </table>
   </div>
 </script>
@@ -102,5 +102,5 @@ is used for sorting, but when two items are equivalent, the next predicate is us
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-208" ng-eval-javascript="script.js-207"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-208" ng-eval-javascript="script.js-207"></div></div>
 </div>

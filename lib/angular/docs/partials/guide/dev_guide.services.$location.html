@@ -1,7 +1,7 @@
 <h1><code ng:non-bindable=""></code>
 <span class="hint"></span>
 </h1>
-<div><h2>What does it do?</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/docs/content/guide/dev_guide.services.$location.ngdoc" class="improve-docs btn btn-primary">Improve this doc</a><h2>What does it do?</h2>
 
 <p>The <code>$location</code> service parses the URL in the browser address bar (based on the <a href="https://developer.mozilla.org/en/window.location">window.location</a>) and makes the URL available to
 your application. Changes to the URL in the address bar are reflected into $location service and
@@ -377,10 +377,10 @@ redirect to regular / hashbang url, as this conversion happens only during parsi
 
 <p>In this examples we use <code>&lt;base href="/base/index.html" /&gt;</code>
 <h3>Source</h3>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-32" source-edit-css="" source-edit-js="script.js-31" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-37" source-edit-css="" source-edit-js="script.js-36" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-32" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-32">
+<pre class="prettyprint linenums" ng-set-text="index.html-37" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-37">
 
 <div ng-non-bindable class="html5-hashbang-example">
   <div id="html5-mode" ng-controller="Html5Cntl">
@@ -417,8 +417,8 @@ redirect to regular / hashbang url, as this conversion happens only during parsi
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-31"></pre>
-<script type="text/ng-template" id="script.js-31">
+<pre class="prettyprint linenums" ng-set-text="script.js-36"></pre>
+<script type="text/ng-template" id="script.js-36">
   function FakeBrowser(initUrl, baseHref) {
     this.onUrlChange = function(fn) {
       this.urlChange = fn;
@@ -496,7 +496,7 @@ redirect to regular / hashbang url, as this conversion happens only during parsi
 </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-32" ng-eval-javascript="script.js-31"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-37" ng-eval-javascript="script.js-36"></div>
 
 <h2>Caveats</h2>
 

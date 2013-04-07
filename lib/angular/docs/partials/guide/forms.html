@@ -1,7 +1,7 @@
 <h1><code ng:non-bindable=""></code>
 <span class="hint"></span>
 </h1>
-<div><p>Controls (<code>input</code>, <code>select</code>, <code>textarea</code>) are a way for user to enter data.
+<div><a href="http://github.com/angular/angular.js/edit/master/docs/content/guide/forms.ngdoc" class="improve-docs btn btn-primary">Improve this doc</a><p>Controls (<code>input</code>, <code>select</code>, <code>textarea</code>) are a way for user to enter data.
 Form is a collection of controls for the purpose of grouping related controls together.</p>
 
 <p>Form and controls provide validation services, so that the user can be notified of invalid input.
@@ -16,10 +16,10 @@ The <code>ngModel</code> directive provides the two-way data-binding by synchron
 In addition it provides an <a href="api/ng.directive:ngModel.NgModelController"><code>API</code></a> for other directives to augment its behavior.</p>
 
 <h3>Source</h3>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-59" source-edit-css="" source-edit-js="script.js-58" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-51" source-edit-css="" source-edit-js="script.js-50" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-59" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-59">
+<pre class="prettyprint linenums" ng-set-text="index.html-51" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-51">
 <div ng-controller="Controller">
   <form novalidate class="simple-form">
     Name: <input type="text" ng-model="user.name" /><br />
@@ -37,8 +37,8 @@ In addition it provides an <a href="api/ng.directive:ngModel.NgModelController">
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-58"></pre>
-<script type="text/ng-template" id="script.js-58">
+<pre class="prettyprint linenums" ng-set-text="script.js-50"></pre>
+<script type="text/ng-template" id="script.js-50">
   function Controller($scope) {
     $scope.master= {};
 
@@ -55,7 +55,7 @@ In addition it provides an <a href="api/ng.directive:ngModel.NgModelController">
   </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-59" ng-eval-javascript="script.js-58"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-51" ng-eval-javascript="script.js-50"></div>
 
 <p>Note that <code>novalidate</code> is used to disable browser's native form validation.</p>
 
@@ -75,10 +75,10 @@ In the example both <code>user.name</code> and <code>user.email</code> are requi
 This ensures that the user is not distracted with an error until after interacting with the control, and failing to satisfy its validity.</p>
 
 <h3>Source</h3>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-61" source-edit-css="" source-edit-js="script.js-60" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-53" source-edit-css="" source-edit-js="script.js-52" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-61" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-61">
+<pre class="prettyprint linenums" ng-set-text="index.html-53" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-53">
 <div ng-controller="Controller">
   <form novalidate class="css-form">
     Name:
@@ -105,8 +105,8 @@ This ensures that the user is not distracted with an error until after interacti
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-60"></pre>
-<script type="text/ng-template" id="script.js-60">
+<pre class="prettyprint linenums" ng-set-text="script.js-52"></pre>
+<script type="text/ng-template" id="script.js-52">
   function Controller($scope) {
     $scope.master= {};
 
@@ -123,7 +123,7 @@ This ensures that the user is not distracted with an error until after interacti
   </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-61" ng-eval-javascript="script.js-60"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-53" ng-eval-javascript="script.js-52"></div>
 
 <h2>Binding to form and control state</h2>
 
@@ -142,10 +142,10 @@ This implies that the internal state of both the form and the control is availab
 </ul>
 
 <h3>Source</h3>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-63" source-edit-css="" source-edit-js="script.js-62" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-55" source-edit-css="" source-edit-js="script.js-54" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-63" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-63">
+<pre class="prettyprint linenums" ng-set-text="index.html-55" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-55">
 <div ng-controller="Controller">
   <form name="form" class="css-form" novalidate>
     Name:
@@ -175,8 +175,8 @@ This implies that the internal state of both the form and the control is availab
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-62"></pre>
-<script type="text/ng-template" id="script.js-62">
+<pre class="prettyprint linenums" ng-set-text="script.js-54"></pre>
+<script type="text/ng-template" id="script.js-54">
   function Controller($scope) {
     $scope.master= {};
 
@@ -197,7 +197,7 @@ This implies that the internal state of both the form and the control is availab
 </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-63" ng-eval-javascript="script.js-62"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-55" ng-eval-javascript="script.js-54"></div>
 
 <h2>Custom Validation</h2>
 
@@ -229,10 +229,10 @@ Note that we can't use input type <code>number</code> here as HTML5 browsers wou
 </ul>
 
 <h3>Source</h3>
-<div source-edit="form-example1" source-edit-deps="angular.js script.js" source-edit-html="index.html-65" source-edit-css="" source-edit-js="script.js-64" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="form-example1" source-edit-deps="angular.js script.js" source-edit-html="index.html-57" source-edit-css="" source-edit-js="script.js-56" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-65" ng-html-wrap="form-example1 angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-65">
+<pre class="prettyprint linenums" ng-set-text="index.html-57" ng-html-wrap="form-example1 angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-57">
 <div ng-controller="Controller">
   <form name="form" class="css-form" novalidate>
     <div>
@@ -258,8 +258,8 @@ Note that we can't use input type <code>number</code> here as HTML5 browsers wou
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-64"></pre>
-<script type="text/ng-template" id="script.js-64">
+<pre class="prettyprint linenums" ng-set-text="script.js-56"></pre>
+<script type="text/ng-template" id="script.js-56">
   var app = angular.module('form-example1', []);
 
   var INTEGER_REGEXP = /^\-?\d*$/;
@@ -302,7 +302,7 @@ Note that we can't use input type <code>number</code> here as HTML5 browsers wou
 </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="form-example1" ng-set-html="index.html-65" ng-eval-javascript="script.js-64"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="form-example1" ng-set-html="index.html-57" ng-eval-javascript="script.js-56"></div>
 
 <h2>Implementing custom form controls (using <code>ngModel</code>)</h2>
 
@@ -312,7 +312,7 @@ However, if you need more flexibility, you can write your own form control as a 
 <p>In order for custom control to work with <code>ngModel</code> and to achieve two-way data-binding it needs to:</p>
 
 <ul>
-<li>implement <code>render</code> method, which is responsible for rendering the data after it passed the <a href="api/ng.directive:ngModel.NgModelController#$formatters"><code>NgModelController#$formatters</code></a>,</li>
+<li>implement <code>$render</code> method, which is responsible for rendering the data after it passed the <a href="api/ng.directive:ngModel.NgModelController#$formatters"><code>NgModelController#$formatters</code></a>,</li>
 <li>call <code>$setViewValue</code> method, whenever the user interacts with the control and model needs to be updated. This is usually done inside a DOM Event listener.</li>
 </ul>
 
@@ -321,10 +321,10 @@ However, if you need more flexibility, you can write your own form control as a 
 <p>The following example shows how to add two-way data-binding to contentEditable elements.</p>
 
 <h3>Source</h3>
-<div source-edit="form-example2" source-edit-deps="angular.js script.js" source-edit-html="index.html-67" source-edit-css="" source-edit-js="script.js-66" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="form-example2" source-edit-deps="angular.js script.js" source-edit-html="index.html-59" source-edit-css="" source-edit-js="script.js-58" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-67" ng-html-wrap="form-example2 angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-67">
+<pre class="prettyprint linenums" ng-set-text="index.html-59" ng-html-wrap="form-example2 angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-59">
 
 
 <div contentEditable="true" ng-model="content" title="Click to edit">Some</div>
@@ -339,8 +339,8 @@ However, if you need more flexibility, you can write your own form control as a 
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-66"></pre>
-<script type="text/ng-template" id="script.js-66">
+<pre class="prettyprint linenums" ng-set-text="script.js-58"></pre>
+<script type="text/ng-template" id="script.js-58">
   angular.module('form-example2', []).directive('contenteditable', function() {
     return {
       require: 'ngModel',
@@ -365,4 +365,4 @@ However, if you need more flexibility, you can write your own form control as a 
 </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="form-example2" ng-set-html="index.html-67" ng-eval-javascript="script.js-66"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="form-example2" ng-set-html="index.html-59" ng-eval-javascript="script.js-58"></div></div>

@@ -1,7 +1,7 @@
 <h1><code ng:non-bindable=""></code>
 <span class="hint"></span>
 </h1>
-<div><p>Using services as dependencies for controllers is very similar to using services as dependencies
+<div><a href="http://github.com/angular/angular.js/edit/master/docs/content/guide/dev_guide.services.injecting_controllers.ngdoc" class="improve-docs btn btn-primary">Improve this doc</a><p>Using services as dependencies for controllers is very similar to using services as dependencies
 for another service.</p>
 
 <p>Since JavaScript is a dynamic language, DI can't figure out which services to inject by static
@@ -28,10 +28,10 @@ myController.$inject = ['$location', '$log'];
 </pre>
 
 <h3>Source</h3>
-<div source-edit="MyServiceModule" source-edit-deps="angular.js script.js" source-edit-html="index.html-34" source-edit-css="" source-edit-js="script.js-33" source-edit-unit="" source-edit-scenario="scenario.js-35"></div>
+<div source-edit="MyServiceModule" source-edit-deps="angular.js script.js" source-edit-html="index.html-32" source-edit-css="" source-edit-js="script.js-31" source-edit-unit="" source-edit-scenario="scenario.js-33"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-34" ng-html-wrap="MyServiceModule angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-34">
+<pre class="prettyprint linenums" ng-set-text="index.html-32" ng-html-wrap="MyServiceModule angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-32">
 
 
 <div ng-controller="myController">
@@ -42,8 +42,8 @@ myController.$inject = ['$location', '$log'];
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-33"></pre>
-<script type="text/ng-template" id="script.js-33">
+<pre class="prettyprint linenums" ng-set-text="script.js-31"></pre>
+<script type="text/ng-template" id="script.js-31">
 angular.
  module('MyServiceModule', []).
  factory('notify', ['$window', function(win) {
@@ -67,15 +67,15 @@ myController.$inject = ['$scope','notify'];
 </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-35"></pre>
-<script type="text/ng-template" id="scenario.js-35">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-33"></pre>
+<script type="text/ng-template" id="scenario.js-33">
   it('should test service', function() {
     expect(element(':input[ng\\:model="message"]').val()).toEqual('test');
   });
 </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="MyServiceModule" ng-set-html="index.html-34" ng-eval-javascript="script.js-33"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="MyServiceModule" ng-set-html="index.html-32" ng-eval-javascript="script.js-31"></div>
 
 <h3>Implicit Dependency Injection</h3>
 
@@ -84,10 +84,10 @@ Let's rewrite the above example to show the use of this implicit dependency inje
 <code>$window</code>, <code>$scope</code>, and our <code>notify</code> service:</p>
 
 <h3>Source</h3>
-<div source-edit="MyServiceModuleDI" source-edit-deps="angular.js script.js" source-edit-html="index.html-37" source-edit-css="" source-edit-js="script.js-36" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="MyServiceModuleDI" source-edit-deps="angular.js script.js" source-edit-html="index.html-35" source-edit-css="" source-edit-js="script.js-34" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-37" ng-html-wrap="MyServiceModuleDI angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-37">
+<pre class="prettyprint linenums" ng-set-text="index.html-35" ng-html-wrap="MyServiceModuleDI angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-35">
 
 <div ng-controller="myController">
   <p>Let's try the notify service, that is implicitly injected into the controller...</p>
@@ -97,8 +97,8 @@ Let's rewrite the above example to show the use of this implicit dependency inje
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-36"></pre>
-<script type="text/ng-template" id="script.js-36">
+<pre class="prettyprint linenums" ng-set-text="script.js-34"></pre>
+<script type="text/ng-template" id="script.js-34">
 angular.
  module('MyServiceModuleDI', []).
  factory('notify', function($window) {
@@ -120,7 +120,7 @@ function myController($scope, notify) {
 </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="MyServiceModuleDI" ng-set-html="index.html-37" ng-eval-javascript="script.js-36"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="MyServiceModuleDI" ng-set-html="index.html-35" ng-eval-javascript="script.js-34"></div>
 
 <p>However, if you plan to <a href="http://en.wikipedia.org/wiki/Minification_(programming)">minify</a> your
 code, your variable names will get renamed in which case you will still need to explicitly specify

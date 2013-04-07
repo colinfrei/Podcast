@@ -2,7 +2,7 @@
 <span class="hint">(directive in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/directive/ngPluralize.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><h3>Overview</h3>
 
 <p><code>ngPluralize</code> is a directive that displays messages according to en-US localization rules.
@@ -16,7 +16,7 @@ by specifying the mappings between
 <p>There are two
 <a href="http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html">plural categories</a> in Angular's default en-US locale: "one" and "other".</p>
 
-<p>While a pural category may match many numbers (for example, in en-US locale, "other" can match
+<p>While a plural category may match many numbers (for example, in en-US locale, "other" can match
 any number that is not 1), an explicit number rule can only match one number. For example, the
 explicit number rule for "3" matches the number 3. You will see the use of plural categories
 and explicit number rules throughout later parts of this documentation.</p>
@@ -84,7 +84,7 @@ numbers from 0 up to and including the offset. If you use an offset of 3, for ex
 you must provide explicit number rules for 0, 1, 2 and 3. You must also provide plural strings for
 plural categories "one" and "other".</p></div>
 <h2 id="Usage">Usage</h2>
-<div class="usage">as element (see <a href="guide/ie">IE restrictions</a>)<pre class="prettyprint linenums">&lt;ng-pluralize
+<div class="usage"><p>This directive can be used as custom element, but we aware of <a href="guide/ie">IE restrictions</a>.</p>as element:<pre class="prettyprint linenums">&lt;ng-pluralize
        count="{string|expression}"
        when="{string}"
        [offset="{number}"]&gt;
@@ -99,7 +99,7 @@ as attribute<pre class="prettyprint linenums">&lt;ANY ng-pluralize
 <ul class="parameters"><li><code ng:non-bindable="">count – {string|expression} – </code>
 <p>The variable to be bounded to.</p></li>
 <li><code ng:non-bindable="">when – {string} – </code>
-<p>The mapping between plural category to its correspoding strings.</p></li>
+<p>The mapping between plural category to its corresponding strings.</p></li>
 <li><code ng:non-bindable="">offset<i>(optional)</i> – {number=} – </code>
 <p>Offset to deduct from the total number.</p></li>
 </ul>
@@ -193,5 +193,5 @@ as attribute<pre class="prettyprint linenums">&lt;ANY ng-pluralize
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-167" ng-eval-javascript="script.js-166"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-167" ng-eval-javascript="script.js-166"></div></div>
 </div>

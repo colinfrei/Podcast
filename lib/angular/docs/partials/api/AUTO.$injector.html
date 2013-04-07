@@ -2,7 +2,7 @@
 <span class="hint">(service in module <code ng:non-bindable="">AUTO</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/auto/injector.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p><code>$injector</code> is used to retrieve object instances as defined by
 <a href="api/AUTO.$provide"><code>provider</code></a>, instantiate types, invoke methods,
 and load modules.</p>
@@ -24,15 +24,15 @@ following ways are all valid way of annotating function with injection arguments
 
 <pre class="prettyprint linenums">
   // inferred (only works if code not minified/obfuscated)
-  $inject.invoke(function(serviceA){});
+  $injector.invoke(function(serviceA){});
 
   // annotated
   function explicit(serviceA) {};
   explicit.$inject = ['serviceA'];
-  $inject.invoke(explicit);
+  $injector.invoke(explicit);
 
   // inline
-  $inject.invoke(['serviceA', function(serviceA){}]);
+  $injector.invoke(['serviceA', function(serviceA){}]);
 </pre>
 
 <h4>Inference</h4>
@@ -71,7 +71,7 @@ the function into a string using <code>toString()</code> method and extracting t
 <p>This method does not work with code minfication / obfuscation. For this reason the following annotation strategies
 are supported.</p>
 
-<h4>The <code>$injector</code> property</h4>
+<h4>The <code>$inject</code> property</h4>
 
 <p>If a function has an <code>$inject</code> property and its value is an array of strings, then the strings represent names of
 services to be injected into the function.

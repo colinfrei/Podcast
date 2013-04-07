@@ -2,7 +2,7 @@
 <span class="hint">(service in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/http.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>The <code>$http</code> service is a core Angular service that facilitates communication with the remote
 HTTP servers via browser's <a href="https://developer.mozilla.org/en/xmlhttprequest">XMLHttpRequest</a> object or via <a href="http://en.wikipedia.org/wiki/JSONP">JSONP</a>.</p>
 
@@ -86,7 +86,7 @@ with name equal to the lower-cased http method name, e.g.
 <code>$httpProvider.defaults.headers.get['My-Header']='value'</code>.</p>
 
 <p>Additionally, the defaults can be set at runtime via the <code>$http.defaults</code> object in a similar
-fassion as described above.</p>
+fashion as described above.</p>
 
 <h3>Transforming Requests and Responses</h3>
 
@@ -107,10 +107,14 @@ JSON format.</li>
 <li>if json response is detected, deserialize it using a JSON parser</li>
 </ul>
 
-<p>To override these transformation locally, specify transform functions as <code>transformRequest</code>
-and/or <code>transformResponse</code> properties of the config object. To globally override the default
-transforms, override the <code>$httpProvider.defaults.transformRequest</code> and
-<code>$httpProvider.defaults.transformResponse</code> properties of the <code>$httpProvider</code>.</p>
+<p>To globally augment or override the default transforms, modify the <code>$httpProvider.defaults.transformRequest</code> and
+<code>$httpProvider.defaults.transformResponse</code> properties of the <code>$httpProvider</code>. These properties are by default an
+array of transform functions, which allows you to <code>push</code> or <code>unshift</code> a new transformation function into the
+transformation chain. You can also decide to completely override any default transformations by assigning your
+transformation functions to these properties directly without the array wrapper.</p>
+
+<p>Similarly, to locally override the request/response transforms, augment the <code>transformRequest</code> and/or
+<code>transformResponse</code> properties of the config object passed into <code>$http</code>.</p>
 
 <h3>Caching</h3>
 
@@ -125,7 +129,93 @@ the same way that real requests are.</p>
 cache, but the cache is not populated yet, only one request to the server will be made and
 the remaining requests will be fulfilled using the response for the first request.</p>
 
-<h3>Response interceptors</h3>
+<p>A custom default cache built with $cacheFactory can be provided in $http.defaults.cache.
+To skip it, set configuration property <code>cache</code> to <code>false</code>.</p>
+
+<h3>Interceptors</h3>
+
+<p>Before you start creating interceptors, be sure to understand the
+<a href="api/ng.$q"><code>$q and deferred/promise APIs</code></a>.</p>
+
+<p>For purposes of global error handling, authentication or any kind of synchronous or
+asynchronous pre-processing of request or postprocessing of responses, it is desirable to be
+able to intercept requests before they are handed to the server and
+responses  before they are handed over to the application code that
+initiated these requests. The interceptors leverage the <a href="api/ng.$q"><code>promise APIs</code></a> to fulfil this need for both synchronous and asynchronous pre-processing.</p>
+
+<p>The interceptors are service factories that are registered with the $httpProvider by
+adding them to the <code>$httpProvider.interceptors</code> array. The factory is called and
+injected with dependencies (if specified) and returns the interceptor.</p>
+
+<p>There are two kinds of interceptors (and two kinds of rejection interceptors):</p>
+
+<ul>
+<li><code>request</code>: interceptors get called with http <code>config</code> object. The function is free to modify
+the <code>config</code> or create a new one. The function needs to return the <code>config</code> directly or as a
+promise.</li>
+<li><code>requestError</code>: interceptor gets called when a previous interceptor threw an error or resolved
+ with a rejection.</li>
+<li><code>response</code>: interceptors get called with http <code>response</code> object. The function is free to modify
+the <code>response</code> or create a new one. The function needs to return the <code>response</code> directly or as a
+promise.</li>
+<li><code>responseError</code>: interceptor gets called when a previous interceptor threw an error or resolved
+ with a rejection.</li>
+</ul>
+
+<pre class="prettyprint linenums">
+  // register the interceptor as a service
+  $provide.factory('myHttpInterceptor', function($q, dependency1, dependency2) {
+    return {
+      // optional method
+      'request': function(config) {
+        // do something on success
+        return config || $q.when(config);
+      },
+
+      // optional method
+     'requestError': function(rejection) {
+        // do something on error
+        if (canRecover(rejection)) {
+          return responseOrNewPromise
+        }
+        return $q.reject(rejection);
+      },
+
+
+
+      // optional method
+      'response': function(response) {
+        // do something on success
+        return response || $q.when(response);
+      },
+
+      // optional method
+     'responseError': function(rejection) {
+        // do something on error
+        if (canRecover(rejection)) {
+          return responseOrNewPromise
+        }
+        return $q.reject(rejection);
+      };
+    }
+  });
+
+  $httpProvider.interceptors.push('myHttpInterceptor');
+
+
+  // register the interceptor via an anonymous factory
+  $httpProvider.interceptors.push(function($q, dependency1, dependency2) {
+    return {
+     'request': function(config) {
+         // same as above
+      },
+      'response': function(response) {
+         // same as above
+      }
+  });
+</pre>
+
+<h3>Response interceptors (DEPRECATED)</h3>
 
 <p>Before you start creating interceptors, be sure to understand the
 <a href="api/ng.$q"><code>$q and deferred/promise APIs</code></a>.</p>
@@ -205,9 +295,10 @@ Angular will automatically strip the prefix before processing it as JSON.</p>
 <p><a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">XSRF</a> is a technique by which
 an unauthorized site can gain your user's private data. Angular provides following mechanism
 to counter XSRF. When performing XHR requests, the $http service reads a token from a cookie
-called <code>XSRF-TOKEN</code> and sets it as the HTTP header <code>X-XSRF-TOKEN</code>. Since only JavaScript that
-runs on your domain could read the cookie, your server can be assured that the XHR came from
-JavaScript running on your domain. The header will not be set for cross-domain requests.</p>
+(by default, <code>XSRF-TOKEN</code>) and sets it as an HTTP header (<code>X-XSRF-TOKEN</code>). Since only
+JavaScript that runs on your domain could read the cookie, your server can be assured that
+the XHR came from JavaScript running on your domain. The header will not be set for
+cross-domain requests.</p>
 
 <p>To take advantage of this, your server needs to set a token in a JavaScript readable session
 cookie called <code>XSRF-TOKEN</code> on first HTTP GET request. On subsequent non-GET requests the
@@ -215,7 +306,10 @@ server can verify that the cookie matches <code>X-XSRF-TOKEN</code> HTTP header,
 that only JavaScript running on your domain could have read the token. The token must be
 unique for each user and must be verifiable by the server (to prevent the JavaScript making
 up its own tokens). We recommend that the token is a digest of your site's authentication
-cookie with <a href="http://en.wikipedia.org/wiki/Rainbow_table">salt for added security</a>.</p></div>
+cookie with <a href="http://en.wikipedia.org/wiki/Rainbow_table">salt for added security</a>.</p>
+
+<p>The name of the headers can be specified using the xsrfHeaderName and xsrfCookieName
+properties of either $httpProvider.defaults, or the per-request config object.</p></div>
 <h2 id="Dependencies">Dependencies</h2>
 <ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$httpBackend">$httpBackend</a></code>
 </li>
@@ -244,6 +338,8 @@ processed. The object has following properties:</p>
 <code>?key1=value1&amp;key2=value2</code> after the url. If the value is not a string, it will be JSONified.</li>
 <li><strong>data</strong> – <code>{string|Object}</code> – Data to be sent as the request message data.</li>
 <li><strong>headers</strong> – <code>{Object}</code> – Map of strings representing HTTP headers to send to the server.</li>
+<li><strong>xsrfHeaderName</strong> – <code>{string}</code> – Name of HTTP header to populate with the XSRF token.</li>
+<li><strong>xsrfCookieName</strong> – <code>{string}</code> – Name of cookie containing the XSRF token.</li>
 <li><strong>transformRequest</strong> – <code>{function(data, headersGetter)|Array.&lt;function(data, headersGetter)&gt;}</code> –
 transform function or an array of such functions. The transform function takes the http
 request body and headers and returns its transformed (typically serialized) version.</li>
@@ -453,5 +549,5 @@ requests. This is primarily meant to be used for debugging purposes.</p></div>
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-210" ng-eval-javascript="script.js-211"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-210" ng-eval-javascript="script.js-211"></div></div>
 </div>

@@ -1,7 +1,7 @@
 <h1><code ng:non-bindable=""></code>
 <span class="hint"></span>
 </h1>
-<div><p>Directives are a way to teach HTML new tricks. During DOM compilation directives are matched
+<div><a href="http://github.com/angular/angular.js/edit/master/docs/content/guide/directive.ngdoc" class="improve-docs btn btn-primary">Improve this doc</a><p>Directives are a way to teach HTML new tricks. During DOM compilation directives are matched
 against the HTML and executed. This allows directives to register behavior, or transform the DOM.</p>
 
 <p>Angular comes with a built in set of directives which are useful for building web applications but
@@ -37,11 +37,11 @@ the following example.</p>
    
    <div ng-controller="Ctrl1">
      Hello <input ng-model='name'> <hr/>
-     &ltspan ng:bind="name"&gt <span ng:bind="name"></span> <br/>
-     &ltspan ng_bind="name"&gt <span ng_bind="name"></span> <br/>
-     &ltspan ng-bind="name"&gt <span ng-bind="name"></span> <br/>
-     &ltspan data-ng-bind="name"&gt <span data-ng-bind="name"></span> <br/>
-     &ltspan x-ng-bind="name"&gt <span x-ng-bind="name"></span> <br/>
+     &lt;span ng:bind="name"&gt; <span ng:bind="name"></span> <br/>
+     &lt;span ng_bind="name"&gt; <span ng_bind="name"></span> <br/>
+     &lt;span ng-bind="name"&gt; <span ng-bind="name"></span> <br/>
+     &lt;span data-ng-bind="name"&gt; <span data-ng-bind="name"></span> <br/>
+     &lt;span x-ng-bind="name"&gt; <span x-ng-bind="name"></span> <br/>
    </div>
   </script>
 </div>
@@ -62,9 +62,9 @@ the following example.</p>
   </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-42" ng-eval-javascript="script.js-41"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-42" ng-eval-javascript="script.js-41"></div>
 
-<h2>String interpolation</h2>
+<h2>Text and attribute bindings</h2>
 
 <p>During the compilation process the <a href="api/ng.$compile"><code>compiler</code></a> matches text and
 attributes using the <a href="api/ng.$interpolate"><code>$interpolate</code></a> service to see if they
@@ -74,6 +74,31 @@ here:</p>
 <pre class="prettyprint linenums">
 &lt;a href="img/{{username}}.jpg"&gt;Hello {{username}}!&lt;/a&gt;
 </pre>
+
+<h2>ngAttr attribute bindings</h2>
+
+<p>If an attribute with a binding is prefixed with <code>ngAttr</code> prefix (denormalized prefix: 'ng-attr-',
+'ng:attr-') then during the compilation the prefix will be removed and the binding will be applied
+to an unprefixed attribute. This allows binding to attributes that would otherwise be eagerly
+processed by browsers in their uncompiled form (e.g. <code>img[src]</code> or svg's <code>circle[cx]</code> attributes).</p>
+
+<p>For example, considering template:</p>
+
+<pre><code>&lt;svg&gt;
+  &lt;circle ng-attr-cx="{{cx}}"&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>and model cx set to 5, will result in rendering this dom:</p>
+
+<pre><code>&lt;svg&gt;
+  &lt;circle cx="5"&gt;&lt;/circle&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>If you were to bind <code>{{cx}}</code> directly to the <code>cx</code> attribute, you'd get the following error:
+<code>Error: Invalid value for attribute cx="{{cx}}"</code>. With <code>ng-attr-cx</code> you can work around this
+problem.</p>
 
 <h2>Compilation process, and directive matching</h2>
 
@@ -100,7 +125,7 @@ scope and the DOM. A change in the scope is reflected in the DOM.</p></li>
   var $compile = ...; // injected into your code
   var scope = ...;
 
-  var html = '&lt;div ng-bind='exp'&gt;&lt;/div&gt;';
+  var html = '&lt;div ng-bind="exp"&gt;&lt;/div&gt;';
 
   // Step 1: parse HTML into DOM element
   var template = angular.element(html);
@@ -219,7 +244,7 @@ as to copy content into the DOM from the scope.</p></li>
            }
 
            // listen on DOM destroy (removal) event, and cancel the next UI update
-           // to prevent updating time ofter the DOM element was removed.
+           // to prevent updating time after the DOM element was removed.
            element.bind('$destroy', function() {
              $timeout.cancel(timeoutId);
            });
@@ -230,7 +255,7 @@ as to copy content into the DOM from the scope.</p></li>
    </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="time" ng-set-html="index.html-45" ng-eval-javascript="script.js-44"></div>
+<div class="well doc-example-live animator-container" ng-embed-app="time" ng-set-html="index.html-45" ng-eval-javascript="script.js-44"></div>
 
 <h2>Writing directives (long version)</h2>
 
@@ -264,7 +289,7 @@ as to copy content into the DOM from the scope.</p></li>
 different parts of this skeleton are explained in following sections. In this section we are
 interested only in some of this skeleton.</p>
 
-<p>The first step in simplyfing the code is to rely on the default values. Therefore the above can be
+<p>The first step in simplifying the code is to rely on the default values. Therefore the above can be
 simplified as:</p>
 
 <pre class="prettyprint linenums">
@@ -338,7 +363,9 @@ name is specified then the attribute name is assumed to be the same as the local
 Given <code>&lt;widget my-attr="parentModel"&gt;</code> and widget definition of
 <code>scope: { localModel:'=myAttr' }</code>, then widget scope property <code>localModel</code> will reflect the
 value of <code>parentModel</code> on the parent scope. Any changes to <code>parentModel</code> will be reflected
-in <code>localModel</code> and any changes in <code>localModel</code> will reflect in <code>parentModel</code>.</p></li>
+in <code>localModel</code> and any changes in <code>localModel</code> will reflect in <code>parentModel</code>. If the parent
+scope property doesn't exist, it will throw a NON<em>ASSIGNABLE</em>MODEL_EXPRESSION exception. You
+can avoid this behavior using <code>=?</code> or <code>=?attr</code> in order to flag the property as optional.</p></li>
 <li><p><code>&amp;</code> or <code>&amp;attr</code> - provides a way to execute an expression in the context of the parent scope.
 If no <code>attr</code> name is specified then the attribute name is assumed to be the same as the
 local name. Given <code>&lt;widget my-attr="count = count + value"&gt;</code> and widget definition of
@@ -355,7 +382,7 @@ each other's behavior. The controller is injectable with the following locals:</
 
 <ul><li><code>$scope</code> - Current scope associated with the element</li>
 <li><code>$element</code> - Current element</li>
-<li><code>$attrs</code> - Current attributes obeject for the element</li>
+<li><code>$attrs</code> - Current attributes object for the element</li>
 <li><code>$transclude</code> - A transclude linking function pre-bound to the correct transclusion scope:
 <code>function(cloneLinkingFn)</code>.</li></ul></li>
 <li><p><code>require</code> - Require another controller be passed into current directive linking function. The
@@ -373,11 +400,19 @@ declaration style. If omitted directives are allowed on attributes only.</p>
 <li><code>C</code> - Class: <code>&lt;div class="my-directive: exp;"&gt;&lt;/div&gt;</code></li>
 <li><code>M</code> - Comment: <code>&lt;!-- directive: my-directive exp --&gt;</code></li></ul></li>
 <li><p><code>template</code> - replace the current element with the contents of the HTML. The replacement process
-migrates all of the attributes / classes from the old element to the new one. See Creating
-Widgets section below for more information.</p></li>
+migrates all of the attributes / classes from the old element to the new one. See the
+<a href="guide/directive#Components">Creating Components</a> section below for more information.</p>
+
+<p>You can specify <code>template</code> as a string representing the template or as a function which takes
+two arguments <code>tElement</code> and <code>tAttrs</code> (described in the <code>compile</code> function api below) and returns
+a string value representing the template.</p></li>
 <li><p><code>templateUrl</code> - Same as <code>template</code> but the template is loaded from the specified URL. Because
 the template loading is asynchronous the compilation/linking is suspended until the template
-is loaded.</p></li>
+is loaded.</p>
+
+<p>You can specify <code>templateUrl</code> as a string representing the URL or as a function which takes two
+arguments <code>tElement</code> and <code>tAttrs</code> (described in the <code>compile</code> function api below) and returns
+a string value representing the url.</p></li>
 <li><p><code>replace</code> - if set to <code>true</code> then the template will replace the current element, rather than
 append the template to the element.</p></li>
 <li><p><code>transclude</code> - compile the content of the element and make it available to the directive.
@@ -585,6 +620,8 @@ restrict: 'E',
 replace: true
 </pre>
 
+<p><a name="Components"></a></p>
+
 <h2>Creating Components</h2>
 
 <p>It is often desirable to replace a single directive with a more complex DOM structure. This
@@ -691,4 +728,4 @@ can be built.</p>
   </script>
 </div>
 </div><h3>Demo</h3>
-<div class="well doc-example-live" ng-embed-app="zippyModule" ng-set-html="index.html-48" ng-eval-javascript="script.js-46"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="zippyModule" ng-set-html="index.html-48" ng-eval-javascript="script.js-46"></div></div>

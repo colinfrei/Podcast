@@ -2,14 +2,14 @@
 <span class="hint">(service in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/q.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>A promise/deferred implementation inspired by <a href="https://github.com/kriskowal/q">Kris Kowal's Q</a>.</p>
 
 <p><a href="http://wiki.commonjs.org/wiki/Promises">The CommonJS Promise proposal</a> describes a promise as an
 interface for interacting with an object that represents the result of an action that is
 performed asynchronously, and may or may not be finished at any given point in time.</p>
 
-<p>From the perspective of dealing with error handling, deferred and promise apis are to
+<p>From the perspective of dealing with error handling, deferred and promise APIs are to
 asynchronous programming what <code>try</code>, <code>catch</code> and <code>throw</code> keywords are to synchronous programming.</p>
 
 <pre class="prettyprint linenums">
@@ -44,7 +44,7 @@ asynchronous programming what <code>try</code>, <code>catch</code> and <code>thr
 
 <p>At first it might not be obvious why this extra complexity is worth the trouble. The payoff
 comes in the way of
-<a href="https://github.com/kriskowal/uncommonjs/blob/master/promises/specification.md">guarantees that promise and deferred apis make</a>.</p>
+<a href="https://github.com/kriskowal/uncommonjs/blob/master/promises/specification.md">guarantees that promise and deferred APIs make</a>.</p>
 
 <p>Additionally the promise api allows for composition that is very hard to do with the
 traditional callback (<a href="http://en.wikipedia.org/wiki/Continuation-passing_style">CPS</a>) approach.
@@ -55,7 +55,7 @@ section on serial or parallel joining of promises.</p>
 
 <p>A new instance of deferred is constructed by calling <code>$q.defer()</code>.</p>
 
-<p>The purpose of the deferred object is to expose the associated Promise instance as well as apis
+<p>The purpose of the deferred object is to expose the associated Promise instance as well as APIs
 that can be used for signaling the successful or unsuccessful completion of the task.</p>
 
 <p><strong>Methods</strong></p>
@@ -102,7 +102,7 @@ to create a chain of promises:</p>
     return result + 1;
   });
 
-  // promiseB will be resolved immediately after promiseA is resolved and it's value will be
+  // promiseB will be resolved immediately after promiseA is resolved and its value will be
   // the result of promiseA incremented by 1
 </pre>
 
@@ -127,7 +127,7 @@ all the important functionality needed for common async tasks.</p>
 <h3>Testing</h3>
 
 <pre class="prettyprint linenums">
-   it('should simulate promise', inject(function($q, $rootSCope) {
+   it('should simulate promise', inject(function($q, $rootScope) {
      var deferred = $q.defer();
      var promise = deferred.promise;
      var resolvedValue;
@@ -136,7 +136,7 @@ all the important functionality needed for common async tasks.</p>
      expect(resolvedValue).toBeUndefined();
 
      // Simulate resolving of promise
-     defered.resolve(123);
+     deferred.resolve(123);
      // Note that the 'then' function does not get called synchronously.
      // This is because we want the promise API to always be async, whether or not
      // it got called synchronously or asynchronously.
@@ -156,13 +156,13 @@ all the important functionality needed for common async tasks.</p>
 <ul class="methods"><li><h3 id="all">all(promises)</h3>
 <div class="all"><p>Combines multiple promises into a single promise that is resolved when all of the input
 promises are resolved.</p><h4 id="Parameters">Parameters</h4>
-<ul class="parameters"><li><code ng:non-bindable="">promises – {Array.&lt;Promise&gt;} – </code>
-<p>An array of promises.</p></li>
+<ul class="parameters"><li><code ng:non-bindable="">promises – {Array.&lt;Promise&gt;|Object.&lt;Promise&gt;} – </code>
+<p>An array or hash of promises.</p></li>
 </ul>
 <h4 id="Returns">Returns</h4>
 <div class="returns"><code ng:non-bindable="">{Promise}</code>
-– <p>Returns a single promise that will be resolved with an array of values,
-each value coresponding to the promise at the same index in the <code>promises</code> array. If any of
+– <p>Returns a single promise that will be resolved with an array/hash of values,
+each value corresponding to the promise at the same index/key in the <code>promises</code> array/hash. If any of
 the promises is resolved with a rejection, this resulting promise will be resolved with the
 same rejection.</p></div>
 </div>
@@ -210,7 +210,7 @@ current promise, you have to "rethrow" the error by returning a rejection constr
 </li>
 <li><h3 id="when">when(value)</h3>
 <div class="when"><p>Wraps an object that might be a value or a (3rd party) then-able promise into a $q promise.
-This is useful when you are dealing with on object that might or might not be a promise, or if
+This is useful when you are dealing with an object that might or might not be a promise, or if
 the promise comes from a source that can't be trusted.</p><h4 id="Parameters">Parameters</h4>
 <ul class="parameters"><li><code ng:non-bindable="">value – {*} – </code>
 <p>Value or a promise</p></li>
@@ -218,7 +218,7 @@ the promise comes from a source that can't be trusted.</p><h4 id="Parameters">Pa
 <h4 id="Returns">Returns</h4>
 <div class="returns"><code ng:non-bindable="">{Promise}</code>
 – <p>Returns a single promise that will be resolved with an array of values,
-each value coresponding to the promise at the same index in the <code>promises</code> array. If any of
+each value corresponding to the promise at the same index in the <code>promises</code> array. If any of
 the promises is resolved with a rejection, this resulting promise will be resolved with the
 same rejection.</p></div>
 </div>

@@ -2,12 +2,23 @@
 <span class="hint">(service in module <code ng:non-bindable="">ngResource</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ngResource/resource.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>A factory which creates a resource object that lets you interact with
 <a href="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</a> server-side data sources.</p>
 
 <p>The returned resource object has action methods which provide high-level behaviors without
-the need to interact with the low level <a href="api/ng.$http"><code>$http</code></a> service.</p></div>
+the need to interact with the low level <a href="api/ng.$http"><code>$http</code></a> service.</p>
+
+<h3>Installation</h3>
+
+<p>To use $resource make sure you have included the <code>angular-resource.js</code> that comes in Angular 
+package. You also can find this stuff in <a href="http://code.angularjs.org/">code.angularjs.org</a>.
+Finally load the module in your application:</p>
+
+<pre><code>   angular.module('app', ['ngResource']);
+</code></pre>
+
+<p>and you ready to get started!</p></div>
 <h2 id="Dependencies">Dependencies</h2>
 <ul class="dependencies"><li><code ng:non-bindable=""><a href="api/ng.$http">$http</a></code>
 </li>
@@ -16,14 +27,14 @@ the need to interact with the low level <a href="api/ng.$http"><code>$http</code
 <div class="usage"><pre class="prettyprint linenums">$resource(url[, paramDefaults][, actions]);</pre>
 <h3 id="Parameters">Parameters</h3>
 <ul class="parameters"><li><code ng:non-bindable="">url – {string} – </code>
-<p>A parameterized URL template with parameters prefixed by <code>:</code> as in
-<code>/user/:username</code>. If you are using a URL with a port number (e.g. 
+<p>A parametrized URL template with parameters prefixed by <code>:</code> as in
+<code>/user/:username</code>. If you are using a URL with a port number (e.g.
 <code>http://example.com:8080/api</code>), you'll need to escape the colon character before the port
 number, like this: <code>$resource('http://example.com\\:8080/api')</code>.</p></li>
 <li><code ng:non-bindable="">paramDefaults<i>(optional)</i> – {Object=} – </code>
 <p>Default values for <code>url</code> parameters. These can be overridden in
 <code>actions</code> methods. If any of the parameter value is a function, it will be executed every time
-when a param value needs to be obtained for a request (unless the param was overriden).</p>
+when a param value needs to be obtained for a request (unless the param was overridden).</p>
 
 <p>Each key value in the parameter object is first bound to url template if present and then any
 excess keys are appended to the url search query after the <code>?</code>.</p>
@@ -51,7 +62,9 @@ resource object.</li>
 and <code>JSONP</code>.</li>
 <li><strong><code>params</code></strong> – {Object=} – Optional set of pre-bound parameters for this action. If any of the
 parameter value is a function, it will be executed every time when a param value needs to be
-obtained for a request (unless the param was overriden).</li>
+obtained for a request (unless the param was overridden).</li>
+<li><strong><code>url</code></strong> – {string} – action specific <code>url</code> override. The url templating is supported just like
+for the resource-level urls.</li>
 <li><strong><code>isArray</code></strong> – {boolean=} – If true then the returned object for this action is an array, see
 <code>returns</code> section.</li>
 <li><strong><code>transformRequest</code></strong> – <code>{function(data, headersGetter)|Array.&lt;function(data, headersGetter)&gt;}</code> –
@@ -84,9 +97,9 @@ optionally extended with custom <code>actions</code>. The default set contains t
 
 <p>Calling these methods invoke an <a href="api/ng.$http"><code>ng.$http</code></a> with the specified http method,
 destination and parameters. When the data is returned from the server then the object is an
-instance of the resource class <code>save</code>, <code>remove</code> and <code>delete</code> actions are available on it as
-methods with the <code>$</code> prefix. This allows you to easily perform CRUD operations (create, read,
-update, delete) on server-side data like this:
+instance of the resource class. The actions <code>save</code>, <code>remove</code> and <code>delete</code> are available on it
+as  methods with the <code>$</code> prefix. This allows you to easily perform CRUD operations (create,
+read, update, delete) on server-side data like this:
 <pre class="prettyprint linenums">
       var User = $resource('/user/:userId', {userId:'@id'});
       var user = User.get({userId:123}, function() {
@@ -110,6 +123,25 @@ parameters:</p>
 <li>HTTP GET "class" actions: <code>Resource.action([parameters], [success], [error])</code></li>
 <li>non-GET "class" actions: <code>Resource.action([parameters], postData, [success], [error])</code></li>
 <li>non-GET instance actions:  <code>instance.$action([parameters], [success], [error])</code></li>
+</ul>
+
+<p>The Resource instances and collection have these additional properties:</p>
+
+<ul>
+<li><p><code>$then</code>: the <code>then</code> method of a <a href="api/ng.$q"><code>promise</code></a> derived from the underlying
+<a href="api/ng.$http"><code>$http</code></a> call.</p>
+
+<p>The success callback for the <code>$then</code> method will be resolved if the underlying <code>$http</code> requests
+succeeds.</p>
+
+<p>The success callback is called with a single object which is the <a href="api/ng.$http"><code>http response</code></a>
+object extended with a new property <code>resource</code>. This <code>resource</code> property is a reference to the
+result of the resource action — resource object or array of resources.</p>
+
+<p>The error callback is called with the <a href="api/ng.$http"><code>http response</code></a> object when an http
+error occurs.</p></li>
+<li><p><code>$resolved</code>: true if the promise has been resolved (either with success or rejection);
+Knowing if the Resource has been resolved is useful in data-binding.</p></li>
 </ul></div>
 </div>
 <h2 id="Example">Example</h2>
@@ -166,10 +198,9 @@ operations (create, read, update, delete) on server-side data.</p>
      });
    </pre>
 
-<pre><code>It's worth noting that the success callback for `get`, `query` and other method gets passed
+<p>It's worth noting that the success callback for <code>get</code>, <code>query</code> and other method gets passed
 in the response that came from the server as well as $http header getter function, so one
-could rewrite the above example and get access to http headers as:
-</code></pre>
+could rewrite the above example and get access to http headers as:</p>
 
 <pre class="prettyprint linenums">
      var User = $resource('/user/:userId', {userId:'@id'});
@@ -186,10 +217,10 @@ could rewrite the above example and get access to http headers as:
 
 <p>Let's look at what a buzz client created with the <code>$resource</code> service looks like:
     <h4>Source</h4>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-221" source-edit-css="" source-edit-js="script.js-220" source-edit-unit="" source-edit-scenario="scenario.js-222"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-224" source-edit-css="" source-edit-js="script.js-223" source-edit-unit="" source-edit-scenario="scenario.js-225"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-221" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-221">
+<pre class="prettyprint linenums" ng-set-text="index.html-224" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-224">
        
 
        <div ng-controller="BuzzController">
@@ -212,8 +243,8 @@ could rewrite the above example and get access to http headers as:
       </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-220"></pre>
-<script type="text/ng-template" id="script.js-220">
+<pre class="prettyprint linenums" ng-set-text="script.js-223"></pre>
+<script type="text/ng-template" id="script.js-223">
          function BuzzController($resource) {
            this.userId = 'googlebuzz';
            this.Activity = $resource(
@@ -235,10 +266,10 @@ could rewrite the above example and get access to http headers as:
        </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-222"></pre>
-<script type="text/ng-template" id="scenario.js-222">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-225"></pre>
+<script type="text/ng-template" id="scenario.js-225">
       </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-221" ng-eval-javascript="script.js-220"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-224" ng-eval-javascript="script.js-223"></div></div>
 </div>

@@ -2,7 +2,7 @@
 <span class="hint">(directive in module <code ng:non-bindable="">ng</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ng/directive/input.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>Standard HTML text input with angular data binding.</p></div>
 <h2 id="Usage">Usage</h2>
 <div class="usage"><pre class="prettyprint linenums">&lt;input type="text"
@@ -46,10 +46,10 @@ input.</p></li>
 </div>
 <h2 id="Example">Example</h2>
 <div class="example"><h4>Source</h4>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-110" source-edit-css="" source-edit-js="script.js-109" source-edit-unit="" source-edit-scenario="scenario.js-111"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-119" source-edit-css="" source-edit-js="script.js-118" source-edit-unit="" source-edit-scenario="scenario.js-120"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-110" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-110">
+<pre class="prettyprint linenums" ng-set-text="index.html-119" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-119">
  
  <form name="myForm" ng-controller="Ctrl">
    Single word: <input type="text" name="input" ng-model="text"
@@ -68,8 +68,8 @@ input.</p></li>
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-109"></pre>
-<script type="text/ng-template" id="script.js-109">
+<pre class="prettyprint linenums" ng-set-text="script.js-118"></pre>
+<script type="text/ng-template" id="script.js-118">
    function Ctrl($scope) {
      $scope.text = 'guest';
      $scope.word = /^\s*\w*\s*$/;
@@ -77,8 +77,8 @@ input.</p></li>
  </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-111"></pre>
-<script type="text/ng-template" id="scenario.js-111">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-120"></pre>
+<script type="text/ng-template" id="scenario.js-120">
   it('should initialize to model', function() {
     expect(binding('text')).toEqual('guest');
     expect(binding('myForm.input.$valid')).toEqual('true');
@@ -103,5 +103,5 @@ input.</p></li>
 </script>
 </div>
 </div><h4>Demo</h4>
-<div class="well doc-example-live" ng-embed-app="" ng-set-html="index.html-110" ng-eval-javascript="script.js-109"></div></div>
+<div class="well doc-example-live animator-container" ng-embed-app="" ng-set-html="index.html-119" ng-eval-javascript="script.js-118"></div></div>
 </div>

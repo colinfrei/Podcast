@@ -2,7 +2,7 @@
 <span class="hint">(service in module <code ng:non-bindable="">ngMock</code>
 )</span>
 </h1>
-<div><h2 id="Description">Description</h2>
+<div><a href="http://github.com/angular/angular.js/edit/master/src/ngMock/angular-mocks.js" class="improve-docs btn btn-primary">Improve this doc</a><h2 id="Description">Description</h2>
 <div class="description"><p>Configures the mock implementation of <a href="api/ng.$exceptionHandler"><code>ng.$exceptionHandler</code></a> to rethrow or to log errors passed
 into the <code>$exceptionHandler</code>.</p></div>
 <div class="member method"><h2 id="Methods">Methods</h2>
@@ -15,7 +15,7 @@ into the <code>$exceptionHandler</code>.</p></div>
 <li><code>rethrow</code>: If any errors are are passed into the handler in tests, it typically
            means that there is a bug in the application or test, so this mock will
            make these tests fail.</li>
-<li><code>log</code>: Sometimes it is desirable to test that an error is throw, for this case the <code>log</code> mode stores an
+<li><code>log</code>: Sometimes it is desirable to test that an error is thrown, for this case the <code>log</code> mode stores an
        array of errors in <code>$exceptionHandler.errors</code>, to allow later assertion of them.
        See <a href="api/ngMock.$log#assertEmpty">assertEmpty()</a> and
         <a href="api/ngMock.$log#reset">reset()</a></li>
