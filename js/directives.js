@@ -2,7 +2,14 @@ angular.module('podcast.directives', [])
     .directive('pullToRefresh', function() {
         return function(scope, element, attrs, feedItems) {
             var myScroll,
-                pullDownEl, pullDownOffset;
+                pullDownEl, pullDownOffset,
+                wrapper = angular.element('<div class="scroller"></div>');
+
+            element.contents().wrap(wrapper[0]);
+
+            wrapper.prepend('<div id="pullDown">' +
+                '<span class="pullDownIcon"></span><span class="pullDownLabel">Pull down to refresh...</span>' +
+            '</div>');
 
             pullDownEl = document.getElementById('pullDown');
             pullDownOffset = pullDownEl.offsetHeight;

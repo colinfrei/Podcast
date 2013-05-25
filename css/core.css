@@ -157,13 +157,14 @@ body, .normalFont {
     min-height: 40px;
 }
 .playButton {
-    width: 40px;
+    width: 50px;
     height: 100%;
     font-size: 20px;
     color: #c0c0c0;
     vertical-align: middle;
     text-align: center;
     line-height: 40px;
+    float: right;
 }
 
 #queueList, #scroller {
@@ -189,4 +190,16 @@ form.importForm {
 }
 label {
     display: inline-block;
+}
+
+
+
+
+.feedData_tmp {
+    display: inline-block;
+    width: 50%;
+}
+
+.feedImageThumbnail {
+    width:40px;
 }

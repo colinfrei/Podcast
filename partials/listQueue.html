@@ -1,19 +1,14 @@
 <div id="queueList" pull-to-refresh="pull-to-refresh">
-    <div id="scroller">
-        <div id="pullDown">
-            <span class="pullDownIcon"></span><span class="pullDownLabel">Pull down to refresh...</span>
+    <div ng-repeat="feedItem in queue | orderBy:'date':reverse=true" class="listItem">
+        <div class="playButton">
+            <span ng-click="playItem(feedItem.id)"><i ng-class="{hasAudio: feedItem.audio}" class="icon-play"></i></span>
         </div>
-        <div ng-repeat="feedItem in queue | orderBy:'date':reverse=true" class="listItem">
-            <div class="playButton" style="width: 50px; float: right;">
-                <span ng-click="playItem(feedItem.id)"><i ng-class="{hasAudio: feedItem.audio}" class="icon-play"></i></span>
-            </div>
-            <div class="feedItemContent">
-                <span class="feedItemTitle">{{ feedItem.title }}</span>
-                {{ feedItem.date | timeAgo }}<span ng-show="feedItem.duration">, {{ feedItem.duration }}</span>
-            </div>
+        <div class="feedItemContent">
+            <span class="feedItemTitle">{{ feedItem.title }}</span>
+            {{ feedItem.date | timeAgo }}<span ng-show="feedItem.duration">, {{ feedItem.duration }}</span>
         </div>
-        <div ng-hide="queue.length" class="pullDownMessage">
-            <i class="icon-arrow-down"></i> Pull down to refresh.
-        </div>
+    </div>
+    <div ng-hide="queue.length" class="pullDownMessage">
+        <i class="icon-arrow-down"></i> Pull down to refresh.
     </div>
 </div>

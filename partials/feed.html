@@ -4,7 +4,7 @@
             <h1>{{ feed.title }}</h1>
             <h2>{{ feed.author }}</h2>
             <img blob="feed.image" class="feedImage" />
-            <div style="display: inline-block; width: 50%">
+            <div class="feedData_tmp">
                 <a ng-click="delete(feed.id)">Delete Feed</a><br />
                 Number of Items to keep in Queue
                 <select ng-model="nrQueueItemsOptions">
@@ -23,7 +23,7 @@
             </div>
             <h3>Episodes</h3>
             <div ng-repeat="item in feed.items | orderBy:'date'" class="listItem">
-                <div class="playButton" style="width: 50px; float: right;">
+                <div class="playButton">
                     <span ng-click="playItem(item.id)"><i ng-class="{hasAudio: item.audio}" class="icon-play"></i></span>
                 </div>
                 <div class="feedItemContent">

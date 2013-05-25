@@ -1,0 +1,11 @@
+{
+    "name": "podcast",
+    "version": "1.0.0",
+    "main": "css/core.css",
+    "ignore": [
+     ],
+    "dependencies": {
+        "iscroll": "d1e642c1d6751877ca0b2b13faf6c2bd512bf473"
+    },
+    "devDependencies": {}
+}

@@ -3,5 +3,5 @@
 </form>
 
 <div ng-repeat="feed in feeds | orderBy:'title'" class="listItem" ng-click="goToFeed(feed.id)">
-    <img blob="feed.image" style="width:40px;" /> <span class="listItemTitle">{{feed.title}}</span>
+    <img blob="feed.image" class="feedImageThumbnail" /> <span class="listItemTitle">{{feed.title}}</span>
 </div>
