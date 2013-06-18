@@ -328,9 +328,12 @@ angular.module('podcasts.services', [])
         };
     }])
     .service('player', ['db', 'url', '$timeout', function(db, url, $timeout) {
+        var audioSetup = new Audio();
+        audioSetup.setAttribute("mozaudiochannel", "content");
+
         return {
             db: db,
-            audio: new Audio(),
+            audio: audioSetup,
             feedItem: null,
             nowPlaying: {position: 0, duration: 0, title: '', description: '', feed: '', date: 0},
             play: function (feedItem, $scope) {
