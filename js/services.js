@@ -635,7 +635,7 @@ angular.module('podcasts.database', [])
                 } else {
                     deferred.reject();
                 }
-            });
+            }, null, IDBKeyRange.only(identifier));
 
             return deferred.promise;
         };
