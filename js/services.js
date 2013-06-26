@@ -143,7 +143,7 @@ angular.module('podcasts.services', [])
             }
         }
     }])
-    .service('feeds', ['$log', '$q', 'dbNew', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', function($log, $q, db, dbOld, downloaderBackend, xmlParser, feedItems) {
+    .service('feeds', ['$log', '$q', 'dbNew', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', 'utilities', function($log, $q, db, dbOld, downloaderBackend, xmlParser, feedItems, utilities) {
         return {
             feeds: [],
             add: function(url) {
@@ -157,9 +157,9 @@ angular.module('podcasts.services', [])
                     });
                 };
 
-                // TODO: verify URL format somewhere
+                var cleanedUrl = utilities.clean_url(url);
 
-                var promise = downloaderBackend.downloadXml(url);
+                var promise = downloaderBackend.downloadXml(cleanedUrl);
                 promise.then(function(xml) {
                     var channelChildren = xml.find('channel').children(),
                         newFeed = {},
@@ -175,7 +175,7 @@ angular.module('podcasts.services', [])
                         }
                     });
 
-                    newFeed.url = url;
+                    newFeed.url = cleanedUrl;
                     newFeed.title = channelChildren.find('title').text();
                     newFeed.summary = channelChildren.find('description').text();
                     newFeed.nrQueueItems = 1;
@@ -190,7 +190,7 @@ angular.module('podcasts.services', [])
                 }, function() {
                     console.warn('Could not fetch XML for feed, adding just URL for now');
                     var newFeed = {};
-                    newFeed.url = url;
+                    newFeed.url = cleanedUrl;
 
                     finishSave(newFeed);
                 });
