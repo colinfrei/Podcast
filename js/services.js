@@ -378,10 +378,10 @@ angular.module('podcasts.services', ['podcasts.utilities'])
                 });
             },
             pause: function() {
-                this.audio[0].pause();
+                this.audio.pause();
             },
             playing: function() {
-                return !this.audio[0].paused;
+                return !this.audio.paused;
             },
             updateSong: function(feedItem, $scope) {
                 this.nowPlaying.title = feedItem.title;
