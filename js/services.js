@@ -1,8 +1,8 @@
 'use strict';
 
 /* Services */
-angular.module('podcasts.services', [])
-    .service('downloaderBackend', ['$http', '$q', 'xmlParser', function($http, $q, xmlParser) {
+angular.module('podcasts.services', ['podcasts.utilities'])
+    .service('downloaderBackend', ['$http', '$q', 'xmlParser', '$rootScope', function($http, $q, xmlParser, $rootScope) {
         return {
             downloadFile: function(url) {
                 var deferred = $q.defer();
@@ -21,13 +21,14 @@ angular.module('podcasts.services', [])
             downloadXml: function(url) {
                 var deferred = $q.defer();
 
-                $http.get(url)
+                $rootScope.$apply($http.get(url)
                     .success(function(xml) {
                         deferred.resolve(xmlParser.parse(xml));
                     })
                     .error(function(data, status, headers, config) {
                         deferred.reject();
-                    });
+                    })
+                );
 
                 return deferred.promise;
             }
