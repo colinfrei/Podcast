@@ -22,7 +22,7 @@
         <i class="icon-pause"></i>
     </div>
     <div ng-click="currentInfo()" class="topBarItem">
-        <span>{{ feedItem.title }}</span>
+        <span>{{ nowPlaying.title }}</span>
         <span ng-show="nowPlaying.duration > 0">
             <span id="position">{{ audio.currentTime|time:true }}</span>/<span id="duration">{{ audio.duration|time }}</span>
         </span>
