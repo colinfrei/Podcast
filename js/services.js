@@ -2,38 +2,6 @@
 
 /* Services */
 angular.module('podcasts.services', ['podcasts.utilities'])
-    .service('downloaderBackend', ['$http', '$q', 'xmlParser', '$rootScope', function($http, $q, xmlParser, $rootScope) {
-        return {
-            downloadFile: function(url) {
-                var deferred = $q.defer();
-
-                $http.get(url, {'responseType': 'blob'})
-                    .success(function(file) {
-                        deferred.resolve(file);
-                    })
-                    .error(function() {
-                        deferred.reject();
-                    })
-                ;
-
-                return deferred.promise;
-            },
-            downloadXml: function(url) {
-                var deferred = $q.defer();
-
-                $rootScope.$apply($http.get(url)
-                    .success(function(xml) {
-                        deferred.resolve(xmlParser.parse(xml));
-                    })
-                    .error(function(data, status, headers, config) {
-                        deferred.reject();
-                    })
-                );
-
-                return deferred.promise;
-            }
-        }
-    }])
     .value('queueList', {
         queue: [],
         scope: null,
@@ -130,7 +98,10 @@ angular.module('podcasts.services', ['podcasts.utilities'])
                         ixDbCursorReq.onsuccess = function (e) {
                             var cursor = ixDbCursorReq.result || e.result;
                             if (cursor) {
-                                queueList.addToQueue(cursor.value);
+                                // This additional check is necessary, since the index doesn't seem to always catch correctly
+                                if (cursor.value.queued) {
+                                    queueList.addToQueue(cursor.value);
+                                }
 
                                 cursor.continue();
                             } else {
@@ -140,7 +111,7 @@ angular.module('podcasts.services', ['podcasts.utilities'])
                             }
                         }
                     }
-                }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
+                }, undefined, IDBKeyRange.only(1), false, 'ixQueued');
             }
         }
     }])
@@ -284,6 +255,7 @@ angular.module('podcasts.services', ['podcasts.utilities'])
             downloadItems: function(feedItem, updateStatus) {
                 var promise = downloaderBackend.downloadXml(feedItem.url),
                     feedObjects = [];
+
                 promise.then(function(data) {
                     angular.forEach(
                         data.find('item'),
@@ -324,86 +296,117 @@ angular.module('podcasts.services', ['podcasts.utilities'])
         return {
             url: $window.URL || $window.webkitURL,
             createObjectUrl: function(data) {
-                return this.url.createObjectUrl(data);
+                return this.url.createObjectURL(data);
             }
         };
     }])
     .service('player', ['db', 'url', '$timeout', function(db, url, $timeout) {
-        var audioSetup = new Audio();
-        audioSetup.setAttribute("mozaudiochannel", "content");
+        var audio = new Audio();
+        audio.setAttribute("mozaudiochannel", "content");
+        var currentFeedItem = null;
+        var nowPlaying = {position: 0, duration: 0, title: '', description: '', feed: '', date: 0};
+
+        var acm = navigator.mozAudioChannelManager;
+
+        if (acm) {
+            acm.addEventListener('headphoneschange', function onheadphoneschange() {
+                if (!acm.headphones && PlayerView.isPlaying) {
+                    PlayerView.pause();
+                }
+            });
+        }
+
+        function play(feedItem, $scope)
+        {
+            if (feedItem) {
+                currentFeedItem = feedItem;
+                var audioSrc;
+
+                if (feedItem.audio) {
+                    console.log('Playing audio from download');
+                    audioSrc = url.createObjectUrl(feedItem.audio);
+                } else {
+                    console.log('Playing audio from web');
+                    audioSrc = feedItem.audioUrl;
+                }
+
+                audio.src = audioSrc;
+                updateSong(feedItem, $scope);
+
+                if (feedItem.position) {
+                    angular.element(audio).bind('canplay', function(event) {
+                        this.currentTime = feedItem.position;
+
+                        angular.element(this).unbind('canplay');
+                    });
+                }
+            }
+
+            audio.play();
+
+            //TODO: handle save when feedItem is not passed in
+            angular.element(audio).bind('pause', function(event) {
+                feedItem.position = Math.floor(event.target.currentTime);
+                db.put("feedItem", feedItem);
+
+                angular.element(this).unbind();
+            });
+
+            // TODO: add something here for when audio is done to remove from queue and go to next song
+            angular.element(audio).bind('ended', function(event) {
+                feedItem.queued = 0;
+                feedItem.position = 0;
+                db.put("feedItem", feedItem);
+
+                // start next item
+                // get next item from queue
+                play(nextFeedItem, $scope);
+
+                angular.element(this).unbind();
+            });
+        }
+
+        function pause()
+        {
+            audio.pause();
+        }
+
+        function playing()
+        {
+            return !audio.paused;
+        }
+
+        function updateSong(feedItem, $scope)
+        {
+            nowPlaying.title = feedItem.title;
+            /*$timeout(function() {
+             player.nowPlaying.duration = audio.duration;
+             }, 100);*/
+            nowPlaying.currentFeedItem = feedItem;
+            nowPlaying.description = feedItem.description;
+            nowPlaying.feed = feedItem.feed;
+            nowPlaying.date = feedItem.date;
+            updatePosition($scope);
+        }
+
+        function updatePosition($scope)
+        {
+            setInterval(function() {
+                nowPlaying.position = audio.currentTime;
+                $scope.$apply();
+            }, 1000);
+        }
+
 
         return {
-            db: db,
-            audio: audioSetup,
-            feedItem: null,
-            nowPlaying: {position: 0, duration: 0, title: '', description: '', feed: '', date: 0},
-            play: function (feedItem, $scope) {
-                if (feedItem) {
-                    this.feedItem = feedItem;
-
-                    var audioSrc;
-
-                    if (feedItem.audio) {
-                        audioSrc = url.createObjectUrl(feedItem.audio);
-                    } else {
-                        audioSrc = feedItem.audioUrl;
-                    }
-
-                    this.audio.src = audioSrc;
-                    this.updateSong(feedItem, $scope);
-
-                    if (feedItem.position) {
-                        angular.element(this.audio).bind('canplay', function(event) {
-                            this.currentTime = feedItem.position;
-                        });
-                    }
-                }
-                this.audio.play();
-
-                var db = this.db;
-                angular.element(this.audio).bind('pause', function(event) {
-                    feedItem.position = Math.floor(event.target.currentTime);
-                    db.put("feedItem", feedItem);
-                });
-
-                // TODO: add something here for when audio is done to remove from queue and go to next song
-                angular.element(this.audio).bind('ended', function(event) {
-                    feedItem.queued = 0;
-                    feedItem.position = 0;
-                    db.put("feedItem", feedItem);
-
-                    // start next item
-                    // get next item from queue
-                    play(nextFeedItem, $scope);
-                });
-            },
-            pause: function() {
-                this.audio.pause();
-            },
-            playing: function() {
-                return !this.audio.paused;
-            },
-            updateSong: function(feedItem, $scope) {
-                this.nowPlaying.title = feedItem.title;
-                var audio = this.audio,
-                    player = this;
-                $timeout(function() {
-                    player.nowPlaying.duration = audio.duration;
-                }, 100);
-                this.nowPlaying.feedItem = feedItem;
-                this.nowPlaying.description = feedItem.description;
-                this.nowPlaying.feed = feedItem.feed;
-                this.nowPlaying.date = feedItem.date;
-                this.updatePosition($scope);
-            },
-            updatePosition: function($scope) {
-                var audio = this.audio,
-                    player = this;
-                setInterval(function() {
-                    player.nowPlaying.position = audio.currentTime;
-                    $scope.$apply();
-                }, 1000);
-            }
+            audio: audio,
+            feedItem: currentFeedItem,
+            nowPlaying: nowPlaying,
+            play: play,
+            pause: pause,
+            playing: playing,
+            updateSong: updateSong,
+            updatePosition: updatePosition
         }
     }])
     .service('pageSwitcher', ['$location', '$route', function($location, $route) {
@@ -471,77 +474,6 @@ angular.module('podcasts.services', ['podcasts.utilities'])
             }
         }
     }])
-    .service('downloader', ['db', 'url', '$http', 'settings', function(db, url, $http, settings) {
-        return {
-            allowedToDownload: function(callback) {
-                settings.get('downloadOnWifi', function(setting) {
-                    if (setting.value) {
-                        //TODO: check if we're on wifi
-                        callback(false);
-                    } else {
-                        callback(true);
-                    }
-                }, function() {
-                    callback(true); // Default value is "allowed" - maybe change this?
-                });
-            },
-            downloadAll: function(silent) {
-                var downloader = this;
-                this.allowedToDownload(function(value) {
-                    if (!value) {
-                        if (typeof silent !== 'undefined' && !silent) {
-                            alert('not Downloading because not on WiFi'); //TODO: nicer error message?
-                        }
-                    } else {
-                        var itemsToDownload = [];
-                        db.getCursor("feedItem", function(ixDbCursorReq)
-                        {
-                            if(typeof ixDbCursorReq !== "undefined") {
-                                ixDbCursorReq.onsuccess = function (e) {
-                                    var cursor = ixDbCursorReq.result || e.result;
-
-                                    if (cursor) {
-                                        if (!cursor.value.audio && cursor.value.audioUrl) {
-                                            itemsToDownload.push(cursor.value);
-                                        }
-                                        cursor.continue();
-                                    } else {
-                                        downloader.downloadFiles(itemsToDownload);
-                                    }
-                                }
-                            }
-                        }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
-                    }
-                });
-            },
-            downloadFiles: function(itemsToDownload) {
-                var item = itemsToDownload.shift(),
-                    downloader = this;
-                if (!item) {
-                    return;
-                }
-
-                $http.get(item.audioUrl, {'responseType': 'blob'})
-                    .success(function(data) {
-                        item.audio = data;
-                        item.duration = this.getAudioLength(data);
-
-                        db.put("feedItem", item);
-
-                        downloader.downloadFiles(itemsToDownload);
-                    })
-                ;
-            },
-            getAudioLength: function(audio) {
-                var tmpAudio = new Audio();
-                tmpAudio.autoplay = false;
-                tmpAudio.muted = true;
-                tmpAudio.src = url.createObjectURL(audio);
-
-                return tmpAudio.duration;
-            }
-        };
-    }])
     .filter('time', function() {
         return function(input, skip) {
             var seconds, minutes, hours;
@@ -592,7 +524,124 @@ angular.module('podcasts.services', ['podcasts.utilities'])
                 day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
                 "older than a month";
         }
-    });
+    })
+    .service('downloaderBackend', ['$http', '$q', 'xmlParser', '$rootScope', function($http, $q, xmlParser, $rootScope) {
+        return {
+            downloadFile: function(url) {
+                var deferred = $q.defer();
+
+                $http.get(url, {'responseType': 'blob'})
+                    .success(function(file) {
+                        deferred.resolve(file);
+                    })
+                    .error(function() {
+                        deferred.reject();
+                    })
+                ;
+
+                return deferred.promise;
+            },
+            downloadXml: function(url) {
+                var deferred = $q.defer();
+
+                $rootScope.$apply($http.get(url)
+                    .success(function(xml) {
+                        deferred.resolve(xmlParser.parse(xml));
+                    })
+                    .error(function(data, status, headers, config) {
+                        deferred.reject();
+                    })
+                );
+
+                return deferred.promise;
+            }
+        }
+    }]);
+
+angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities'])
+    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', function(db, url, $http, settings, $rootScope) {
+        return {
+            allowedToDownload: function(callback) {
+                callback(true);
+
+                /*
+                 Not sure how to check this...
+                 settings.get('downloadOnWifi', function(setting) {
+                 if (setting.value) {
+                 //TODO: check if we're on wifi
+                 callback(false);
+                 } else {
+                 callback(true);
+                 }
+                 }, function() {
+                 callback(true); // Default value is "allowed" - maybe change this?
+                 });
+                 */
+            },
+            downloadAll: function(silent) {
+                var downloader = this;
+                this.allowedToDownload(function(value) {
+                    if (!value) {
+                        console.log('Not Allowed to Download because not on Wifi');
+                        if (!angular.isUndefined(silent) && !silent) {
+                            alert('not Downloading because not on WiFi'); //TODO: nicer error message?
+                        }
+                    } else {
+                        var itemsToDownload = [];
+                        db.getCursor("feedItem", function(ixDbCursorReq)
+                        {
+                            if(typeof ixDbCursorReq !== "undefined") {
+                                ixDbCursorReq.onsuccess = function (e) {
+                                    var cursor = ixDbCursorReq.result || e.result;
+
+                                    if (cursor) {
+                                        if (!cursor.value.audio && cursor.value.audioUrl) {
+                                            itemsToDownload.push(cursor.value);
+                                        }
+                                        cursor.continue();
+                                    } else {
+                                        downloader.downloadFiles(itemsToDownload);
+                                    }
+                                }
+                            }
+                        }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
+                    }
+                });
+            },
+            downloadFiles: function(itemsToDownload) {
+                var item = itemsToDownload.shift(),
+                    downloader = this;
+                if (!item) {
+                    return;
+                }
+
+                $rootScope.$apply(
+                    $http.get(item.audioUrl, {'responseType': 'blob'})
+                        .success(function(data) {
+                            console.log('downloaded audio file for saving');
+
+                            item.audio = data;
+                            item.duration = downloader.getAudioLength(data);
+
+                            db.put("feedItem", item);
+
+                            downloader.downloadFiles(itemsToDownload);
+                        })
+                        .error(function() {
+                            console.warn('Could not download file');
+                        })
+                );
+            },
+            getAudioLength: function(audio) {
+                var tmpAudio = new Audio();
+                tmpAudio.autoplay = false;
+                tmpAudio.muted = true;
+                tmpAudio.src = url.createObjectUrl(audio);
+
+                return tmpAudio.duration;
+            }
+        };
+    }]);
 
 angular.module('podcasts.database', [])
     .run(function() {
@@ -606,10 +655,11 @@ angular.module('podcasts.database', [])
             ixDbEz.createIndex("feedItem", "ixQueued", "queued");
             ixDbEz.createObjStore("setting", "id", true);
             ixDbEz.createIndex("setting", "ixName", "name", true);
+            ixDbEz.put("setting", {'name': "refreshInterval", 'value': 20000});
         });
 
         //Create or Open the local IndexedDB database via ixDbEz
-        ixDbEz.startDB("podcastDb", 8, dbConfig, undefined, undefined, false);
+        ixDbEz.startDB("podcastDb", 10, dbConfig, undefined, undefined, false);
     })
     .value('db', ixDbEz)
     .service('dbNew', ['$q', '$rootScope', 'db', function($q, $rootScope, _db) {
@@ -645,25 +695,17 @@ angular.module('podcasts.database', [])
         };
     }]);
 
-angular.module('podcasts.updater', ['podcasts.settings'])
+
+angular.module('podcasts.updater', ['podcasts.settings', 'podcasts.alarmManager', 'podcasts.downloader'])
     .run(['update', function(update) {
-        update.checkFeeds();
+        //update.checkFeeds();
     }])
-    .service('update', ['$timeout', '$log', 'settings', 'downloader', function($timeout, $log, settings, downloader) {
+    .service('update', ['$log', 'downloader', 'updateFeedsAlarmManager', function($log, downloader, updateFeedsAlarmManager) {
         var checkFeeds = function() {
             $log.info('Running Feed Check');
 
-            settings.get('refreshInterval', function(value) {
-                if (value.value > 0) {
-                    var refreshInterval = value.value;
-
-                    update();
-
-                    if (refreshInterval > 0) {
-                        $timeout(checkFeeds, refreshInterval);
-                    }
-                }
-            });
+            update();
+            updateFeedsAlarmManager.setAlarm();
         };
 
         function update() {
@@ -687,7 +729,6 @@ angular.module('podcasts.settings', ['podcasts.database'])
             waiting = [];
 
         function _init() {
-            console.log('init settings');
             db.getCursor("setting", function(ixDbCursorReq)
             {
                 if(typeof ixDbCursorReq !== "undefined") {
@@ -793,6 +834,13 @@ angular.module('podcasts.settings', ['podcasts.database'])
 ;
 
 angular.module('podcasts.importer', [])
+    .service('opml', function() {
+        return {
+            import: function(url) {
+
+            }
+        }
+    })
     .service('google', ['$q', '$http', 'feeds', function($q, $http, feeds) {
         return {
             import: function(email, password) {

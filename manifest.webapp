@@ -1,6 +1,6 @@
 {
     "name": "Podcast",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Podcast Manager for Firefox OS",
     "icons": {
         "128": "/blaIcon128.png"
@@ -14,8 +14,12 @@
     "permissions": {
         "storage": { "description": "Allow Podcast to store podcast information for offline use" },
         "systemXHR": { "description": "Allow Podcast to download podcast information" },
-        "audio-channel-content": { "description": "Allow Podcast to play audio in the background" }
+        "audio-channel-content": { "description": "Allow Podcast to play audio in the background" },
+        "alarms": { "description": "Allow Podcast to update in the background" }
     },
     "installs_allowed_from": ["*"],
-    "default_locale": "en"
+    "default_locale": "en",
+    "messages": [
+        { "alarm": "/index.html" }
+    ]
 }

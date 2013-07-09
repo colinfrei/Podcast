@@ -13,8 +13,7 @@ body, .normalFont {
 
 .main-container {
     height: 100%;
-    height: -webkit-calc(100% - 30px);
-    height: calc(100% - 30px);
+    height: calc(100% - 42px);
 }
 
 
@@ -31,11 +30,15 @@ body, .normalFont {
 .topBar .topBarItem {
     padding: 6px;
     text-align: center;
-    height: 18px;
+    height: 30px;
+    font-size: 14px;
 }
 .topBar a, .topBar a:visited {
     text-decoration: none;
     color: white;
+}
+.topBar .topBarButton {
+    font-size: 24px;
 }
 
 #controlButton {
@@ -59,27 +62,26 @@ body, .normalFont {
 .pageswitch-icon {
     transition-property: font-size, top, left, color;
     -webkit-transition-property: font-size, top, left, color;
-    transition-duration: 1s;
     -webkit-transition-duration: 1s;
     position: absolute;
 }
 .pageswitch-icon.next {
-    font-size: 18px;
+    font-size: 30px;
     top: 5px;
-    left: 20px;
+    left: 16px;
     z-index: 10;
 }
 .pageswitch-icon.next1 {
-    font-size: 12px;
+    font-size: 20px;
     top: 12px;
-    left: 33px;
+    left: 40px;
     z-index: 8;
     color: #708090;
 }
 .pageswitch-icon.next2 {
-    font-size: 10px;
+    font-size: 18px;
     top: 3px;
-    left: 33px;
+    left: 40px;
     z-index: 6;
     color: #708090;
 }
@@ -124,7 +126,6 @@ body, .normalFont {
 .fullCurrentInfo {
     width: 100%;
     -moz-box-sizing: border-box;
-    box-sizing: border-box;
     padding: 10px;
 }
 
@@ -171,6 +172,15 @@ body, .normalFont {
     height: 100%;
 }
 
+.newFeedField {
+    width: calc(100% - 60px);
+    margin: 5px;
+}
+
+input {
+    height: 24px;
+}
+
 /* form */
 form.importForm {
     padding: 10px;
@@ -182,7 +192,6 @@ form.importForm {
     height: 25px;
     margin: 5px 0;
     -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
 }
 .importForm input[type="submit"] {
@@ -194,7 +203,6 @@ label {
 
 
 
-
 .feedData_tmp {
     display: inline-block;
     width: 50%;
@@ -202,4 +210,29 @@ label {
 
 .feedImageThumbnail {
     width:40px;
+}
+
+select {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    display: inline-block;
+    width: 210px;
+    padding: 4px;
+    margin-bottom: 9px;
+    font-size: 13px;
+    color: #555555;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+
+    height: 28px;
+    /* In IE7, the height of the select element cannot be changed by height, only font-size */
+    margin-top: 4px;
+    /* For IE7, add top margin to align select with labels */
+    line-height: 28px;
+}
+
+.active {
+    color: red;
 }

@@ -14,4 +14,12 @@ angular.module('podcasts.utilities', [])
             }
         }
     })
+    .service('url', ['$window', function($window) {
+        return {
+            url: $window.URL || $window.webkitURL,
+            createObjectUrl: function(data) {
+                return this.url.createObjectURL(data);
+            }
+        };
+    }])
 ;

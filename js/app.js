@@ -9,5 +9,6 @@ angular.module('podcasts', ['podcasts.services', 'podcasts.updater', 'podcasts.d
     $routeProvider.when('/settings', {templateUrl: 'partials/settings.html', controller: SettingsCtrl});
     $routeProvider.when('/import/google', {templateUrl: 'partials/importGoogle.html', controller: ImportCtrl});
     $routeProvider.when('/info', {templateUrl: 'partials/info.html', controller: InfoCtrl});
+    $routeProvider.when('/dev', {templateUrl: 'partials/dev.html', controller: DevCtrl});
     $routeProvider.otherwise({redirectTo: '/queue'});
 }]);

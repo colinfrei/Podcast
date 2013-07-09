@@ -9,52 +9,23 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
         feeds.add($scope.newFeedUrl);
     };
 
+    $scope.preFillField = function() {
+        if (angular.isUndefined($scope.newFeedUrl) || $scope.newFeedUrl == "") {
+            $scope.newFeedUrl = "http://";
+        }
+    };
+
+    $scope.removePrefillIfNecessary = function() {
+        if ($scope.newFeedUrl == "http://") {
+            $scope.newFeedUrl = "";
+        }
+    };
+
     $scope.goToFeed = function(hash) {
         $location.path('/feed/'+hash);
     };
 
     pageSwitcher.change('feeds');
-}
-
-function TopLinksCtrl($scope, downloader, google) {
-    $scope.downloadFiles = function() {
-        downloader.downloadAll();
-    };
-
-    $scope.loadFixtures = function() {
-        var newFeed = {};
-        newFeed.title = "Some OGG Vorbis Podcast";
-        newFeed.url = "http://www.c3d2.de/pentacast-ogg.xml";
-
-        //add new record to the local database
-        ixDbEz.put("feed", newFeed);
-
-
-        var newFeedItem = {};
-        newFeedItem.guid = 'http://example.com/1';
-        newFeedItem.feedId = 1;
-        newFeedItem.title = 'Example Item 1';
-        newFeedItem.link = 'http://example.com/1';
-        newFeedItem.date = 'Date';
-        newFeedItem.description = 'Long Description<br /> with HTML <b>and stuff</b>';
-        newFeedItem.audioUrl = 'http://example.com/1';
-        newFeedItem.queued = 1;
-
-        ixDbEz.put("feedItem", newFeedItem);
-
-
-        var newFeedItem = {};
-        newFeedItem.guid = 'http://example.com/2';
-        newFeedItem.feedId = 1;
-        newFeedItem.title = 'Example Item 2';
-        newFeedItem.link = 'http://example.com/2';
-        newFeedItem.date = 'Date';
-        newFeedItem.description = 'Second Long Description<br /> with HTML <b>and stuff</b>';
-        newFeedItem.audioUrl = 'http://example.com/2';
-        newFeedItem.queued = 1;
-
-        ixDbEz.put("feedItem", newFeedItem);
-    };
 }
 
 function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
@@ -101,7 +72,7 @@ function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queue
     pageSwitcher.change('queue');
 }
 
-function SettingsCtrl($scope, settings, pageSwitcher) {
+function SettingsCtrl($scope, settings, pageSwitcher, updateFeedsAlarmManager) {
     $scope.refreshIntervalOptions = [
         {name: '10 seconds', value: '10000'},
         {name: '1 hour', value: '3600000'},
@@ -112,11 +83,17 @@ function SettingsCtrl($scope, settings, pageSwitcher) {
     $scope.settings = {};
 
     $scope.changeInterval = function() {
-        settings.set('refreshInterval', $scope.refreshInterval.value, $scope.refreshInterval.id);
+        settings.set(
+            'refreshInterval',
+            $scope.settings.refreshInterval.value,
+            $scope.settings.refreshInterval.id
+        );
+
+        updateFeedsAlarmManager.changeAlarmInterval();
     };
 
     $scope.changeDownloadOnWifi = function() {
-        settings.set('downloadOnWifi', $scope.downloadOnWifi.value, $scope.downloadOnWifi.id);
+        settings.set('downloadOnWifi', $scope.settings.downloadOnWifi.value, $scope.settings.downloadOnWifi.id);
     };
 
     settings.setAllValuesInScope($scope);
@@ -131,6 +108,7 @@ function TopBarCtrl($scope, player, pageSwitcher)
     $scope.showingPageSwitchMenu = false;
     $scope.showingFullCurrentInfo = false;
     $scope.showInfoIcon = false;
+    $scope.playing = player.playing;
 
     $scope.playPause = function() {
         if (player.playing()) {
@@ -182,4 +160,21 @@ function ImportCtrl($scope, pageSwitcher, google)
 
     pageSwitcher.backPage = true;
     pageSwitcher.change('settings');
+}
+
+
+
+function DevCtrl($scope, downloader, updateFeedsAlarmManager)
+{
+    $scope.downloadFiles = function() {
+        downloader.downloadAll();
+    };
+
+    $scope.checkForPendingMessage = function() {
+        console.log(navigator.mozHasPendingMessage('alarm'));
+    };
+
+    $scope.setAlarmTmp = function() {
+        updateFeedsAlarmManager.setAlarm();
+    };
 }

@@ -17,9 +17,9 @@
         <i id="pageswitch-icon-queue" class="pageswitch-icon next2 icon-th-list"></i>
         <i id="pageswitch-icon-info" class="pageswitch-icon icon-info-sign" ng-show="showInfoIcon"></i>
     </div>
-    <div id="controlButton" class="topBarItem" ng-click="playPause()">
-        <i class="icon-play"></i>
-        <i class="icon-pause"></i>
+    <div id="controlButton" class="topBarItem topBarButton" ng-click="playPause()">
+        <i class="icon-play" ng-class=""></i>
+        <i class="icon-pause" ng-class=""></i>
     </div>
     <div ng-click="currentInfo()" class="topBarItem">
         <span>{{ nowPlaying.title }}</span>
@@ -30,7 +30,6 @@
     <div class="fullCurrentInfo topBarMenu" ng-show="showingFullCurrentInfo" ng-cloak>
         {{ nowPlaying.description }}
         {{ nowPlaying.date|date }}
-        more information about song playing (description, link to go to this feed, more controls?)
     </div>
     <div class="pageSwitchMenu topBarMenu" ng-show="showingPageSwitchMenu" ng-cloak>
         <ul>
@@ -48,6 +47,7 @@
 
 <script src="lib/angular/angular.js"></script>
 <script src="lib/iscroll.js"></script>
+<script src="js/alarmManagers.js"></script>
 <script src="js/app.js"></script>
 <script src="js/utilities.js"></script>
 <script src="js/services.js"></script>
