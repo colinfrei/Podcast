@@ -140,13 +140,15 @@ body, .normalFont {
     height: 40px;
     font-size: 12px;
     padding: 3px;
+    overflow: hidden;
 }
 .listItemTitle {
     line-height: 20px;
     vertical-align: top;
     font-weight: bold;
     display: inline-block;
-    padding-top: 3px;
+    width: calc(100% - 50px);
+    margin-left: 5px;
 }
 .feedItemTitle {
     display: block;
@@ -210,6 +212,8 @@ label {
 
 .feedImageThumbnail {
     width:40px;
+    display: block;
+    float: left;
 }
 
 select {
