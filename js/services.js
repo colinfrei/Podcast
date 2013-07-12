@@ -30,6 +30,7 @@ angular.module('podcasts.services', ['podcasts.utilities'])
             getFeedItemFromXml: function(xml) {
                 var newFeedItem = {},
                     searchableXml = angular.element(xml);
+
                 newFeedItem.guid = searchableXml.find('guid').text();
                 newFeedItem.title = searchableXml.find('title').text();
                 newFeedItem.link = searchableXml.find('link').text();
@@ -137,6 +138,11 @@ angular.module('podcasts.services', ['podcasts.utilities'])
                         newFeed = {},
                         imageUrl;
 
+                    newFeed.url = cleanedUrl;
+                    newFeed.title = xml.find('title').text();
+                    newFeed.summary = xml.find('description').text();
+                    newFeed.nrQueueItems = 1;
+
                     angular.forEach(channelChildren, function(value, key) {
                         if ('itunes:image' === angular.element(value)[0].nodeName.toLowerCase()) {
                             imageUrl = angular.element(value).attr('href');
@@ -147,10 +153,6 @@ angular.module('podcasts.services', ['podcasts.utilities'])
                         }
                     });
 
-                    newFeed.url = cleanedUrl;
-                    newFeed.title = channelChildren.find('title').text();
-                    newFeed.summary = channelChildren.find('description').text();
-                    newFeed.nrQueueItems = 1;
 
                     var file = downloaderBackend.downloadFile(imageUrl);
                     file.then(function(fileBlob) {
