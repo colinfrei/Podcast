@@ -312,8 +312,8 @@ angular.module('podcasts.services', ['podcasts.utilities'])
 
         if (acm) {
             acm.addEventListener('headphoneschange', function onheadphoneschange() {
-                if (!acm.headphones && PlayerView.isPlaying) {
-                    PlayerView.pause();
+                if (!acm.headphones && playing()) {
+                    pause();
                 }
             });
         }
