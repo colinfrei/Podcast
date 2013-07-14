@@ -22,4 +22,11 @@ angular.module('podcasts.utilities', [])
             }
         };
     }])
+    .service('xmlParser', ['$window', function($window) {
+        return  {
+            parse: function(data) {
+                return angular.element(new $window.DOMParser().parseFromString(data, "text/xml"));
+            }
+        };
+    }])
 ;

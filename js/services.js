@@ -287,13 +287,6 @@ angular.module('podcasts.services', ['podcasts.utilities'])
             }
         }
     }])
-    .service('xmlParser', ['$window', function($window) {
-        return  {
-            parse: function(data) {
-                return angular.element(new $window.DOMParser().parseFromString(data, "text/xml"));
-            }
-        };
-    }])
     .service('url', ['$window', function($window) {
         return {
             url: $window.URL || $window.webkitURL,
