@@ -1,7 +1,7 @@
 <div id="queueList" pull-to-refresh="pull-to-refresh">
     <div ng-repeat="feedItem in queue | orderBy:'date':reverse=true" class="listItem">
-        <div class="playButton">
-            <span ng-click="playItem(feedItem.id)"><i ng-class="{hasAudio: feedItem.audio}" class="icon-play"></i></span>
+        <div class="playButton" ng-click="playItem(feedItem.id)">
+            <span><i ng-class="{hasAudio: feedItem.audio}" class="icon-play"></i></span>
         </div>
         <div class="feedItemContent">
             <span class="feedItemTitle">{{ feedItem.title }}</span>

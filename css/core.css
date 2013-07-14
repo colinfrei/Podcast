@@ -156,7 +156,7 @@ body, .normalFont {
 }
 .feedItemContent {
     border-right: 1px solid #c0c0c0;
-    margin-right: 40px;
+    margin-right: 50px;
     min-height: 40px;
 }
 .playButton {
