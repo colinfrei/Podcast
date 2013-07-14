@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>Colin's Podcasts</title>
+    </head>
+    <body>
+        <outline
+                text="The Public Speaker's Quick and Dirty Tips for Improving Your Communication Skills"
+                title="The Public Speaker's Quick and Dirty Tips for Improving Your Communication Skills"
+                type="rss"
+                xmlUrl="http://www.quickanddirtytips.com/xml/speaker.xml" htmlUrl="http://www.quickanddirtytips.com"/>
+        <outline text="Back to Work with After Dark Post-Shows"
+                 title="Back to Work with After Dark Post-Shows"
+                 type="rss" xmlUrl="http://feeds.5by5.tv/b2w-afterdark" htmlUrl="http://5by5.tv/b2w"/>
+        <outline text="Espresso" title="Espresso" type="rss"
+                 xmlUrl="http://pod.drs.ch/espresso_mpx.xml" htmlUrl="http://www.srf.ch/sendungen/espresso"/>
+        <outline text="HeuteMorgen" title="HeuteMorgen" type="rss"
+                 xmlUrl="http://pod.drs.ch/heutemorgen_mpx.xml" htmlUrl="http://www.srf.ch/sendungen/heute-aktuell"/>
+        <outline text="Mailbox" title="Mailbox" type="rss"
+                 xmlUrl="http://pod.drs.ch/mailbox_mpx.xml" htmlUrl="http://www.srf.ch/podcasts"/>
+        <outline text="Ratgeber" title="Ratgeber" type="rss"
+                 xmlUrl="http://pod.drs.ch/ratgeber_mpx.xml" htmlUrl="http://www.srf.ch/sendungen/ratgeber"/>
+        <outline text="Security Now!" title="Security Now!"
+                 type="rss" xmlUrl="http://leoville.tv/podcasts/sn.xml" htmlUrl="http://grc.com/securitynow.htm"/>
+        <outline text="The Web Ahead" title="The Web Ahead"
+                 type="rss" xmlUrl="http://feeds.5by5.tv/webahead" htmlUrl="http://5by5.tv/webahead"/>
+        <outline text="This is my next Podcast"
+                 title="This is my next Podcast" type="rss"
+                 xmlUrl="http://feeds.feedburner.com/ThisIsMyNextPodcast" htmlUrl="http://www.theverge.com/label/the-vergecast"/>
+        <outline text="Voices of the ElePHPant"
+                 title="Voices of the ElePHPant" type="rss"
+                 xmlUrl="http://feeds.feedburner.com/VoicesOfTheElephpant" htmlUrl="http://voicesoftheelephpant.com"/>
+        <outline text="Wetterbox" title="Wetterbox" type="rss"
+                 xmlUrl="http://pod.drs.ch/wetterbox_mpx.xml" htmlUrl="http://www.srf.ch/sendungen/wetterbox"/>
+        <outline text="Wissen aktuell" title="Wissen aktuell"
+                 type="rss"
+                 xmlUrl="http://pod.drs.ch/wissen_aktuell_mpx.xml" htmlUrl="http://www.srf.ch/podcasts"/>
+    </body>
+</opml>
