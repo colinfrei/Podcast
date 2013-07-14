@@ -674,7 +674,7 @@ angular.module('podcasts.database', [])
                     ixDbCursorReq.onsuccess = function (e) {
                         var cursor = ixDbCursorReq.result || e.result;
                         if (cursor) {
-                            deferred.resolve(cursor.value);
+                            $rootScope.$apply(deferred.resolve(cursor.value));
 
                             cursor.continue();
                         } else {
