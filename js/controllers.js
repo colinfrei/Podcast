@@ -171,7 +171,7 @@ function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBa
     };
 
     $scope.checkForPendingMessage = function() {
-        console.log(navigator.mozHasPendingMessage('alarm'));
+        console.log('Has pending message: ' + navigator.mozHasPendingMessage('alarm'));
     };
 
     $scope.setAlarmTmp = function() {
