@@ -46,7 +46,6 @@ body, .normalFont {
     float: right;
 }
 #controlButton:hover {
-    background-color: #708090;
     cursor: pointer;
 }
 
@@ -55,14 +54,13 @@ body, .normalFont {
     float: left;
 }
 #pageSwitcher:hover {
-    background-color: #708090;
     cursor: pointer;
 }
 
 .pageswitch-icon {
     transition-property: font-size, top, left, color;
     -webkit-transition-property: font-size, top, left, color;
-    -webkit-transition-duration: 1s;
+    transition-duration: 1s;
     position: absolute;
 }
 .pageswitch-icon.next {
