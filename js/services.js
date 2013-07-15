@@ -828,14 +828,25 @@ angular.module('podcasts.settings', ['podcasts.database'])
     }])
 ;
 
-angular.module('podcasts.importer', [])
-    .service('opml', function() {
+angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services'])
+    .service('opml', ['xmlParser', 'feeds', function(xmlParser, feeds) {
         return {
-            import: function(url) {
+            import: function(xml) {
+                angular.forEach(xml.find('outline'), function(value, key) {
+                    var element = angular.element(value);
+                    if ("rss" != element.attr('type')) {
+                        return;
+                    }
 
+                    var feedUrl = element.attr('xmlUrl');
+                    if (feedUrl) {
+                        console.log('adding something');
+                        feeds.add(feedUrl);
+                    }
+                });
             }
         }
-    })
+    }])
     .service('google', ['$q', '$http', 'feeds', function($q, $http, feeds) {
         return {
             import: function(email, password) {

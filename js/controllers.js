@@ -164,7 +164,7 @@ function ImportCtrl($scope, pageSwitcher, google)
 
 
 
-function DevCtrl($scope, downloader, updateFeedsAlarmManager)
+function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend)
 {
     $scope.downloadFiles = function() {
         downloader.downloadAll();
@@ -177,4 +177,12 @@ function DevCtrl($scope, downloader, updateFeedsAlarmManager)
     $scope.setAlarmTmp = function() {
         updateFeedsAlarmManager.setAlarm();
     };
+    $scope.importColinsOpml = function() {
+        var url = 'https://raw.github.com/colinfrei/Podcast/master/podcasts.xml';
+        var xmlPromise = downloaderBackend.downloadXml(url);
+
+        xmlPromise.then(function(xml) {
+            opml.import(xml);
+        });
+    }
 }
