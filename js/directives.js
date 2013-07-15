@@ -18,6 +18,7 @@ angular.module('podcast.directives', [])
             myScroll = new iScroll(element[0], {
                 useTransition: true,
                 topOffset: pullDownOffset,
+                vScrollbar: false,
                 onRefresh: function () {
                     if (pullDownEl.className.match('loading')) {
                         pullDownEl.className = '';
@@ -84,7 +85,7 @@ angular.module('podcast.directives', [])
     }])
     .directive('scroll', function() {
         return function(scope, element, attrs, feedItems) {
-            var scroll = new iScroll(element[0]);
+            var scroll = new iScroll(element[0], {vScrollbar: false});
         };
     })
     .directive('blob', function() {
