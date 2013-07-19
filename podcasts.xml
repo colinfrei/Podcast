@@ -27,9 +27,9 @@
         <outline text="This is my next Podcast"
                  title="This is my next Podcast" type="rss"
                  xmlUrl="http://feeds.feedburner.com/ThisIsMyNextPodcast" htmlUrl="http://www.theverge.com/label/the-vergecast"/>
-        <outline text="Voices of the ElePHPant"
+        <!--<outline text="Voices of the ElePHPant"
                  title="Voices of the ElePHPant" type="rss"
-                 xmlUrl="http://feeds.feedburner.com/VoicesOfTheElephpant" htmlUrl="http://voicesoftheelephpant.com"/>
+                 xmlUrl="http://feeds.feedburner.com/VoicesOfTheElephpant" htmlUrl="http://voicesoftheelephpant.com"/>-->
         <outline text="Wetterbox" title="Wetterbox" type="rss"
                  xmlUrl="http://pod.drs.ch/wetterbox_mpx.xml" htmlUrl="http://www.srf.ch/sendungen/wetterbox"/>
         <outline text="Wissen aktuell" title="Wissen aktuell"
