@@ -5,17 +5,10 @@
             <h2>{{ feed.author }}</h2>
             <img blob="feed.image" class="feedImage" />
             <div class="feedData_tmp">
-                <a ng-click="delete(feed.id)">Delete Feed</a><br />
-                Number of Items to keep in Queue
-                <select ng-model="nrQueueItemsOptions">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                    <option value="1000">all</option>
-                    <option value="0">none</option>
-                </select>
+                <button ng-click="delete(feed.id)" class="warn"><i class="icon-trash"></i> Delete Feed</button><br />
+
+                <!-- Number of Items to keep in Queue
+                <select ng-model="feed.nrQueueItems" ng-options="nrQueueItemsOptions"></select> -->
             </div>
             <h3>Description</h3>
             <div>
