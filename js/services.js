@@ -116,7 +116,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList']
             }
         }
     }])
-    .service('feeds', ['$log', '$q', 'dbNew', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', 'utilities', function($log, $q, db, dbOld, downloaderBackend, xmlParser, feedItems, utilities) {
+    .service('feeds', ['$log', '$q', 'dbNew', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', 'utilities', '$rootScope', function($log, $q, db, dbOld, downloaderBackend, xmlParser, feedItems, utilities, $rootScope) {
         return {
             feeds: [],
             add: function(url) {
@@ -190,7 +190,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList']
 
                                         cursor.continue();
                                     } else {
-                                        deferred.resolve(feed);
+                                        $rootScope.$apply(deferred.resolve(feed));
                                     }
                                 }
                             }
