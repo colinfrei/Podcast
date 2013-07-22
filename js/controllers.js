@@ -34,8 +34,11 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
     // show info at top and items underneath
     feeds.get($routeParams.feedId)
         .then(function(feed) {
-        $scope.feed = feed;
-    });
+            $scope.feed = feed;
+
+        }, function() {
+            console.log('error fetching feed');
+        });
 
     $scope.delete = function(id) {
         //TODO: check we're not playing anything from this feed?
