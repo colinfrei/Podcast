@@ -610,6 +610,8 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                     return;
                 }
 
+                console.log('downloading File for: ' + item.title);
+
                 $rootScope.$apply(
                     $http.get(item.audioUrl, {'responseType': 'blob'})
                         .success(function(data) {
