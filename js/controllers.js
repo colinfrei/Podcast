@@ -39,9 +39,11 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
 
     $scope.delete = function(id) {
         //TODO: check we're not playing anything from this feed?
-        feeds.delete(id);
+        if (confirm('Are you sure you want to delete this feed?')) {
+            feeds.delete(id);
 
-        $location.path('/feeds');
+            $location.path('/feeds');
+        }
     };
 
     pageSwitcher.setBack('feeds');
