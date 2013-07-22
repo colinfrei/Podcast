@@ -239,3 +239,13 @@ select {
 .active {
     color: red;
 }
+
+button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.warn {
+    background-color: #ff8175;
+}
