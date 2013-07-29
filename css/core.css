@@ -250,6 +250,15 @@ button {
     background-color: #ff8175;
 }
 
+.feedItemOptions {
+    padding: 6px;
+    font-size: 13px;
+}
+
+.feedItemOptions i {
+    font-size: 16px;
+}
+
 .title-slider {
     display: inline-block;
     animation: bounce-text 30s linear infinite;

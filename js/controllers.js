@@ -28,7 +28,7 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
     pageSwitcher.change('feeds');
 }
 
-function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
+function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher, feedItems) {
     $scope.nrQueueItemsOptions = [1, 2, 3, 4, 5];
     $scope.feed = {};
     // show info at top and items underneath
@@ -49,11 +49,29 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
         }
     };
 
+    $scope.showItemOptions = function(id) {
+        angular.forEach($scope.feed.items, function(value, key) {
+            if (value.id == id) {
+                $scope.feed.items[key].showOptions = !$scope.feed.items[key].showOptions;
+            } else {
+                $scope.feed.items[key].showOptions = false;
+            }
+        });
+    };
+
+    $scope.addToQueue = function(id) {
+        feedItems.addToQueue(id);
+    };
+
     pageSwitcher.setBack('feeds');
 }
 
 function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, downloader, queueList, pageChanger) {
     $scope.queue = queueList.getQueueList();
+
+    $scope.$on('queueListRefresh', function(event) {
+        $rootScope.$apply(queueList.rebuildList());
+    });
 
     $scope.playItem = function(id) {
         feedItems.get(id, function(feedItem) {
@@ -61,15 +79,47 @@ function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, downl
         });
     };
 
+    $scope.showItemOptions = function(id) {
+        angular.forEach($scope.queue, function(value, key) {
+            if (value.id == id) {
+                $scope.queue[key].showOptions = !$scope.queue[key].showOptions;
+            } else {
+                $scope.queue[key].showOptions = false;
+            }
+        });
+    };
+
+    $scope.downloadFile = function(id) {
+        feedItems.get(id, function(feedItem) {
+            downloader.downloadFiles([feedItem]);
+        });
+    };
+
+    $scope.removeFromQueue = function(feedItemId) {
+        feedItems.unQueue(feedItemId);
+    };
+
     $scope.downloadItems = function(updateStatus) {
         feeds.downloadAllItems(feedItems, function(feedItem, feed) {
             if (feedItem) {
                 $scope.queue.push(feedItem);
-                $scope.$apply();
             }
 
             updateStatus(feed);
+            $scope.$broadcast('queueListRefresh');
         });
+    };
+
+    $scope.reDownloadFile = function(id) {
+        feedItems.get(id, function(feedItem) {
+            feedItem.audio = null;
+            downloader.downloadFiles([feedItem]);
+        });
+    };
+
+    //TODO: extract this to somewhere
+    $scope.goToFeed = function(feedId) {
+        pageChanger.goToFeed(feedId);
     };
 
     pageSwitcher.change('queue');
