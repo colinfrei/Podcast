@@ -645,3 +645,14 @@ angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services'])
         };
     }])
 ;
+angular.module('podcasts.router', [])
+    .service('pageChanger', ['$location', function($location) {
+        function goToFeed(feedId) {
+            $location.path('/feed/' + feedId);
+        }
+
+        return {
+            goToFeed: goToFeed
+        };
+    }])
+;
