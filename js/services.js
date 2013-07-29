@@ -59,7 +59,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }
 
             if (!delayPlay) {
-            audio.play();
+                audio.play();
             }
 
             // TODO: add something here for when audio is done to remove from queue and go to next song
@@ -78,9 +78,9 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 }, function(error) {
                     console.log('got Errror when fetching next feed item');
 
-                feedItem.queued = 0;
-                feedItem.position = 0;
-                db.put("feedItem", feedItem);
+                    feedItem.queued = 0;
+                    feedItem.position = 0;
+                    db.put("feedItem", feedItem);
                 }));
 
                 angular.element(this).unbind();
