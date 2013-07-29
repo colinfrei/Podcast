@@ -21,8 +21,8 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
         }
     };
 
-    $scope.goToFeed = function(hash) {
-        $location.path('/feed/'+hash);
+    $scope.goToFeed = function(feedId) {
+        $location.path('/feed/' + feedId);
     };
 
     pageSwitcher.change('feeds');
