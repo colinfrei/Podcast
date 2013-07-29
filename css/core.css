@@ -249,3 +249,36 @@ button {
 .warn {
     background-color: #ff8175;
 }
+
+.title-slider {
+    display: inline-block;
+    animation: bounce-text 30s linear infinite;
+    height: 20px;
+    white-space:nowrap;
+    text-align: left;
+}
+
+@keyframes bounce-text {
+    0%  {
+        transform: translateX(0);
+    }
+    10%  {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(calc(190px - 100%));
+    }
+    55% {
+        transform: translateX(calc(190px - 100%));
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+#currentInfo {
+    width: 190px;
+    margin-left: 60px;
+    overflow: hidden;
+    text-align: left;
+}

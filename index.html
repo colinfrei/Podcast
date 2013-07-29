@@ -22,10 +22,12 @@
         <i class="icon-pause" ng-class=""></i>
     </div>
     <div ng-click="currentInfo()" class="topBarItem">
-        <span>{{ nowPlaying.title }}</span>
-        <span ng-show="nowPlaying.duration > 0">
-            <span id="position">{{ audio.currentTime|time:true }}</span>/<span id="duration">{{ audio.duration|time }}</span>
-        </span>
+        <div id="currentInfo">
+            <span class="title-slider">{{ nowPlaying.title }}</span>
+            <span ng-show="nowPlaying.duration > 0">
+                <span id="position">{{ audio.currentTime|time:true }}</span>/<span id="duration">{{ audio.duration|time }}</span>
+            </span>
+        </div>
     </div>
     <div class="fullCurrentInfo topBarMenu" ng-show="showingFullCurrentInfo" ng-cloak>
         {{ nowPlaying.description }}
@@ -48,6 +50,8 @@
 <script src="lib/angular/angular.js"></script>
 <script src="lib/iscroll.js"></script>
 <script src="js/alarmManagers.js"></script>
+<script src="js/queueList.js"></script>
+<script src="js/models.js"></script>
 <script src="js/app.js"></script>
 <script src="js/utilities.js"></script>
 <script src="js/services.js"></script>
