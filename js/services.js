@@ -10,7 +10,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }
         };
     }])
-    .service('player', ['db', 'url', '$timeout', function(db, url, $timeout) {
+    .service('player', ['db', 'url', '$timeout', 'feedItems', '$rootScope', function(db, url, $timeout, feedItems, $rootScope) {
         var audio = new Audio();
         audio.setAttribute("mozaudiochannel", "content");
         var currentFeedItem = null;
@@ -28,6 +28,9 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
 
         function play(feedItem, $scope)
         {
+            console.log('playing: ' + feedItem.title);
+            var delayPlay = false;
+
             if (feedItem) {
                 currentFeedItem = feedItem;
                 var audioSrc;
@@ -44,33 +47,50 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 updateSong(feedItem, $scope);
 
                 if (feedItem.position) {
+                    delayPlay = true;
                     angular.element(audio).bind('canplay', function(event) {
                         this.currentTime = feedItem.position;
 
                         angular.element(this).unbind('canplay');
+
+                        audio.play();
                     });
                 }
             }
 
+            if (!delayPlay) {
             audio.play();
+            }
 
-            //TODO: handle save when feedItem is not passed in
-            angular.element(audio).bind('pause', function(event) {
-                feedItem.position = Math.floor(event.target.currentTime);
+            // TODO: add something here for when audio is done to remove from queue and go to next song
+            audio.addEventListener("ended", function(event) {
+                var nextFeedItemPromise = feedItems.getNextInQueue(feedItem);
+                console.log('got promise for next feed item');
+                $rootScope.$apply(nextFeedItemPromise.then(function(nextFeedItem) {
+                    console.log('Got next Feed Item:');
+                    console.log(nextFeedItem);
+                    console.log(nextFeedItem.title);
+                    play(nextFeedItem, $scope);
+
+                    feedItem.queued = 0;
+                    feedItem.position = 0;
+                    db.put("feedItem", feedItem);
+                }, function(error) {
+                    console.log('got Errror when fetching next feed item');
+
+                feedItem.queued = 0;
+                feedItem.position = 0;
                 db.put("feedItem", feedItem);
+                }));
 
                 angular.element(this).unbind();
             });
 
-            // TODO: add something here for when audio is done to remove from queue and go to next song
-            angular.element(audio).bind('ended', function(event) {
-                feedItem.queued = 0;
-                feedItem.position = 0;
+            //TODO: handle save when feedItem is not passed in
+            angular.element(audio).bind('pause', function(event) {
+                console.log('paused audio');
+                feedItem.position = Math.floor(event.target.currentTime);
                 db.put("feedItem", feedItem);
-
-                // start next item
-                // get next item from queue
-                play(nextFeedItem, $scope);
 
                 angular.element(this).unbind();
             });
