@@ -52,8 +52,8 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
     pageSwitcher.setBack('feeds');
 }
 
-function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, downloader, newQueueList) {
-    $scope.queue = newQueueList.getQueueList();
+function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, downloader, queueList, pageChanger) {
+    $scope.queue = queueList.getQueueList();
 
     $scope.playItem = function(id) {
         feedItems.get(id, function(feedItem) {
