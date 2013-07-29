@@ -579,7 +579,6 @@ angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services'])
 
                     var feedUrl = element.attr('xmlUrl');
                     if (feedUrl) {
-                        console.log('adding something');
                         feeds.add(feedUrl);
                     }
                 });
