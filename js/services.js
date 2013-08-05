@@ -28,10 +28,11 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
 
         function play(feedItem, $scope)
         {
-            console.log('playing: ' + feedItem.title);
             var delayPlay = false;
 
             if (feedItem) {
+                console.log('playing: ' + feedItem.title);
+
                 currentFeedItem = feedItem;
                 var audioSrc;
 
