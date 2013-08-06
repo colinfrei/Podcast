@@ -1,18 +1,19 @@
 'use strict';
 
 angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
-    .service('feeds', ['$log', '$q', 'dbNew', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', 'utilities', '$rootScope', function($log, $q, db, dbOld, downloaderBackend, xmlParser, feedItems, utilities, $rootScope) {
+    .service('feeds', ['$log', '$q', 'db', 'downloaderBackend', 'xmlParser', 'feedItems', 'utilities', '$rootScope', function($log, $q, db, downloaderBackend, xmlParser, feedItems, utilities, $rootScope) {
         var feeds = [];
 
         function _add(url) {
             var feedService = this;
             var finishSave = function(newFeed) {
-                dbOld.put("feed", newFeed, undefined, function(key) {
-                    newFeed.id = key;
+                var promise = db.put("feed", newFeed)
+                    .then(function(key) {
+                        newFeed.id = key;
 
-                    feedService.feeds.push(newFeed);
-                    feedService.downloadItems(newFeed);
-                });
+                        feedService.feeds.push(newFeed);
+                        feedService.downloadItems(newFeed);
+                    });
             };
 
             var cleanedUrl = utilities.clean_url(url);
@@ -65,22 +66,15 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                         feed.image = new Blob([feed.image]);
                     }
 
-                    dbOld.getCursor("feedItem", function(ixDbCursorReq)
-                    {
-                        feed.items = [];
-                        if(typeof ixDbCursorReq !== "undefined") {
-                            ixDbCursorReq.onsuccess = function (e) {
-                                var cursor = ixDbCursorReq.result || e.result;
-                                if (cursor) {
-                                    feed.items.push(cursor.value);
+                    feed.items = [];
+                    db.get("feedItem", IDBKeyRange.only(feed.id), "ixFeedId")
+                        .then(function(results) {
+                            angular.forEach(results, function(item) {
+                                feed.items.push(item);
+                            });
 
-                                    cursor.continue();
-                                } else {
-                                    $rootScope.$apply(deferred.resolve(feed));
-                                }
-                            }
-                        }
-                    }, null, IDBKeyRange.only(feed.id), undefined, 'ixFeedId');
+                            $rootScope.$apply(deferred.resolve(feed));
+                        });
                 }, function(value) {
                     deferred.reject();
                 });
@@ -89,58 +83,46 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         function _list($scope) {
-            var feeds = this.feeds;
-            dbOld.getCursor("feed", function(ixDbCursorReq)
-            {
-                if(typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function (e) {
-                        var cursor = ixDbCursorReq.result || e.result;
-                        if (cursor) {
-                            if (typeof cursor.value.image === 'string') {
-                                cursor.value.image = new Blob(
-                                    [cursor.value.image],
-                                    {type: 'application/octet-stream'}
-                                );
-                            }
-                            feeds.push(cursor.value);
-                            $scope.$apply();
+            var feeds = this.feeds,
+                promise = db.get("feed");
 
-                            cursor.continue();
-                        }
+            promise.then(function(results) {
+                angular.forEach(results, function(item) {
+                    if (typeof item.image === 'string') {
+                        item.image = new Blob(
+                            [item.image],
+                            {type: 'application/octet-stream'}
+                        );
                     }
-                }
+
+                    feeds.push(item);
+                });
+
+                $scope.$apply();
             });
         }
 
         function _delete(id) {
             $log.info('Deleting feed with ID ' + id);
             feedItems.deleteByFeedId(id);
-            dbOld.delete("feed", id);
+            db.delete("feed", id);
         }
 
         /**
          *
-         * @param feedItems
          * @param updateStatus  function that gets called for each item it goes through
          *                      Takes the feedItem as the argument
          */
-        function _downloadAllItems(feedItems, updateStatus) {
-            var feedService = this;
-            dbOld.getCursor("feed", function(ixDbCursorReq)
-            {
-                if(typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function (e) {
-                        var cursor = ixDbCursorReq.result || e.result;
+        function _downloadAllItems(updateStatus) {
+            var feedService = this,
+                promise = db.get("feed");
 
-                        if (cursor) {
-                            feedService.downloadItems(cursor.value, updateStatus);
+            promise.then(function(results) {
+                angular.forEach(results, function(item) {
+                    feedService.downloadItems(item, updateStatus);
+                });
 
-                            cursor.continue();
-                        } else {
-                            updateStatus();
-                        }
-                    }
-                }
+                updateStatus();
             });
         }
 
@@ -185,7 +167,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             downloadItems: _downloadItems
         };
     }])
-    .service('feedItems', ['dbNew', 'db', '$q', '$rootScope', function(db, oldDb, $q, $rootScope) {
+    .service('feedItems', ['db', '$q', '$rootScope', function(db, $q, $rootScope) {
         function _get(id, onSuccess, onFailure) {
             db.getOne("feedItem", id)
                 .then(function(value) {
@@ -210,20 +192,16 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         function _delete(feedItemId) {
-            oldDb.delete("feedItem", feedItemId);
+            db.delete("feedItem", feedItemId);
         }
 
         function _deleteByFeedId(feedId) {
-            oldDb.getCursor("feedItem", function(ixDbCursorReq) {
-                if (typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function(e) {
-                        var cursor = ixDbCursorReq.result || e.result;
-                        if (cursor) {
-                            this.delete(cursor.value.id);
-                        }
-                    }
-                }
-            }, null, IDBKeyRange.only(feedId), null, 'ixFeedId');
+            db.get("feedItem", IDBKeyRange.only(feedId), "ixFeedId")
+                .then(function(results) {
+                    angular.forEach(results, function(item) {
+                        this._delete(item.id);
+                    })
+                });
         }
 
         function _add(object) {
@@ -237,9 +215,10 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                     description: object.description,
                     audioUrl: object.audioUrl,
                     queued: object.queued
-                };
+                },
+                promise = db.put("feedItem", newFeedItem);
 
-            oldDb.put("feedItem", newFeedItem, undefined, function() {
+            promise.then(function() {
                 deferred.resolve(newFeedItem);
             });
 
@@ -253,8 +232,6 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             this.listQueue(tempQueueList, function() {
                 var returnNextValue = false,
                     didReturnValue = false;
-                console.log(feedItem.id);
-                console.log('and now values');
                 angular.forEach(tempQueueList.queue, function(value, key) {
                     if (returnNextValue) {
                         deferred.resolve(value);
@@ -281,41 +258,36 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
          * @param done
          */
         function _listQueue(queueList, done) {
-            oldDb.getCursor("feedItem", function(ixDbCursorReq)
-            {
-                if(typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function (e) {
-                        var cursor = ixDbCursorReq.result || e.result;
-                        if (cursor) {
-                            // This additional check is necessary, since the index doesn't seem to always catch correctly
-                            if (cursor.value.queued) {
-                                queueList.addToQueue(cursor.value);
-                            }
-
-                            cursor.continue();
-                        } else {
-                            if (typeof done === 'function') {
-                                done();
-                            }
+            db.get("feedItem", IDBKeyRange.only(1), "ixQueued")
+                .then(function(results) {
+                    angular.forEach(results, function(item) {
+                        // This additional check is necessary, since the index doesn't seem to always catch correctly
+                        if (item.queued) {
+                            queueList.addToQueue(item);
                         }
-                    }
-                }
-            }, undefined, IDBKeyRange.only(1), false, 'ixQueued');
+                    });
+
+                    done();
+                });
         }
 
         function _unQueue(feedItemId) {
             var feedItem = _get(feedItemId, function(feedItem) {
                 feedItem.queued = 0;
-                oldDb.put("feedItem", feedItem, undefined, function() {
-                    $rootScope.$broadcast('queueListRefresh');
-                });
+
+                var promise = db.put("feedItem", feedItem);
+                    .then(function() {
+                        $rootScope.$broadcast('queueListRefresh');
+                    });
             });
         }
 
         function _addToQueue(feedItemId) {
             var feedItem = _get(feedItemId, function(feedItem) {
                 feedItem.queued = 1;
-                oldDb.put("feedItem", feedItem, undefined, function() {
+
+                var promise = db.put("feedItem", feedItem);
+                promise.then(function() {
                     $rootScope.$broadcast('queueListRefresh');
                 });
             });

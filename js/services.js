@@ -319,23 +319,16 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                         }
                     } else {
                         var itemsToDownload = [];
-                        db.getCursor("feedItem", function(ixDbCursorReq)
-                        {
-                            if(typeof ixDbCursorReq !== "undefined") {
-                                ixDbCursorReq.onsuccess = function (e) {
-                                    var cursor = ixDbCursorReq.result || e.result;
-
-                                    if (cursor) {
-                                        if (!cursor.value.audio && cursor.value.audioUrl) {
-                                            itemsToDownload.push(cursor.value);
-                                        }
-                                        cursor.continue();
-                                    } else {
-                                        downloader.downloadFiles(itemsToDownload);
+                        db.get("feedItem", IDBKeyRange.only(1), "ixQueueud")
+                            .then(function(results) {
+                                angular.forEach(results, function(item) {
+                                    if (!item.audio && item.audioUrl) {
+                                        itemsToDownload.push(item);
                                     }
-                                }
-                            }
-                        }, undefined, IDBKeyRange.only(1), undefined, 'ixQueued');
+                                });
+
+                                downloader.downloadFiles(itemsToDownload);
+                            });
                     }
                 });
             },
@@ -376,59 +369,6 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
         };
     }]);
 
-angular.module('podcasts.database', [])
-    .run(function() {
-        var dbConfig = (function () {
-            //Create IndexedDB ObjectStore and Indexes via ixDbEz
-            ixDbEz.createObjStore("feed", "id", true);
-            ixDbEz.createIndex("feed", "ixUrl", "url", true);
-            ixDbEz.createObjStore("feedItem", "id", true);
-            ixDbEz.createIndex("feedItem", "ixGuid", "guid", true);
-            ixDbEz.createIndex("feedItem", "ixFeedId", "feedId");
-            ixDbEz.createIndex("feedItem", "ixQueued", "queued");
-            ixDbEz.createObjStore("setting", "id", true);
-            ixDbEz.createIndex("setting", "ixName", "name", true);
-            ixDbEz.put("setting", {'name': "refreshInterval", 'value': 20000});
-        });
-
-        //Create or Open the local IndexedDB database via ixDbEz
-        ixDbEz.startDB("podcastDb", 10, dbConfig, undefined, undefined, false);
-    })
-    .value('db', ixDbEz)
-    .service('dbNew', ['$q', '$rootScope', 'db', function($q, $rootScope, _db) {
-        var _getOne = function(store, identifier) {
-            var deferred = $q.defer();
-
-            _db.getCursor(store, function(ixDbCursorReq)
-            {
-                if(typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function (e) {
-                        var cursor = ixDbCursorReq.result || e.result;
-                        if (cursor) {
-                            $rootScope.$apply(deferred.resolve(cursor.value));
-
-                            cursor.continue();
-                        } else {
-                            //TODO: not sure if this'll work, since it may both resolve and reject.
-                            // May need to check if any were resolved or not first
-
-                            // deferred.reject();
-                        }
-                    }
-                } else {
-                    deferred.reject();
-                }
-            }, null, IDBKeyRange.only(identifier));
-
-            return deferred.promise;
-        };
-
-        return {
-            getOne: _getOne
-        };
-    }]);
-
-
 angular.module('podcasts.updater', ['podcasts.settings', 'podcasts.alarmManager', 'podcasts.downloader'])
     .run(['update', function(update) {
         //update.checkFeeds();
@@ -462,25 +402,18 @@ angular.module('podcasts.settings', ['podcasts.database'])
             waiting = [];
 
         function _init() {
-            db.getCursor("setting", function(ixDbCursorReq)
-            {
-                if(typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function (e) {
-                        var cursor = ixDbCursorReq.result || e.result;
-                        if (cursor) {
-                            settings[cursor.value.name] = cursor.value;
+            db.get("setting")
+                .then(function(results) {
+                    angular.forEach(results, function(item) {
+                        settings[item.name] = item;
+                    });
 
-                            cursor.continue();
-                        } else {
-                            initialized = true;
+                    initialized = true;
 
-                            for (var i = 0, l = waiting.length; i < l; i++) {
-                                waiting[i]();
-                            }
-                        }
+                    for (var i = 0, l = waiting.length; i < l; i++) {
+                        waiting[i]();
                     }
-                }
-            });
+                });
         }
 
         function _set(name, value, key) {
@@ -514,26 +447,14 @@ angular.module('podcasts.settings', ['podcasts.database'])
             if (!angular.isUndefined(settings[name])) {
                 onSuccess(settings[name]);
             } else {
-                db.getCursor("setting", function(ixDbCursorReq)
-                {
-                    if(typeof ixDbCursorReq !== "undefined") {
-                        ixDbCursorReq.onsuccess = function (e) {
-                            var cursor = ixDbCursorReq.result || e.result;
-                            if (cursor) {
-                                onSuccess(cursor.value);
-                            } else {
-                                if (typeof onFailure === 'function') {
-                                    onFailure();
-                                }
-                            }
-                        };
-
-                        ixDbCursorReq.onerror = function (e) {
-                            console.log('didnt get setting');
+                db.get("setting", IDBKeyRange.only(name), "ixName")
+                    .then(function(results) {
+                        onSuccess(results[0]);
+                    }, function() {
+                        if (typeof onFailure === 'function') {
                             onFailure();
-                        };
-                    }
-                }, function() { onFailure(); }, IDBKeyRange.only(name), undefined, 'ixName');
+                        }
+                    });
             }
         }
 

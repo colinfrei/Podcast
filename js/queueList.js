@@ -2,7 +2,7 @@ angular.module('podcasts.queueList', ['podcasts.database'])
     .run(['queueList', function(queueList) {
         queueList.rebuildList();
     }])
-    .service('queueList', ['db', '$rootScope', function(oldDb, $rootScope) {
+    .service('queueList', ['db', '$rootScope', function(db, $rootScope) {
         var queueList = [];
 
         function getQueueList() {
@@ -12,24 +12,16 @@ angular.module('podcasts.queueList', ['podcasts.database'])
         function rebuildList() {
             queueList = [];
 
-            oldDb.getCursor("feedItem", function(ixDbCursorReq)
-            {
-                if(typeof ixDbCursorReq !== "undefined") {
-                    ixDbCursorReq.onsuccess = function (e) {
-                        var cursor = ixDbCursorReq.result || e.result;
-                        if (cursor) {
-                            // This additional check is necessary, since the index doesn't seem to always catch correctly
-                            if (cursor.value.queued) {
-                                queueList.push(cursor.value);
-                            }
-
-                            cursor.continue();
-                        } else {
-                            $rootScope.$apply();
+            db.get("feedItem", IDBKeyRange.only(1), "ixQueued")
+                .then(function(results) {
+                    angular.forEach(results, function(item) {
+                        if (item.queued) {
+                            queueList.push(item);
                         }
-                    }
-                }
-            }, undefined, IDBKeyRange.only(1), false, 'ixQueued');
+                    });
+
+                    $rootScope.$apply();
+                });
         }
 
         return {
