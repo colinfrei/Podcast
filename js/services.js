@@ -110,9 +110,6 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
         function updateSong(feedItem, $scope)
         {
             nowPlaying.title = feedItem.title;
-            /*$timeout(function() {
-             player.nowPlaying.duration = audio.duration;
-             }, 100);*/
             nowPlaying.currentFeedItem = feedItem;
             nowPlaying.description = feedItem.description;
             nowPlaying.feed = feedItem.feed;
@@ -122,6 +119,10 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
 
         function updatePosition($scope)
         {
+            $timeout(function() {
+                nowPlaying.duration = audio.duration;
+            }, 500);
+
             setInterval(function() {
                 nowPlaying.position = audio.currentTime;
                 $scope.$apply();

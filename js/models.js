@@ -275,7 +275,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             var feedItem = _get(feedItemId, function(feedItem) {
                 feedItem.queued = 0;
 
-                var promise = db.put("feedItem", feedItem);
+                var promise = db.put("feedItem", feedItem)
                     .then(function() {
                         $rootScope.$broadcast('queueListRefresh');
                     });
