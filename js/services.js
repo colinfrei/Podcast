@@ -15,6 +15,8 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
         audio.setAttribute("mozaudiochannel", "content");
         var currentFeedItem = null;
         var nowPlaying = {position: 0, duration: 0, title: '', description: '', feed: '', date: 0};
+        var hasOfflineErrorHandler = false;
+        var hasPauseEventListener = false;
 
         var acm = navigator.mozAudioChannelManager;
 
@@ -26,10 +28,38 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             });
         }
 
+        function addOfflineErrorHandler($scope)
+        {
+            if (!hasOfflineErrorHandler) {
+                audio.addEventListener("error", function(event) {
+                    console.log('Error when loading audio file, continuing to next file');
+
+                    var nextFeedItemPromise = feedItems.getNextInQueue(currentFeedItem);
+                    $rootScope.$apply(nextFeedItemPromise.then(function(nextFeedItem) {
+                        play(nextFeedItem, $scope);
+                    }));
+                });
+
+                hasOfflineErrorHandler = true;
+            }
+        }
+
+        function addPauseEventListener()
+        {
+            if (!hasPauseEventListener) {
+                audio.addEventListener("pause", function(event) {
+                    console.log('paused audio');
+                    currentFeedItem.position = Math.floor(event.target.currentTime);
+                    db.put("feedItem", currentFeedItem);
+                });
+
+                hasPauseEventListener = true;
+            }
+        }
+
         function play(feedItem, $scope)
         {
             var delayPlay = false;
-
             if (feedItem) {
                 console.log('playing: ' + feedItem.title);
 
@@ -46,6 +76,8 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
 
                 audio.src = audioSrc;
                 updateSong(feedItem, $scope);
+
+                addOfflineErrorHandler($scope);
 
                 if (feedItem.position) {
                     delayPlay = true;
@@ -69,7 +101,6 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 console.log('got promise for next feed item');
                 $rootScope.$apply(nextFeedItemPromise.then(function(nextFeedItem) {
                     console.log('Got next Feed Item:');
-                    console.log(nextFeedItem);
                     console.log(nextFeedItem.title);
                     play(nextFeedItem, $scope);
 
@@ -83,15 +114,6 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                     feedItem.position = 0;
                     db.put("feedItem", feedItem);
                 }));
-
-                angular.element(this).unbind();
-            });
-
-            //TODO: handle save when feedItem is not passed in
-            angular.element(audio).bind('pause', function(event) {
-                console.log('paused audio');
-                feedItem.position = Math.floor(event.target.currentTime);
-                db.put("feedItem", feedItem);
 
                 angular.element(this).unbind();
             });
