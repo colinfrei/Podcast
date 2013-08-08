@@ -225,6 +225,10 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             return deferred.promise;
         }
 
+        function _save(object) {
+            db.put("feedItem", object);
+        }
+
         function _getNextInQueue(feedItem) {
             var tempQueueList = { queue: [], addToQueue: function(item) { this.queue.push(item); } },
                 deferred = $q.defer();
@@ -300,6 +304,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             delete: _delete,
             deleteByFeedId: _deleteByFeedId,
             add: _add,
+            save: _save,
             getNextInQueue: _getNextInQueue,
             listQueue: _listQueue,
             unQueue: _unQueue,

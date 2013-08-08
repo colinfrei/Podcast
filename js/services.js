@@ -10,7 +10,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }
         };
     }])
-    .service('player', ['db', 'url', '$timeout', 'feedItems', '$rootScope', function(db, url, $timeout, feedItems, $rootScope) {
+    .service('player', ['url', '$timeout', 'feedItems', '$rootScope', function(url, $timeout, feedItems, $rootScope) {
         var audio = new Audio();
         audio.setAttribute("mozaudiochannel", "content");
         var currentFeedItem = null;
@@ -50,7 +50,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 audio.addEventListener("pause", function(event) {
                     console.log('paused audio');
                     currentFeedItem.position = Math.floor(event.target.currentTime);
-                    db.put("feedItem", currentFeedItem);
+                    feedItems.save(currentFeedItem);
                 });
 
                 hasPauseEventListener = true;
@@ -106,13 +106,15 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
 
                     feedItem.queued = 0;
                     feedItem.position = 0;
-                    db.put("feedItem", feedItem);
+
+                    feedItems.save(feedItem);
                 }, function(error) {
                     console.log('got Errror when fetching next feed item');
 
                     feedItem.queued = 0;
                     feedItem.position = 0;
-                    db.put("feedItem", feedItem);
+
+                    feedItems.save(feedItem);
                 }));
 
                 angular.element(this).unbind();
@@ -312,7 +314,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
         }
     }]);
 
-angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities'])
+angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities', 'podcasts.models'])
     .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', function(db, url, $http, settings, $rootScope) {
         return {
             allowedToDownload: function(callback) {
@@ -372,7 +374,7 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                             item.audio = data;
                             item.duration = downloader.getAudioLength(data);
 
-                            db.put("feedItem", item);
+                            feedItems.save(item);
 
                             downloader.downloadFiles(itemsToDownload);
                         })
@@ -512,7 +514,7 @@ angular.module('podcasts.settings', ['podcasts.database'])
 
 
 
-angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services'])
+angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services', 'podcasts.models'])
     .service('opml', ['xmlParser', 'feeds', function(xmlParser, feeds) {
         return {
             import: function(xml) {
