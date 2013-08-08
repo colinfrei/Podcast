@@ -10,7 +10,7 @@ angular.module('podcasts.database', [])
             dbBackend.createIndex("feedItem", "ixQueued", "queued");
             dbBackend.createObjStore("setting", "id", true);
             dbBackend.createIndex("setting", "ixName", "name", true);
-            dbBackend.put("setting", {'name': "refreshInterval", 'value': 20000});
+            dbBackend.put("setting", {'name': "refreshInterval", 'value': "0"});
         });
 
         //Create or Open the local IndexedDB database via ixDbEz
