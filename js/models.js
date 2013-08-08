@@ -238,7 +238,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                         returnNextValue = false;
                         didReturnValue = true;
                     }
-                    console.log(value.id);
+
                     if (feedItem.id === value.id) {
                         returnNextValue = true;
                     }
