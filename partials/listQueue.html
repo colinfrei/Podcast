@@ -11,9 +11,9 @@
         </div>
         <div ng-show="feedItem.showOptions" class="feedItemOptions">
             <a ng-hide="feedItem.audio" ng-click="downloadFile(feedItem.id)"><i class="icon-download"></i> Download</a>
-            | <a ng-show="feedItem.audio" ng-click="reDownloadFile(feedItem.id)"><i class="icon-download"></i> Re-Download</a>
-            | <a ng-click="goToFeed(feedItem.feedId)"><i class="icon-list-ul"></i> Show Feed</a>
-            | <a ng-click="removeFromQueue(feedItem.id)"><i class="icon-remove-circle"></i> Unqueue</a>
+            <a ng-show="feedItem.audio" ng-click="reDownloadFile(feedItem.id)"><i class="icon-download"></i> Re-Download</a>
+            <a ng-click="goToFeed(feedItem.feedId)"><i class="icon-list-ul"></i> Show Feed</a>
+            <a ng-click="removeFromQueue(feedItem.id)"><i class="icon-remove-circle"></i> Unqueue</a>
         </div>
     </div>
     <div ng-hide="queue.length" class="pullDownMessage">
