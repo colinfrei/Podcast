@@ -226,7 +226,10 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         function _save(object) {
-            db.put("feedItem", object);
+            db.put("feedItem", object)
+                .then(function() {
+                    $rootScope.$broadcast('queueListRefresh');
+                });
         }
 
         function _getNextInQueue(feedItem) {
@@ -290,10 +293,10 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             var feedItem = _get(feedItemId, function(feedItem) {
                 feedItem.queued = 1;
 
-                var promise = db.put("feedItem", feedItem);
-                promise.then(function() {
-                    $rootScope.$broadcast('queueListRefresh');
-                });
+                db.put("feedItem", feedItem)
+                    .then(function() {
+                        $rootScope.$broadcast('queueListRefresh');
+                    });
             });
         }
 
