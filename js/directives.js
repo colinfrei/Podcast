@@ -1,5 +1,5 @@
 angular.module('podcast.directives', [])
-    .directive('pullToRefresh', function() {
+    .directive('pullToRefresh', ['$timeout', function($timeout) {
         return function(scope, element, attrs, feedItems) {
             var myScroll,
                 pullDownEl, pullDownOffset,
@@ -54,11 +54,15 @@ angular.module('podcast.directives', [])
 
             scope.$watch(
                 function() { return scope.queue; },
-                function() { myScroll.refresh(); },
+                function() {
+                    $timeout(function() {
+                        myScroll.refresh();
+                    }, 5);
+                },
                 true
             );
         }
-    })
+    }])
     .directive('hold', ['$timeout', function($timeout) {
         return function(scope, element, attrs) {
             var startTime, moved, holdTimer = false;
@@ -84,8 +88,19 @@ angular.module('podcast.directives', [])
         }
     }])
     .directive('scroll', function() {
-        return function(scope, element, attrs, feedItems) {
-            var scroll = new iScroll(element[0], {vScrollbar: false});
+        return {
+            priority: -1000,
+            compile: function compile(tElement, tAttrs) {
+                return function postLink(scope, element, attrs, feedItems) {
+                    //TODO: this should probably work somehow without setting a timeout
+                    // - need to be able to set the order of watchers?
+                    setTimeout(function() {
+                        console.log('bla');
+                        console.log(element[0]);
+                        var scroll = new iScroll(element[0], {vScrollbar: false});
+                    }, 500);
+                }
+            }
         };
     })
     .directive('blob', function() {

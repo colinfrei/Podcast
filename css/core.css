@@ -169,7 +169,7 @@ body, .normalFont {
     float: right;
 }
 
-#queueList, #scroller {
+#queueList, #scroller, #feedList {
     height: 100%;
 }
 
