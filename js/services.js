@@ -315,7 +315,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
     }]);
 
 angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities', 'podcasts.models'])
-    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', function(db, url, $http, settings, $rootScope) {
+    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', 'feedItems', function(db, url, $http, settings, $rootScope, feedItems) {
         return {
             allowedToDownload: function(callback) {
                 callback(true);
