@@ -1,19 +1,20 @@
 <div id="queueList" pull-to-refresh="pull-to-refresh">
-    <div ng-repeat="feedItem in queue|orderBy:'-date'" class="listRow">
+    <div ng-repeat="item in queue|orderBy:'-date'" class="listRow" ng-controller="ListItemCtrl">
         <div class="listItem">
-            <div class="playButton" ng-click="playItem(feedItem.id)">
-                <span><i ng-class="{hasAudio: feedItem.audio}" class="icon-play"></i></span>
+            <div class="playButton">
+                <span ng-click="playItem(item.id)"><i ng-class="{hasAudio: item.audio}" class="icon-play"></i></span>
             </div>
-            <div class="feedItemContent" ng-click="showItemOptions(feedItem.id)">
-                <span class="feedItemTitle">{{ feedItem.title }}</span>
-                {{ feedItem.date | timeAgo }}<span ng-show="feedItem.duration">, {{ feedItem.duration }}</span>
+            <div class="feedItemContent" ng-click="showItemOptions(item.id)">
+                <span class="feedItemTitle">{{ item.title }}</span>
+                {{ item.date | timeAgo }}<span ng-show="item.duration">, {{ item.duration }}</span>
             </div>
         </div>
-        <div ng-show="feedItem.showOptions" class="feedItemOptions">
-            <a ng-hide="feedItem.audio" ng-click="downloadFile(feedItem.id)"><i class="icon-download"></i> Download</a>
-            <a ng-show="feedItem.audio" ng-click="reDownloadFile(feedItem.id)"><i class="icon-download"></i> Re-Download</a>
-            <a ng-click="goToFeed(feedItem.feedId)"><i class="icon-list-ul"></i> Show Feed</a>
-            <a ng-click="removeFromQueue(feedItem.id)"><i class="icon-remove-circle"></i> Unqueue</a>
+        <div ng-show="item.showOptions" class="feedItemOptions">
+            <a ng-hide="item.queued" ng-click="addToQueue(item.id)"><i class="icon-plus"></i> Add to Queue</a>
+            <a ng-hide="item.audio" ng-click="downloadFile(item.id)"><i class="icon-download"></i> Download</a>
+            <a ng-show="item.audio" ng-click="reDownloadFile(item.id)"><i class="icon-download"></i> Re-Download</a>
+            <a ng-click="goToFeed(item.feedId)"><i class="icon-list-ul"></i> Show Feed</a>
+            <a ng-show="item.queued" ng-click="removeFromQueue(item.id)"><i class="icon-remove-circle"></i> Unqueue</a>
         </div>
     </div>
     <div ng-hide="queue.length" class="pullDownMessage">
