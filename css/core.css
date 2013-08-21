@@ -254,7 +254,6 @@ button {
     border-top: 1px solid #c0c0c0;
     background-image: linear-gradient(#F1EFE2 50%, #C0C0C0);
     background-color: #C0C0C0;
-    padding: 6px;
     font-size: 13px;
     display: table;
     width: 100%;
@@ -266,6 +265,13 @@ button {
 
 .feedItemOptions a {
     display: table-cell;
+    padding: 6px;
+    border-right: 1px solid #c0c0c0;
+    text-align: center;
+}
+
+.feedItemOptions a:last-child {
+    border-right: none;
 }
 
 .title-slider {
