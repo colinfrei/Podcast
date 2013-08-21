@@ -78,6 +78,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 updateSong(feedItem, $scope);
 
                 addOfflineErrorHandler($scope);
+                addPauseEventListener();
 
                 if (feedItem.position) {
                     delayPlay = true;
