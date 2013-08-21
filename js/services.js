@@ -351,7 +351,7 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                         }
                     } else {
                         var itemsToDownload = [];
-                        db.get("feedItem", IDBKeyRange.only(1), "ixQueueud")
+                        db.get("feedItem", IDBKeyRange.only(1), "ixQueued")
                             .then(function(results) {
                                 angular.forEach(results, function(item) {
                                     if (!item.audio && item.audioUrl) {
