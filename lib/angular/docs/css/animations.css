@@ -1,73 +1,99 @@
-.reveal-setup {
+.reveal.ng-enter {
   -webkit-transition:1s linear all;
   -moz-transition:1s linear all;
-  -ms-transition:1s linear all;
   -o-transition:1s linear all;
   transition:1s linear all;
 
   opacity:0;
 }
-.reveal-setup.reveal-start {
+.reveal.ng-enter.ng-enter-active {
   opacity:1;
 }
 
-.slide-reveal-setup {
-  -webkit-transition:0.5s linear all;
-  -moz-transition:0.5s linear all;
-  -ms-transition:0.5s linear all;
-  -o-transition:0.5s linear all;
-  transition:0.5s linear all;
-  opacity:0.5;
-}
-.slide-reveal-setup.slide-reveal-start {
-  opacity:1;
+.nav-list {
+  padding: 0;
 }
 
-.slide-enter-setup {
-  -webkit-transition:0.5s linear all;
-  -moz-transition:0.5s linear all;
-  -ms-transition:0.5s linear all;
-  -o-transition:0.5s linear all;
-  transition:0.5s linear all;
-
-  position:relative;
-  left:10px;
-  opacity:0;
-}
-.slide-enter-setup.slide-enter-start {
-  left:0;
-  opacity:1;
-}
-
-.slide-leave-setup {
-  -webkit-transition:0.5s linear all;
-  -moz-transition:0.5s linear all;
-  -ms-transition:0.5s linear all;
-  -o-transition:0.5s linear all;
-  transition:0.5s linear all;
-
-  opacity:1;
-}
-.slide-leave-setup.slide-leave-start {
-  opacity:0;
-}
-
-.example-animate-container {
-  position:relative;
-  background:white;
-  border:1px solid black;
-  height:40px;
+.nav-list li {
+  margin:0!important;
+  padding:0 15px;
+  height:20px;
   overflow:hidden;
 }
 
-.example-animate-container > div {
-  padding:1em;
+.slide-reveal.ng-enter {
+  -webkit-transition:0.5s linear all;
+  -moz-transition:0.5s linear all;
+  -o-transition:0.5s linear all;
+  transition:0.5s linear all;
+
+  opacity:0.5;
+  position:relative;
+  opacity:0;
+  top:10px;
+}
+.slide-reveal.ng-enter.ng-enter-active {
+  top:0;
+  opacity:1;
 }
 
-.animator-container.animations-off * {
+.expand.ng-enter,
+.expand.ng-leave {
+  -webkit-transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -moz-transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -o-transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+}
+.expand.ng-enter {
+  opacity:0;
+  line-height:0;
+  height:0!important;
+}
+.expand.ng-enter.expand.ng-enter-active {
+  opacity:1;
+  line-height:20px;
+  height:20px!important;
+}
+
+.expand.ng-leave {
+  opacity:1;
+  height:20px;
+}
+.expand.ng-leave.expand.ng-leave-active {
+  opacity:0;
+  height:0;
+}
+
+.animate-container.animations-off * {
   -webkit-transition: none;
   -moz-transition: none;
-  -ms-transition: none;
   -o-transition: color 0 ease-in; /* opera is special :) */
   transition: none;
+}
+
+.foldout.ng-enter,
+.foldout.ng-hide-add,
+.foldout.ng-hide-remove {
+  -webkit-transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -moz-transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  -o-transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+  transition:0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) all;
+}
+
+.foldout.ng-hide-remove,
+.foldout.ng-enter {
+  opacity:0;
+}
+
+.foldout.ng-hide-remove.ng-hide-remove-active,
+.foldout.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.foldout.ng-hide-add {
+  opacity:1;
+}
+
+.foldout.ng-hide-add.ng-hide-active {
+  opacity:0;
 }
