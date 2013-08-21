@@ -9,7 +9,7 @@
 </head>
 <body>
 <!-- TODO: move topBar into it's own partial -->
-<div class="topBar" ng-controller="TopBarCtrl">
+<div class="topBar" ng-controller="TopBarCtrl" ng-swipe-left="jumpAudio(+5)" ng-swipe-right="jumpAudio(-5)">
     <div id="pageSwitcher" class="topBarItem" hold="showPageSwitchMenu()" ng-click="changePage()">
         <i id="pageswitch-back-arrow" class="pageswitch-icon icon-chevron-left ng-cloak" ng-show="showBackLink()"></i>
         <i id="pageswitch-icon-settings" class="pageswitch-icon next icon-cogs"></i>

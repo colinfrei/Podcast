@@ -204,6 +204,10 @@ function TopBarCtrl($scope, player, pageSwitcher)
     $scope.showBackLink = function() {
         return !!pageSwitcher.backPage;
     };
+
+    $scope.jumpAudio = function(distance) {
+        player.jumpAudio(distance);
+    };
 }
 
 function InfoCtrl(pageSwitcher)

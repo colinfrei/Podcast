@@ -154,6 +154,11 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }, 1000);
         }
 
+        function jumpAudio(distance)
+        {
+            audio.currentTime = audio.currentTime + distance;
+        }
+
 
         return {
             audio: audio,
@@ -163,7 +168,8 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             pause: pause,
             playing: playing,
             updateSong: updateSong,
-            updatePosition: updatePosition
+            updatePosition: updatePosition,
+            jumpAudio: jumpAudio
         }
     }])
     .service('pageSwitcher', ['$location', '$route', function($location, $route) {
