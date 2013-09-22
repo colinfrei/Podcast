@@ -6,10 +6,10 @@
 to make both of these operations trivial. This example shows off how you can build a simple form to
 allow a user to enter data.</p>
 <h3>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-173" source-edit-css="" source-edit-js="script.js-172" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-174"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-171" source-edit-css="" source-edit-js="script.js-170" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-172"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-173" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-173">
+<pre class="prettyprint linenums" ng-set-text="index.html-171" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-171">
   
   <div ng-controller="FormController" class="example">
 
@@ -44,8 +44,8 @@ allow a user to enter data.</p>
  </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-172"></pre>
-<script type="text/ng-template" id="script.js-172">
+<pre class="prettyprint linenums" ng-set-text="script.js-170"></pre>
+<script type="text/ng-template" id="script.js-170">
     function FormController($scope) {
       var user = $scope.user = {
         name: 'John Smith',
@@ -70,8 +70,8 @@ allow a user to enter data.</p>
   </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-174"></pre>
-<script type="text/ng-template" id="scenario.js-174">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-172"></pre>
+<script type="text/ng-template" id="scenario.js-172">
   it('should show debug', function() {
     expect(binding('user')).toMatch(/John Smith/);
   });
@@ -107,7 +107,7 @@ allow a user to enter data.</p>
  </script>
 </div>
 </div><h2>Demo</h3>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-173" ng-eval-javascript="script.js-172"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-171" ng-eval-javascript="script.js-170"></div>
 <h2>Things to notice</h2>
 <ul>
 <li>The user data model is initialized <a href="api/ng.directive:ngController"><code>controller</code></a> and is

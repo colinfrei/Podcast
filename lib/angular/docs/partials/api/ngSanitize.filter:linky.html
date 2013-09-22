@@ -6,6 +6,7 @@
 <div><h2 id="Description">Description</h2>
 <div class="description"><div class="ngsanitize-filter-page ngsanitize-filter-linky-page"><p>Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and
 plain email address links.</p>
+<p>Requires the <a href="api/ngSanitize"><code>ngSanitize</code></a> module to be installed.</p>
 </div></div>
 <h2 id="Usage">Usage</h2>
 <div class="usage"><h3 id="In.HTML.Template.Binding">In HTML Template Binding</h3>
@@ -20,10 +21,10 @@ plain email address links.</p>
 </div></td></tr></table></div>
 <h2 id="Example">Example</h2>
 <div class="example"><div class="ngsanitize-filter-page ngsanitize-filter-linky-page"><h4>Source</h2>
-<div source-edit="ngSanitize" source-edit-deps="angular.js script.js" source-edit-html="index.html-148" source-edit-css="" source-edit-js="script.js-147" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-149"></div>
+<div source-edit="ngSanitize" source-edit-deps="angular.js script.js" source-edit-html="index.html-152" source-edit-css="" source-edit-js="script.js-151" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-153"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-148" ng-html-wrap="ngSanitize angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-148">
+<pre class="prettyprint linenums" ng-set-text="index.html-152" ng-html-wrap="ngSanitize angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-152">
   
   <div ng-controller="Ctrl">
   Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
@@ -60,8 +61,8 @@ plain email address links.</p>
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-147"></pre>
-<script type="text/ng-template" id="script.js-147">
+<pre class="prettyprint linenums" ng-set-text="script.js-151"></pre>
+<script type="text/ng-template" id="script.js-151">
     function Ctrl($scope) {
       $scope.snippet =
         'Pretty text with some links:\n'+
@@ -74,8 +75,8 @@ plain email address links.</p>
   </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-149"></pre>
-<script type="text/ng-template" id="scenario.js-149">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-153"></pre>
+<script type="text/ng-template" id="scenario.js-153">
   it('should linkify the snippet with urls', function() {
     expect(using('#linky-filter').binding('snippet | linky')).
       toBe('Pretty text with some links:&#10;' +
@@ -108,6 +109,6 @@ plain email address links.</p>
 </script>
 </div>
 </div><h2>Demo</h4>
-<div class="well doc-example-live animate-container" ng-embed-app="ngSanitize" ng-set-html="index.html-148" ng-eval-javascript="script.js-147"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="ngSanitize" ng-set-html="index.html-152" ng-eval-javascript="script.js-151"></div>
 </div></div>
 </div>

@@ -20,10 +20,10 @@ interaction with the input element.</p>
 </div></td></tr></tbody></table></div>
 <h2 id="Example">Example</h2>
 <div class="example"><div class="ng-directive-page ng-directive-input-radio-page"><h4>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-48" source-edit-css="" source-edit-js="script.js-47" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-49"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-35" source-edit-css="" source-edit-js="script.js-34" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-36"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-48" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-48">
+<pre class="prettyprint linenums" ng-set-text="index.html-35" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-35">
  
  <form name="myForm" ng-controller="Ctrl">
    <input type="radio" ng-model="color" value="red">  Red <br/>
@@ -34,16 +34,16 @@ interaction with the input element.</p>
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-47"></pre>
-<script type="text/ng-template" id="script.js-47">
+<pre class="prettyprint linenums" ng-set-text="script.js-34"></pre>
+<script type="text/ng-template" id="script.js-34">
    function Ctrl($scope) {
      $scope.color = 'blue';
    }
  </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-49"></pre>
-<script type="text/ng-template" id="scenario.js-49">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-36"></pre>
+<script type="text/ng-template" id="scenario.js-36">
   it('should change state', function() {
     expect(binding('color')).toEqual('blue');
 
@@ -53,6 +53,6 @@ interaction with the input element.</p>
 </script>
 </div>
 </div><h2>Demo</h4>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-48" ng-eval-javascript="script.js-47"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-35" ng-eval-javascript="script.js-34"></div>
 </div></div>
 </div>

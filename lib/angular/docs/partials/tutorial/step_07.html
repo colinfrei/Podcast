@@ -26,8 +26,8 @@ template into what we call a &quot;layout template&quot;. This is a template tha
 our application. Other &quot;partial templates&quot; are then included into this layout template depending on
 the current &quot;route&quot; — the view that is currently displayed to the user.</p>
 <p>Application routes in Angular are declared via the
-<a href="api/ng.$routeProvider"><code>$routeProvider</code></a>, which is the provider of the
-<a href="api/ng.$route"><code>$route service</code></a>. This service makes it easy to wire together
+<a href="api/ngRoute.$routeProvider">$routeProvider</a>, which is the provider of the
+<a href="api/ngRoute.$route">$route service</a>. This service makes it easy to wire together
 controllers, view templates, and the current
 URL location in the browser. Using this feature we can implement <a href="http://en.wikipedia.org/wiki/Deep_linking">deep linking</a>, which lets us utilize the browser&#39;s
 history (back and forward navigation) and bookmarks.</p>
@@ -45,7 +45,7 @@ that can be used to control the creation and runtime behavior of a service. In c
 service, the <code>$routeProvider</code> exposes APIs that allow you to define routes for your application.</p>
 <p>Angular modules solve the problem of removing global state from the application and provide a way
 of configuring the injector. As opposed to AMD or require.js modules, Angular modules don&#39;t try to
-solve the problem of script load ordering or lazy script fetching. These goals are orthogonal and
+solve the problem of script load ordering or lazy script fetching. These goals are totally independent and
 both module systems can live side by side and fulfil their goals.</p>
 <h2>The App Module</h2>
 <p><strong><code>app/js/app.js</code>:</strong>
@@ -81,7 +81,7 @@ the browser address doesn&#39;t match either of our routes.</p>
 <p>Note the use of the <code>:phoneId</code> parameter in the second route declaration. The <code>$route</code> service uses
 the route declaration — <code>&#39;/phones/:phoneId&#39;</code> — as a template that is matched against the current
 URL. All variables defined with the <code>:</code> notation are extracted into the
-<a href="api/ng.$routeParams"><code>$routeParams</code></a> object.</p>
+<a href="api/ngRoute.$routeParams">$routeParams</a> object.</p>
 <p>In order for our application to bootstrap with our newly created module we&#39;ll also need to specify
 the module name as the value of the <a href="api/ng.directive:ngApp"><code>ngApp</code></a>
 directive:</p>
@@ -102,7 +102,7 @@ function PhoneDetailCtrl($scope, $routeParams) {
 //PhoneDetailCtrl.$inject = ['$scope', '$routeParams'];
 </pre>
 <h2>Template</h2>
-<p>The <code>$route</code> service is usually used in conjunction with the <a href="api/ng.directive:ngView"><code>ngView</code></a> directive. The role of the <code>ngView</code> directive is to include the view template for the current
+<p>The <code>$route</code> service is usually used in conjunction with the <a href="api/ngRoute.directive:ngView">ngView</a> directive. The role of the <code>ngView</code> directive is to include the view template for the current
 route into the layout template, which makes it a perfect fit for our <code>index.html</code> template.</p>
 <p><strong><code>app/index.html</code>:</strong>
 <pre class="prettyprint linenums">

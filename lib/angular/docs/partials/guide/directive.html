@@ -24,10 +24,10 @@ attribute only.)</p>
 <p>Directives can be invoked in many different ways, but are equivalent in the end result as shown in
 the following example.</p>
 <h3>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-215" source-edit-css="" source-edit-js="script.js-214" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-216"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-216" source-edit-css="" source-edit-js="script.js-215" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-217"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-215" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-215">
+<pre class="prettyprint linenums" ng-set-text="index.html-216" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-216">
    
    <div ng-controller="Ctrl1">
      Hello <input ng-model='name'> <hr/>
@@ -40,23 +40,23 @@ the following example.</p>
   </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-214"></pre>
-<script type="text/ng-template" id="script.js-214">
+<pre class="prettyprint linenums" ng-set-text="script.js-215"></pre>
+<script type="text/ng-template" id="script.js-215">
      function Ctrl1($scope) {
        $scope.name = 'angular';
      }
    </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-216"></pre>
-<script type="text/ng-template" id="scenario.js-216">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-217"></pre>
+<script type="text/ng-template" id="scenario.js-217">
     it('should show off bindings', function() {
       expect(element('div[ng-controller="Ctrl1"] span[ng-bind]').text()).toBe('angular');
     });
   </script>
 </div>
 </div><h2>Demo</h2>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-215" ng-eval-javascript="script.js-214"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-216" ng-eval-javascript="script.js-215"></div>
 <h1>Text and attribute bindings</h1>
 <p>During the compilation process the <a href="api/ng.$compile"><code>compiler</code></a> matches text and
 attributes using the <a href="api/ng.$interpolate"><code>$interpolate</code></a> service to see if they
@@ -167,10 +167,10 @@ as to copy content into the DOM from the scope.</p>
 <h1>Writing directives (short version)</h1>
 <p>In this example we will build a directive that displays the current time.</p>
 <h2>Source</h2>
-<div source-edit="time" source-edit-deps="angular.js script.js" source-edit-html="index.html-218" source-edit-css="" source-edit-js="script.js-217" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="time" source-edit-deps="angular.js script.js" source-edit-html="index.html-219" source-edit-css="" source-edit-js="script.js-218" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-218" ng-html-wrap="time angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-218">
+<pre class="prettyprint linenums" ng-set-text="index.html-219" ng-html-wrap="time angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-219">
    
    <div ng-controller="Ctrl2">
      Date format: <input ng-model="format"> <hr/>
@@ -179,8 +179,8 @@ as to copy content into the DOM from the scope.</p>
   </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-217"></pre>
-<script type="text/ng-template" id="script.js-217">
+<pre class="prettyprint linenums" ng-set-text="script.js-218"></pre>
+<script type="text/ng-template" id="script.js-218">
      function Ctrl2($scope) {
        $scope.format = 'M/d/yy h:mm:ss a';
      }
@@ -226,7 +226,7 @@ as to copy content into the DOM from the scope.</p>
    </script>
 </div>
 </div><h2>Demo</h2>
-<div class="well doc-example-live animate-container" ng-embed-app="time" ng-set-html="index.html-218" ng-eval-javascript="script.js-217"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="time" ng-set-html="index.html-219" ng-eval-javascript="script.js-218"></div>
 <h1>Writing directives (long version)</h1>
 <p>There are different ways to declare a directive. The difference resides in the return
 value of the factory function. You can either return a Directive Definition Object
@@ -376,10 +376,6 @@ found, or if the directive does not have a controller, then an error is raised. 
 <li><p><code>controllerAs</code> - Controller alias at the directive scope. An alias for the controller so it
 can be referenced at the directive template. The directive needs to define a scope for this
 configuration to be used. Useful in the case when directive is used as component.</p>
-</li>
-<li><p><code>require</code> - Require another controller be passed into current directive linking function. The
-<code>require</code> takes a name of the directive controller to pass in. If no such controller can be
-found an error is raised. The name can be prefixed with:</p>
 </li>
 <li><p><code>restrict</code> - String of subset of <code>EACM</code> which restricts the directive to a specific directive
 declaration style. If omitted, the default (attributes only) is used.</p>
@@ -604,10 +600,10 @@ allows the directives to become a short hand for reusable components from which 
 can be built.</p>
 <p>Following is an example of building a reusable widget.</p>
 <h2>Source</h2>
-<div source-edit="zippyModule" source-edit-deps="angular.js script.js" source-edit-html="index.html-221" source-edit-css="style.css-220" source-edit-js="script.js-219" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-222"></div>
+<div source-edit="zippyModule" source-edit-deps="angular.js script.js" source-edit-html="index.html-222" source-edit-css="style.css-221" source-edit-js="script.js-220" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-223"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-221" ng-html-wrap="zippyModule angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-221">
+<pre class="prettyprint linenums" ng-set-text="index.html-222" ng-html-wrap="zippyModule angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-222">
    
    
    <div ng-controller="Ctrl3">
@@ -619,8 +615,8 @@ can be built.</p>
   </script>
 </div>
 <div class="tab-pane" title="style.css">
-<pre class="prettyprint linenums" ng-set-text="style.css-220"></pre>
-<style type="text/css" id="style.css-220">
+<pre class="prettyprint linenums" ng-set-text="style.css-221"></pre>
+<style type="text/css" id="style.css-221">
      .zippy {
        border: 1px solid black;
        display: inline-block;
@@ -642,8 +638,8 @@ can be built.</p>
    </style>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-219"></pre>
-<script type="text/ng-template" id="script.js-219">
+<pre class="prettyprint linenums" ng-set-text="script.js-220"></pre>
+<script type="text/ng-template" id="script.js-220">
      function Ctrl3($scope) {
        $scope.title = 'Lorem Ipsum';
        $scope.text = 'Neque porro quisquam est qui dolorem ipsum quia dolor...';
@@ -686,8 +682,8 @@ can be built.</p>
    </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-222"></pre>
-<script type="text/ng-template" id="scenario.js-222">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-223"></pre>
+<script type="text/ng-template" id="scenario.js-223">
     it('should bind and open / close', function() {
       input('title').enter('TITLE');
       input('text').enter('TEXT');
@@ -701,5 +697,5 @@ can be built.</p>
   </script>
 </div>
 </div><h2>Demo</h3>
-<div class="well doc-example-live animate-container" ng-embed-app="zippyModule" ng-set-html="index.html-221" ng-eval-javascript="script.js-219"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="zippyModule" ng-set-html="index.html-222" ng-eval-javascript="script.js-220"></div>
 </div></div>

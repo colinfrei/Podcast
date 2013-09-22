@@ -21,6 +21,8 @@ asynchronous programming what <code>try</code>, <code>catch</code> and <code>thr
       // since this fn executes async in a future turn of the event loop, we need to wrap
       // our code into an $apply call so that the model changes are properly observed.
       scope.$apply(function() {
+        deferred.notify('About to greet ' + name + '.');
+
         if (okToGreet(name)) {
           deferred.resolve('Hello, ' + name + '!');
         } else {
@@ -37,6 +39,8 @@ asynchronous programming what <code>try</code>, <code>catch</code> and <code>thr
     alert('Success: ' + greeting);
   }, function(reason) {
     alert('Failed: ' + reason);
+  }, function(update) {
+    alert('Got notification: ' + update);
   });
 </pre>
 <p>At first it might not be obvious why this extra complexity is worth the trouble. The payoff
@@ -49,13 +53,16 @@ section on serial or parallel joining of promises.</p>
 <h3>The Deferred API</h1>
 <p>A new instance of deferred is constructed by calling <code>$q.defer()</code>.</p>
 <p>The purpose of the deferred object is to expose the associated Promise instance as well as APIs
-that can be used for signaling the successful or unsuccessful completion of the task.</p>
+that can be used for signaling the successful or unsuccessful completion, as well as the status
+of the task.</p>
 <p><strong>Methods</strong></p>
 <ul>
 <li><code>resolve(value)</code> – resolves the derived promise with the <code>value</code>. If the value is a rejection
 constructed via <code>$q.reject</code>, the promise will be rejected instead.</li>
 <li><code>reject(reason)</code> – rejects the derived promise with the <code>reason</code>. This is equivalent to
 resolving it with a rejection constructed via <code>$q.reject</code>.</li>
+<li><code>notify(value)</code> - provides updates on the status of the promises execution. This may be called
+multiple times before the promise is either resolved or rejected.</li>
 </ul>
 <p><strong>Properties</strong></p>
 <ul>
@@ -68,11 +75,14 @@ calling <code>deferred.promise</code>.</p>
 of the deferred task when it completes.</p>
 <p><strong>Methods</strong></p>
 <ul>
-<li><p><code>then(successCallback, errorCallback)</code> – regardless of when the promise was or will be resolved
-or rejected, <code>then</code> calls one of the success or error callbacks asynchronously as soon as the result
-is available. The callbacks are called with a single argument: the result or rejection reason.</p>
+<li><p><code>then(successCallback, errorCallback, notifyCallback)</code> – regardless of when the promise was or
+will be resolved or rejected, <code>then</code> calls one of the success or error callbacks asynchronously
+as soon as the result is available. The callbacks are called with a single argument: the result
+or rejection reason. Additionally, the notify callback may be called zero or more times to
+provide a progress indication, before the promise is resolved or rejected.</p>
 <p>This method <em>returns a new promise</em> which is resolved or rejected via the return value of the
-<code>successCallback</code> or <code>errorCallback</code>.</p>
+<code>successCallback</code>, <code>errorCallback</code>. It also notifies via the return value of the <code>notifyCallback</code>
+method. The promise can not be resolved or rejected from the notifyCallback method.</p>
 </li>
 <li><p><code>catch(errorCallback)</code> – shorthand for <code>promise.then(null, errorCallback)</code></p>
 </li>

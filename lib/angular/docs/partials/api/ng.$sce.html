@@ -47,7 +47,7 @@ accepted by SCE / privileged contexts.</p>
 <h4>How does it work?</h2>
 <p>In privileged contexts, directives and code will bind to the result of <a href="../../../../../index.htmle#getTrusted"><code>$sce.getTrusted(context, value)</code></a> rather than to the value directly.  Directives use <a href="../../../../../index.htmle#parse"><code>$sce.parseAs</code></a> rather than <code>$parse</code> to watch attribute bindings, which performs the
 <a href="../../../../../index.htmle#getTrusted"><code>$sce.getTrusted</code></a> behind the scenes on non-constant literals.</p>
-<p>As an example, <a href="../../../../../index.htmlective:ngBindHtml"><code>ngBindHtml</code></a> uses <a href="../../../../../index.htmle#parseHtml"><code>$sce.parseAsHtml(binding expression)</code></a>.  Here&#39;s the actual code (slightly
+<p>As an example, <a href="../../../../../index.htmlective:ngBindHtml"><code>ngBindHtml</code></a> uses <a href="../../../../../index.htmle#parseAsHtml"><code>$sce.parseAsHtml(binding expression)</code></a>.  Here&#39;s the actual code (slightly
 simplified):</p>
 <pre class="prettyprint" class="prettyprint linenums">
   var ngBindHtmlDirective = ['$sce', function($sce) {
@@ -86,13 +86,36 @@ served document.  You can change these by setting your own custom <a href="../..
 application that&#39;s secure and can be audited to verify that with much more ease than bolting
 security onto an application later.</p>
 <h2>What trusted context types are supported?<a name="contexts"></a></h2>
-<p>| Context             | Notes          |
-|=====================|================|
-| <code>$sce.HTML</code>         | For HTML that&#39;s safe to source into the application.  The <a href="../../../../../index.htmlective:ngBindHtml"><code>ngBindHtml</code></a> directive uses this context for bindings. |
-| <code>$sce.CSS</code>          | For CSS that&#39;s safe to source into the application.  Currently unused.  Feel free to use it in your own directives. |
-| <code>$sce.URL</code>          | For URLs that are safe to follow as links.  Currently unused (<code>&lt;a href=</code> and <code>&lt;img src=</code> sanitize their urls and don&#39;t consititute an SCE context. |
-| <code>$sce.RESOURCE_URL</code> | For URLs that are not only safe to follow as links, but whose contens are also safe to include in your application.  Examples include <code>ng-include</code>, <code>src</code> / <code>ngSrc</code> bindings for tags other than <code>IMG</code> (e.g. <code>IFRAME</code>, <code>OBJECT</code>, etc.)  <br><br>Note that <code>$sce.RESOURCE_URL</code> makes a stronger statement about the URL than <code>$sce.URL</code> does and therefore contexts requiring values trusted for <code>$sce.RESOURCE_URL</code> can be used anywhere that values trusted for <code>$sce.URL</code> are required. |
-| <code>$sce.JS</code>           | For JavaScript that is safe to execute in your application&#39;s context.  Currently unused.  Feel free to use it in your own directives. |</p>
+<table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$sce.HTML</code></td>
+<td>For HTML that&#39;s safe to source into the application.  The <a href="../../../../../index.htmlective:ngBindHtml"><code>ngBindHtml</code></a> directive uses this context for bindings.</td>
+</tr>
+<tr>
+<td><code>$sce.CSS</code></td>
+<td>For CSS that&#39;s safe to source into the application.  Currently unused.  Feel free to use it in your own directives.</td>
+</tr>
+<tr>
+<td><code>$sce.URL</code></td>
+<td>For URLs that are safe to follow as links.  Currently unused (<code>&lt;a href=</code> and <code>&lt;img src=</code> sanitize their urls and don&#39;t consititute an SCE context.</td>
+</tr>
+<tr>
+<td><code>$sce.RESOURCE_URL</code></td>
+<td>For URLs that are not only safe to follow as links, but whose contens are also safe to include in your application.  Examples include <code>ng-include</code>, <code>src</code> / <code>ngSrc</code> bindings for tags other than <code>IMG</code> (e.g. <code>IFRAME</code>, <code>OBJECT</code>, etc.)  <br><br>Note that <code>$sce.RESOURCE_URL</code> makes a stronger statement about the URL than <code>$sce.URL</code> does and therefore contexts requiring values trusted for <code>$sce.RESOURCE_URL</code> can be used anywhere that values trusted for <code>$sce.URL</code> are required.</td>
+</tr>
+<tr>
+<td><code>$sce.JS</code></td>
+<td>For JavaScript that is safe to execute in your application&#39;s context.  Currently unused.  Feel free to use it in your own directives.</td>
+</tr>
+</tbody>
+</table>
 <h2>Show me an example.</h4>
 </div></div>
 <div class="member method"><h2 id="Methods">Methods</h2>
@@ -266,10 +289,10 @@ have to do it at module config time on <a href="../../../../../index.htmleProvid
 </div>
 <h2 id="Example">Example</h2>
 <div class="example"><div class="ng-sce-page"><h4>Source</h2>
-<div source-edit="mySceApp" source-edit-deps="angular.js script.js" source-edit-html="index.html-133" source-edit-css="" source-edit-js="script.js-134" source-edit-json="test_data.json" source-edit-unit="" source-edit-scenario="scenario.js-135"></div>
+<div source-edit="mySceApp" source-edit-deps="angular.js script.js" source-edit-html="index.html-134" source-edit-css="" source-edit-js="script.js-135" source-edit-json="test_data.json" source-edit-unit="" source-edit-scenario="scenario.js-136"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-133" ng-html-wrap="mySceApp angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-133">
+<pre class="prettyprint linenums" ng-set-text="index.html-134" ng-html-wrap="mySceApp angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-134">
   <div ng-controller="myAppController as myCtrl">
     <i ng-bind-html="myCtrl.explicitlyTrustedHtml" id="explicitlyTrustedHtml"></i><br><br>
     <b>User comments</b><br>
@@ -285,8 +308,8 @@ have to do it at module config time on <a href="../../../../../index.htmleProvid
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-134"></pre>
-<script type="text/ng-template" id="script.js-134">
+<pre class="prettyprint linenums" ng-set-text="script.js-135"></pre>
+<script type="text/ng-template" id="script.js-135">
   var mySceApp = angular.module('mySceApp', ['ngSanitize']);
 
   mySceApp.controller("myAppController", function myAppController($http, $templateCache, $sce) {
@@ -314,8 +337,8 @@ have to do it at module config time on <a href="../../../../../index.htmleProvid
 </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-135"></pre>
-<script type="text/ng-template" id="scenario.js-135">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-136"></pre>
+<script type="text/ng-template" id="scenario.js-136">
   describe('SCE doc demo', function() {
     it('should sanitize untrusted values', function() {
       expect(element('.htmlComment').html()).toBe('<span>Is <i>anyone</i> reading this?</span>');
@@ -329,7 +352,7 @@ have to do it at module config time on <a href="../../../../../index.htmleProvid
 </script>
 </div>
 </div><h2>Demo</h2>
-<div class="well doc-example-live animate-container" ng-embed-app="mySceApp" ng-set-html="index.html-133" ng-eval-javascript="script.js-134"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="mySceApp" ng-set-html="index.html-134" ng-eval-javascript="script.js-135"></div>
 <h2>Can I disable SCE completely?</h4>
 <p>Yes, you can.  However, this is strongly discouraged.  SCE gives you a lot of security benefits
 for little coding overhead.  It will be much harder to take an SCE disabled application and

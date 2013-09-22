@@ -14,10 +14,10 @@ The expression is not evaluated when the value change is coming from the model.<
 </div>
 <h2 id="Example">Example</h2>
 <div class="example"><div class="ng-directive-page ng-directive-ngchange-page"><h4>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-61" source-edit-css="" source-edit-js="script.js-60" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-62"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-47" source-edit-css="" source-edit-js="script.js-46" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-48"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-61" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-61">
+<pre class="prettyprint linenums" ng-set-text="index.html-47" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-47">
   
   <div ng-controller="Controller">
     <input type="checkbox" ng-model="confirmed" ng-change="change()" id="ng-change-example1" />
@@ -29,8 +29,8 @@ The expression is not evaluated when the value change is coming from the model.<
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-60"></pre>
-<script type="text/ng-template" id="script.js-60">
+<pre class="prettyprint linenums" ng-set-text="script.js-46"></pre>
+<script type="text/ng-template" id="script.js-46">
     function Controller($scope) {
       $scope.counter = 0;
       $scope.change = function() {
@@ -40,8 +40,8 @@ The expression is not evaluated when the value change is coming from the model.<
   </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-62"></pre>
-<script type="text/ng-template" id="scenario.js-62">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-48"></pre>
+<script type="text/ng-template" id="scenario.js-48">
   it('should evaluate the expression if changing from view', function() {
     expect(binding('counter')).toEqual('0');
     element('#ng-change-example1').click();
@@ -57,6 +57,6 @@ The expression is not evaluated when the value change is coming from the model.<
 </script>
 </div>
 </div><h2>Demo</h4>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-61" ng-eval-javascript="script.js-60"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-47" ng-eval-javascript="script.js-46"></div>
 </div></div>
 </div>

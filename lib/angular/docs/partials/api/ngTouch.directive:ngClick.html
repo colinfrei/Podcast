@@ -8,6 +8,7 @@
 devices. Most mobile browsers wait about 300ms after a tap-and-release before sending
 the click event. This version handles them immediately, and then prevents the
 following click event from propagating.</p>
+<p>Requires the <a href="api/ngTouch"><code>ngTouch</code></a> module to be installed.</p>
 <p>This directive can fall back to using an ordinary click event, and so works on desktop
 browsers as well as mobile.</p>
 <p>This directive also sets the CSS class <code>ng-click-active</code> while the element is being held
@@ -25,10 +26,10 @@ upon tap. (Event object is available as <code>$event</code>)</p>
 </div></td></tr></tbody></table></div>
 <h2 id="Example">Example</h2>
 <div class="example"><div class="ngtouch-directive-page ngtouch-directive-ngclick-page"><h4>Source</h2>
-<div source-edit="" source-edit-deps="angular.js" source-edit-html="index.html-158" source-edit-css="" source-edit-js="" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js" source-edit-html="index.html-159" source-edit-css="" source-edit-js="" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-158" ng-html-wrap=" angular.js"></pre>
-<script type="text/ng-template" id="index.html-158">
+<pre class="prettyprint linenums" ng-set-text="index.html-159" ng-html-wrap=" angular.js"></pre>
+<script type="text/ng-template" id="index.html-159">
   <button ng-click="count = count + 1" ng-init="count=0">
     Increment
   </button>
@@ -36,6 +37,6 @@ upon tap. (Event object is available as <code>$event</code>)</p>
 </script>
 </div>
 </div><h2>Demo</h4>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-158" ng-eval-javascript=""></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-159" ng-eval-javascript=""></div>
 </div></div>
 </div>

@@ -322,10 +322,10 @@ redirect to regular / hashbang url, as this conversion happens only during parsi
 = on page reload.</p>
 <p>In this examples we use <code>&lt;base href=&quot;/base/index.html&quot; /&gt;</code>
 <h2>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-200" source-edit-css="" source-edit-js="script.js-199" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-201" source-edit-css="" source-edit-js="script.js-200" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-200" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-200">
+<pre class="prettyprint linenums" ng-set-text="index.html-201" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-201">
 
 <div ng-non-bindable class="html5-hashbang-example">
   <div id="html5-mode" ng-controller="Html5Cntl">
@@ -362,8 +362,8 @@ redirect to regular / hashbang url, as this conversion happens only during parsi
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-199"></pre>
-<script type="text/ng-template" id="script.js-199">
+<pre class="prettyprint linenums" ng-set-text="script.js-200"></pre>
+<script type="text/ng-template" id="script.js-200">
   function FakeBrowser(initUrl, baseHref) {
     this.onUrlChange = function(fn) {
       this.urlChange = fn;
@@ -441,7 +441,7 @@ redirect to regular / hashbang url, as this conversion happens only during parsi
 </script>
 </div>
 </div><h2>Demo</h2>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-200" ng-eval-javascript="script.js-199"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-201" ng-eval-javascript="script.js-200"></div>
 <h1>Caveats</h1>
 <h2>Page reload navigation</h2>
 <p>The <code>$location</code> service allows you to change only the URL; it does not allow you to reload the
@@ -560,18 +560,18 @@ to the $location object (using <a href="api/ng.directive:input.text"><code>ngMod
 (e.g. <code>locationPath</code>) with two watchers which push $location updates in both directions. For
 example:
 <h2>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-201" source-edit-css="" source-edit-js="script.js-202" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-202" source-edit-css="" source-edit-js="script.js-203" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-201" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-201">
+<pre class="prettyprint linenums" ng-set-text="index.html-202" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-202">
 <div ng-controller="LocationController">
   <input type="text" ng-model="locationPath" />
 </div>
 </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-202"></pre>
-<script type="text/ng-template" id="script.js-202">
+<pre class="prettyprint linenums" ng-set-text="script.js-203"></pre>
+<script type="text/ng-template" id="script.js-203">
 function LocationController($scope, $location) {
   $scope.$watch('locationPath', function(path) {
     $location.path(path);
@@ -585,7 +585,7 @@ function LocationController($scope, $location) {
 </script>
 </div>
 </div><h2>Demo</h3>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-201" ng-eval-javascript="script.js-202"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-202" ng-eval-javascript="script.js-203"></div>
 <h1>Related API</h2>
 <ul>
 <li><a href="api/ng.$location"><code>$location API</code></a></li>

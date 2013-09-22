@@ -196,12 +196,14 @@ expression are propagated (uncaught). This is useful when evaluating Angular exp
 <div class="$evalasync"><div class="ng-rootscope-scope-evalasync-page"><p>Executes the expression on the current scope at a later point in time.</p>
 <p>The <code>$evalAsync</code> makes no guarantees as to when the <code>expression</code> will be executed, only that:</p>
 <ul>
-<li>it will execute in the current script execution context (before any DOM rendering).</li>
-<li>at least one <a href="api/ng.$rootScope.Scope#$digest"><code>$digest cycle</code></a> will be performed after
-<code>expression</code> execution.</li>
+<li>it will execute after the function that schedule the evaluation is done running (preferably before DOM rendering).</li>
+<li>at least one <a href="api/ng.$rootScope.Scope#$digest"><code>$digest cycle</code></a> will be performed after <code>expression</code> execution.</li>
 </ul>
 <p>Any exceptions from the execution of the expression are forwarded to the
 <a href="api/ng.$exceptionHandler"><code>$exceptionHandler</code></a> service.</p>
+<p><strong>Note:</strong> if this function is called outside of <code>$digest</code> cycle, a new $digest cycle will be scheduled.
+It is however encouraged to always call code that changes the model from withing an <code>$apply</code> call.
+That includes code evaluated via <code>$evalAsync</code>.</p>
 </div><h5 id="parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>expression <div><em>(optional)</em></div></td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-function">function()</a></td><td><div class="ng-rootscope-scope-evalasync-page"><p>An angular expression to be executed.</p>
 <ul>
 <li><code>string</code>: execute using the rules as defined in  <a href="guide/expression">expression</a>.</li>

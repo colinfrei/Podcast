@@ -200,6 +200,7 @@ takes a <a href="api/ng.$q"><code>promise</code></a> and returns the original or
     return function(promise) {
       return promise.then(function(response) {
         // do something on success
+        return response;
       }, function(response) {
         // do something on error
         if (canRecover(response)) {

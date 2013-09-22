@@ -46,11 +46,11 @@ directives, form validation, routing, deep-linking, reusable components, depende
 <p>Angular simplifies application development by presenting a higher level of abstraction to the
 developer. Like any abstraction, it comes at a cost of flexibility. In other words not every app
 is a good fit for Angular. Angular was built for the CRUD application in mind. Luckily CRUD
-applications represent at least 90% of the web applications. But to understand what Angular is
+applications represent the majority of web applications. But to understand what Angular is
 good at one also has to understand when an app is not a good fit for Angular.</p>
-<p>Games, and GUI editors are examples of very intensive and tricky DOM manipulation. These kinds of
-apps are different from CRUD apps, and as a result are not a good fit for Angular. In these cases
-using something closer to bare metal such as <code>jQuery</code> may be a better fit.</p>
+<p>Games and GUI editors are examples of applications with intensive and tricky DOM manipulation.
+These kinds of apps are different from CRUD apps, and as a result are probably not a good fit for Angular.
+In these cases it may be better to use a library with a lower level of abstraction, such as <code>jQuery</code>.</p>
 <h1>An Introductory Angular Example</h1>
 <p>Below is a typical CRUD application which contains a form. The form values are validated, and
 are used to compute the total, which is formatted to a particular locale. These are some common
@@ -62,10 +62,10 @@ concepts which the application developer may face:</p>
 <li>formatting output in a user specific locale.</li>
 </ul>
 <h2>Source</h2>
-<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-245" source-edit-css="" source-edit-js="script.js-244" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-246"></div>
+<div source-edit="" source-edit-deps="angular.js script.js" source-edit-html="index.html-239" source-edit-css="" source-edit-js="script.js-238" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-240"></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-245" ng-html-wrap=" angular.js script.js"></pre>
-<script type="text/ng-template" id="index.html-245">
+<pre class="prettyprint linenums" ng-set-text="index.html-239" ng-html-wrap=" angular.js script.js"></pre>
+<script type="text/ng-template" id="index.html-239">
     <div ng-controller="InvoiceCntl">
       <b>Invoice:</b>
       <br>
@@ -83,8 +83,8 @@ concepts which the application developer may face:</p>
   </script>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-244"></pre>
-<script type="text/ng-template" id="script.js-244">
+<pre class="prettyprint linenums" ng-set-text="script.js-238"></pre>
+<script type="text/ng-template" id="script.js-238">
     function InvoiceCntl($scope) {
       $scope.qty = 1;
       $scope.cost = 19.95;
@@ -92,8 +92,8 @@ concepts which the application developer may face:</p>
   </script>
 </div>
 <div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-246"></pre>
-<script type="text/ng-template" id="scenario.js-246">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-240"></pre>
+<script type="text/ng-template" id="scenario.js-240">
     it('should show of angular binding', function() {
       expect(binding('qty * cost')).toEqual('$19.95');
       input('qty').enter('2');
@@ -103,7 +103,7 @@ concepts which the application developer may face:</p>
   </script>
 </div>
 </div><h2>Demo</h3>
-<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-245" ng-eval-javascript="script.js-244"></div>
+<div class="well doc-example-live animate-container" ng-embed-app="" ng-set-html="index.html-239" ng-eval-javascript="script.js-238"></div>
 <p>Try out the Live Preview above, and then let&#39;s walk through the example and describe what&#39;s going
 on.</p>
 <p>In the <code>&lt;html&gt;</code> tag, we specify that it is an Angular
@@ -153,7 +153,7 @@ allows development work to progress in parallel, and allows for reuse of both si
 building an app: from designing the UI, through writing the business logic, to testing.</li>
 <li>It is always good to make common tasks trivial and difficult tasks possible.</li>
 </ul>
-<p>Angular frees you from the following pain:</p>
+<p>Angular frees you from the following pains:</p>
 <ul>
 <li><strong>Registering callbacks:</strong> Registering callbacks clutters your code, making it hard to see the
 forest for the trees. Removing common boilerplate code such as callbacks is a good thing. It

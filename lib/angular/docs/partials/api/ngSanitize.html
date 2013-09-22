@@ -2,18 +2,9 @@
 <div><span class="hint"></span>
 </div>
 </h1>
-<div><div class="ngsanitize-page"><p>The <code>ngSanitize</code> module provides functionality to sanitize HTML.</p>
-<h2>Installation</h1>
-<p>As a separate module, it must be loaded after Angular core is loaded; otherwise, an &#39;Uncaught Error:
-No module: ngSanitize&#39; runtime error will occur.</p>
-<pre class="prettyprint linenums">
-  &lt;script src="angular.js"&gt;&lt;/script&gt;
-  &lt;script src="angular-sanitize.js"&gt;&lt;/script&gt;
-</pre>
-<h1>Usage</h2>
-<p>To make sure the module is available to your application, declare it as a dependency of you application
-module.</p>
-<pre class="prettyprint linenums">
-  angular.module('app', ['ngSanitize']);
-</pre>
+<div><div class="ngsanitize-page"><h2>ngSanitize</h1>
+<p>The <code>ngSanitize</code> module provides functionality to sanitize HTML.</p>
+<p><h1>Installation</h2><p>First include <code>angular-sanitize.js</code> in your HTML:</p><pre><code>    &lt;script src=&quot;angular.js&quot;&gt;
+    &lt;script src=&quot;angular-sanitize.js&quot;&gt;</pre></code><p>You can also find this file on the <a href="https://developers.google.com/speed/libraries/devguide#angularjs">Google CDN</a>, <a href="http://bower.io/">Bower</a> (as <code>angular-sanitize</code>), and on <a href="http://code.angularjs.org/">code.angularjs.org</a>.</p><p>Then load the module in your application by adding it as a dependant module:</p><pre><code>    angular.module(&#39;app&#39;, [&#39;ngSanitize&#39;]);</pre></code><p>With that you&#39;re ready to get started!</p></p>
+<p>See <a href="api/ngSanitize.$sanitize"><code>$sanitize</code></a> for usage.</p>
 </div></div>

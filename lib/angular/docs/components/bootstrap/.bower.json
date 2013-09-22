@@ -8,5 +8,6 @@
   },
   "_release": "e-tag:51ba48cd2",
   "_source": "https://raw.github.com/twbs/bootstrap/v2.0.2/docs/assets/bootstrap.zip",
-  "_target": "*"
+  "_target": "*",
+  "_originalSource": "https://raw.github.com/twbs/bootstrap/v2.0.2/docs/assets/bootstrap.zip"
 }

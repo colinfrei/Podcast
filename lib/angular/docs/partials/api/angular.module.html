@@ -4,9 +4,11 @@
 </div>
 </h1>
 <div><h2 id="Description">Description</h2>
-<div class="description"><div class="angular-module-page"><p>The <code>angular.module</code> is a global place for creating and registering Angular modules. All
-modules (angular core or 3rd party) that should be available to an application must be
+<div class="description"><div class="angular-module-page"><p>The <code>angular.module</code> is a global place for creating, registering and retrieving Angular modules.
+All modules (angular core or 3rd party) that should be available to an application must be
 registered using this mechanism.</p>
+<p>When passed two or more arguments, a new module is created.  If passed only one argument, an
+existing module (the name passed as the first argument to <code>module</code>) is retrieved.</p>
 <h3>Module</h3>
 <p>A module is a collection of services, directives, filters, and configuration information.
 <code>angular.module</code> is used to configure the <a href="api/AUTO.$injector"><code>$injector</code></a>.</p>

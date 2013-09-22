@@ -1,10 +1,11 @@
-<a href="http://github.com/angular/angular.js/tree/v1.2.0rc1/src/ngRoute/route.js#L14" class="view-source btn btn-action"><i class="icon-zoom-in"> </i> View source</a><a href="http://github.com/angular/angular.js/edit/master/src/ngRoute/route.js" class="improve-docs btn btn-primary"><i class="icon-edit"> </i> Improve this doc</a><h1><code ng:non-bindable="">$routeProvider</code>
+<a href="http://github.com/angular/angular.js/tree/v1.2.0rc1/src/ngRoute/route.js#L19" class="view-source btn btn-action"><i class="icon-zoom-in"> </i> View source</a><a href="http://github.com/angular/angular.js/edit/master/src/ngRoute/route.js" class="improve-docs btn btn-primary"><i class="icon-edit"> </i> Improve this doc</a><h1><code ng:non-bindable="">$routeProvider</code>
 <div><span class="hint">service in module <code ng:non-bindable="">ngRoute</code>
 </span>
 </div>
 </h1>
 <div><h2 id="Description">Description</h2>
 <div class="description"><div class="ngroute-routeprovider-page"><p>Used for configuring routes. See <a href="api/ngRoute.$route">$route</a> for an example.</p>
+<p>Requires the <a href="api/ngRoute"><code>ngRoute</code></a> module to be installed.</p>
 </div></div>
 <div class="member method"><h2 id="Methods">Methods</h2>
 <ul class="methods"><li><h3 id="otherwise">otherwise(params)</h3>
@@ -24,8 +25,8 @@ route definition.</p>
 <li><code>path</code> can contain named groups starting with a colon (<code>:name</code>). All characters up
 to the next slash are matched and stored in <code>$routeParams</code> under the given <code>name</code>
 when the route matches.</li>
-<li><code>path</code> can contain named groups starting with a colon and ending with a star (<code>:name*</code>). 
-All characters are eagerly stored in <code>$routeParams</code> under the given <code>name</code> 
+<li><code>path</code> can contain named groups starting with a colon and ending with a star (<code>:name*</code>).
+All characters are eagerly stored in <code>$routeParams</code> under the given <code>name</code>
 when the route matches.</li>
 <li><code>path</code> can contain optional named groups with a question mark (<code>:name?</code>).</li>
 </ul>

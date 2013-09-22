@@ -115,7 +115,9 @@ of service names to inject.</p>
   }
   MyController.$inject = ['$scope', 'greeter'];
 </pre>
-<p>Care must be taken that the <code>$inject</code> annotation is kept in sync with the actual arguments in the
+<p>In this scenario the ordering of the values in the &#39;$inject&#39; array must match the ordering of the arguments to inject.
+Using above code snippet as an example, &#39;$scope&#39; will be injected into &#39;renamed$scope&#39; and &#39;greeter&#39; into &#39;renamedGreeter&#39;.
+Care must be taken that the <code>$inject</code> annotation is kept in sync with the actual arguments in the
 function declaration.</p>
 <p>This method of annotation is useful for controller declarations since it assigns the annotation
 information with the function.</p>

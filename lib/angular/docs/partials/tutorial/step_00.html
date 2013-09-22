@@ -22,19 +22,15 @@ angular-seed, and run the application in the browser.</p>
         <ul>
           <li><b>For node.js users:</b>
             <ol>
-              <li>In a <i>separate</i> terminal tab or window, run
-<code>node ./scripts/web-server.js</code> to start the web server.</li>
-              <li>Open a browser window for the app and navigate to <a href="a
-href=&quot;http://localhost:8000/app/index.html&quot;">a
-href=&quot;http://localhost:8000/app/index.html&quot;</a><a href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html</a></a></li>
+              <li>In a <i>separate</i> terminal tab or window, run <code>node ./scripts/web-server.js</code> to start the web server.</li>
+              <li>Open a browser window for the app and navigate to <a
+              href="http://localhost:8000/app/index.html"><a href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html</a></a></li>
             </ol>
           </li>
           <li><b>For other http servers:</b>
             <ol>
-              <li>Configure the server to serve the files in the <code>angular-phonecat</code>
-directory.</li>
-              <li>Navigate in your browser to
-<code><a href="http://localhost:[port-number]/[context-path]/app/index.html">http://localhost:[port-number]/[context-path]/app/index.html</a></code>.</li>
+              <li>Configure the server to serve the files in the <code>angular-phonecat</code> directory.</li>
+              <li>Navigate in your browser to <code><a href="http://localhost:[port-number]/[context-path]/app/index.html">http://localhost:[port-number]/[context-path]/app/index.html</a></code>.</li>
             </ol>
           </li>
         </ul>
@@ -55,19 +51,14 @@ directory.</li>
         <ul>
           <li><b>For node.js users:</b>
             <ol>
-              <li>In a <i>separate</i> terminal tab or window, run <code>node
-scripts\web-server.js</code> to start the web server.</li>
-              <li>Open a browser window for the app and navigate to <a href="a
-href=&quot;http://localhost:8000/app/index.html&quot;">a
-href=&quot;http://localhost:8000/app/index.html&quot;</a><a href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html</a></a></li>
+              <li>In a <i>separate</i> terminal tab or window, run <code>node scripts\web-server.js</code> to start the web server.</li>
+              <li>Open a browser window for the app and navigate to <a href="http://localhost:8000/app/index.html"><a href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html</a></a></li>
             </ol>
           </li>
           <li><b>For other http servers:</b>
             <ol>
-              <li>Configure the server to serve the files in the <code>angular-phonecat</code>
-directory.</li>
-              <li>Navigate in your browser to
-<code><a href="http://localhost:[port-number]/[context-path]/app/index.html">http://localhost:[port-number]/[context-path]/app/index.html</a></code>.</li>
+              <li>Configure the server to serve the files in the <code>angular-phonecat</code> directory.</li>
+              <li>Navigate in your browser to <code><a href="http://localhost:[port-number]/[context-path]/app/index.html">http://localhost:[port-number]/[context-path]/app/index.html</a></code>.</li>
             </ol>
           </li>
         </ul>
@@ -102,9 +93,11 @@ The code contains some key Angular elements that we will need going forward.</p>
 <ul>
 <li><p><code>ng-app</code> directive:</p>
 <pre><code>    &lt;html ng-app&gt;</code></pre>
-<p>The <code>ng-app</code> attribute represents an Angular directive (named <code>ngApp</code>; Angular uses
-<code>name-with-dashes</code> for attribute names and <code>camelCase</code> for the corresponding directive name)
-used to flag an element which Angular should consider to be the root element of our application.
+<p>The <code>ng-app</code> attribute represents an Angular directive named <code>ngApp</code> (Angular uses
+<code>name-with-dashes</code> for its custom attributes and <code>camelCase</code> for the corresponding directives
+that implements them).
+This directive is used to flag the html element that Angular should consider to be the root element
+of our application.
 This gives application developers the freedom to tell Angular if the entire html page or only a
 portion of it should be treated as the Angular application.</p>
 </li>
