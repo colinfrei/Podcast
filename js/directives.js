@@ -95,8 +95,6 @@ angular.module('podcast.directives', [])
                     //TODO: this should probably work somehow without setting a timeout
                     // - need to be able to set the order of watchers?
                     setTimeout(function() {
-                        console.log('bla');
-                        console.log(element[0]);
                         var scroll = new iScroll(element[0], {vScrollbar: false});
                     }, 500);
                 }
