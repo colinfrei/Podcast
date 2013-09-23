@@ -11,6 +11,6 @@
     <a ng-hide="item.queued" ng-click="addToQueue(item.id)"><i class="icon-plus"></i> Add to Queue</a>
     <a ng-hide="item.audio" ng-click="downloadFile(item.id)"><i class="icon-download"></i> Download</a>
     <a ng-show="item.audio" ng-click="reDownloadFile(item.id)"><i class="icon-download"></i> Re-Download</a>
-    <a ng-click="goToFeed(item.feedId)"><i class="icon-list-ul"></i> Show Feed</a>
-    <a ng-click="removeFromQueue(item.id)"><i class="icon-remove-circle"></i> Unqueue</a>
+    <a ng-hide="hideShowFeedOption" ng-click="goToFeed(item.feedId)"><i class="icon-list-ul"></i> Show Feed</a>
+    <a ng-show="item.queued" ng-click="removeFromQueue(item.id)"><i class="icon-remove-circle"></i> Unqueue</a>
 </div>
