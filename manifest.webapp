@@ -1,6 +1,6 @@
 {
     "name": "Podcast",
-    "version": "0.3.0",
+    "version": "0.3.5",
     "description": "Podcast Manager for Firefox OS",
     "icons": {
         "128": "/blaIcon128.png"
