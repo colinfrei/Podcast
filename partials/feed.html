@@ -15,7 +15,7 @@
         </div>
         <h3>Episodes</h3>
         <div ng-repeat="item in feed.items | orderBy:'date':reverse=true" ng-controller="ListItemCtrl">
-            <div ng-include src="'partials/listItem.html'" onload="hideShowFeedOption=true"></div>
+            <div class="ng-include: 'partials/listItem.html'; onload: hideShowFeedOption=true;"></div>
         </div>
     </div>
 </div>
