@@ -17,6 +17,16 @@ body, .normalFont {
 }
 
 
+div.progressBarFull {
+    height: 3px;
+    background-color: gray;
+}
+
+div.progressBarCurrent {
+    height: 3px;
+    background-color: cornflowerblue;
+}
+
 .topBar, .topBarMenu {
     background-color: #206BA4;
     color: white;

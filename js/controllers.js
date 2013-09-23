@@ -96,7 +96,6 @@ function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, downl
     $scope.queue = queueList.getQueueList();
 
     $scope.$on('queueListRefresh', function(event) {
-        console.log('rebuilding');
         $rootScope.$apply(queueList.rebuildList());
     });
 
@@ -161,7 +160,7 @@ function TopBarCtrl($scope, player, pageSwitcher)
     };
 
     $scope.$on('playItem', function(event, feedItem) {
-        player.play(feedItem, $scope);
+        player.play(feedItem);
     });
 
     $scope.currentInfo = function() {
@@ -188,7 +187,21 @@ function TopBarCtrl($scope, player, pageSwitcher)
         return !!pageSwitcher.backPage;
     };
 
-    $scope.jumpAudio = function(distance) {
+    var lastForwardJump = 0,
+        forwardJumpCount = 1;
+
+    $scope.jumpAudioForward = function() {
+        var distance = 5;
+        if (lastForwardJump > new Date().getTime() - 2000) {
+            distance = forwardJumpCount * distance;
+            forwardJumpCount++;
+        } else {
+            forwardJumpCount = 0;
+        }
+
+        player.jumpAudio(distance);
+    };
+    $scope.jumpAudioBack = function(distance) {
         player.jumpAudio(distance);
     };
 }

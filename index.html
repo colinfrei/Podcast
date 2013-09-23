@@ -9,7 +9,8 @@
 </head>
 <body>
 <!-- TODO: move topBar into it's own partial -->
-<div class="topBar" ng-controller="TopBarCtrl" ng-swipe-left="jumpAudio(+5)" ng-swipe-right="jumpAudio(-5)">
+<div class="topBar" ng-controller="TopBarCtrl" ng-swipe-left="jumpAudioForward()" ng-swipe-right="jumpAudioBack()">
+    <div progress-bar progress-bar-current="audio.currentTime" progress-bar-duration="audio.duration"></div>
     <div id="pageSwitcher" class="topBarItem" hold="showPageSwitchMenu()" ng-click="changePage()">
         <i id="pageswitch-back-arrow" class="pageswitch-icon icon-chevron-left ng-cloak" ng-show="showBackLink()"></i>
         <i id="pageswitch-icon-settings" class="pageswitch-icon next icon-cogs"></i>
@@ -24,7 +25,7 @@
     <div ng-click="currentInfo()" class="topBarItem">
         <div id="currentInfo">
             <span class="title-slider">{{ nowPlaying.title }}</span>
-            <span ng-show="nowPlaying.duration > 0">
+            <span ng-show="audio.duration > 0">
                 <span id="position">{{ audio.currentTime|time:true }}</span>/<span id="duration">{{ audio.duration|time }}</span>
             </span>
         </div>
@@ -56,6 +57,7 @@
 <script src="js/database.js"></script>
 <script src="js/models.js"></script>
 <script src="js/app.js"></script>
+<script src="js/player.js"></script>
 <script src="js/utilities.js"></script>
 <script src="js/services.js"></script>
 <script src="js/directives.js"></script>
