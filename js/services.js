@@ -127,35 +127,81 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
         }
     })
     .service('downloaderBackend', ['$http', '$q', 'xmlParser', '$rootScope', function($http, $q, xmlParser, $rootScope) {
+        function downloadFile(url)
+        {
+            var deferred = $q.defer();
+
+            $http.get(url, {'responseType': 'blob'})
+                .success(function(file) {
+                    deferred.resolve(file);
+                })
+                .error(function() {
+                    deferred.reject();
+                })
+            ;
+
+            return deferred.promise;
+        }
+
+        function downloadXml(url)
+        {
+            var deferred = $q.defer();
+
+            $rootScope.$apply($http.get(url)
+                .success(function(xml) {
+                    deferred.resolve(xmlParser.parse(xml));
+                })
+                .error(function(data, status, headers, config) {
+                    deferred.reject();
+                })
+            );
+
+            return deferred.promise;
+        }
+
+        function downloadChunkedFile(url)
+        {
+            var deferred = $q.defer();
+
+            // first delete all existing chunks for this URL
+            db.get("downloadChunk", IDBKeyRange.only(url), "ixUrl")
+                .then(function(results) {
+                    angular.forEach(results, function(item) {
+                        db.delete(item.id);
+                    });
+                });
+
+            //TODO: not sure if I need to wait until delete is done to start downloading/saving?
+            var i = 0;
+            $http.get(url, {'responseType': 'moz-chunked-arraybuffer'})
+                .then(function() {
+                    db.get("downloadChunk", IDBKeyRange.only(url), "ixUrl")
+                        .then(function(result) {
+                            //TODO: put together file and resolve deferred with it
+                            //TODO: not sure if blob or not
+
+                            //deferred.resolve(combinedFile);
+                        });
+                },
+                function(error) {
+                    deferred.reject(error);
+                },
+                function(chunkData) {
+                    var data = {
+                        url: url,
+                        counter: i++,
+                        chunk: chunkData
+                    };
+                    db.put('downloadChunk', data);
+                });
+
+            return deferred.promise;
+        }
+
         return {
-            downloadFile: function(url) {
-                var deferred = $q.defer();
-
-                $http.get(url, {'responseType': 'blob'})
-                    .success(function(file) {
-                        deferred.resolve(file);
-                    })
-                    .error(function() {
-                        deferred.reject();
-                    })
-                ;
-
-                return deferred.promise;
-            },
-            downloadXml: function(url) {
-                var deferred = $q.defer();
-
-                $rootScope.$apply($http.get(url)
-                    .success(function(xml) {
-                        deferred.resolve(xmlParser.parse(xml));
-                    })
-                    .error(function(data, status, headers, config) {
-                        deferred.reject();
-                    })
-                );
-
-                return deferred.promise;
-            }
+            downloadFile: downloadFile,
+            downloadXml: downloadXml,
+            downloadChunkedFile: downloadChunkedFile
         }
     }]);
 
