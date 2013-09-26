@@ -115,9 +115,9 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
          */
         function _downloadAllItems(updateStatus) {
             var feedService = this,
-                promise = db.get("feed");
+                feeds = db.get("feed");
 
-            promise.then(function(results) {
+            feeds.then(function(results) {
                 angular.forEach(results, function(item) {
                     feedService.downloadItems(item, updateStatus);
                 });

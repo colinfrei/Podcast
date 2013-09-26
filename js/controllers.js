@@ -28,7 +28,7 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
     pageSwitcher.change('feeds');
 }
 
-function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher, feedItems, $rootScope) {
+function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
     $scope.nrQueueItemsOptions = [1, 2, 3, 4, 5];
     $scope.feed = {};
     // show info at top and items underneath
@@ -50,7 +50,7 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher, feedItem
     };
 
     pageSwitcher.setBack('feeds');
-            }
+}
 
 function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
 {
