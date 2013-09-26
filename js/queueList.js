@@ -1,6 +1,10 @@
 angular.module('podcasts.queueList', ['podcasts.database'])
-    .run(['queueList', function(queueList) {
+    .run(['queueList', '$rootScope', function(queueList, $rootScope) {
         queueList.rebuildList();
+
+        $rootScope.$on('queueListRefresh', function(event) {
+            $rootScope.$apply(queueList.rebuildList());
+        });
     }])
     .service('queueList', ['db', '$rootScope', function(db, $rootScope) {
         var queueList = [];

@@ -92,12 +92,8 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
     };
 }
 
-function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, downloader, queueList, pageChanger) {
+function QueueListCtrl($scope, pageSwitcher, feedItems, feeds, queueList) {
     $scope.queue = queueList.getQueueList();
-
-    $scope.$on('queueListRefresh', function(event) {
-        $rootScope.$apply(queueList.rebuildList());
-    });
 
     $scope.downloadItems = function(updateStatus) {
         feeds.downloadAllItems(feedItems, function(feedItem, feed) {
