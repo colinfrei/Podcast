@@ -22,11 +22,13 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             promise.then(function(xml) {
                 var channelChildren = xml.find('channel').children(),
                     newFeed = {},
-                    imageUrl;
+                    imageUrl,
+                    titles = xml.find('title'),
+                    descriptions = xml.find('description');
 
                 newFeed.url = cleanedUrl;
-                newFeed.title = xml.find('title').text();
-                newFeed.summary = xml.find('description').text();
+                newFeed.title = angular.element(titles[Object.keys(titles)[0]]).text();
+                newFeed.summary = angular.element(descriptions[Object.keys(descriptions)[0]]).text();
                 newFeed.nrQueueItems = 1;
 
                 angular.forEach(channelChildren, function(value, key) {
