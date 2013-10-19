@@ -1,15 +1,22 @@
 <button ng-click="downloadFiles()">Download Files</button>
 <button ng-click="setAlarmTmp()">Set Alarm in 10 Seconds</button>
 <button ng-click="checkForPendingMessage()">Check for pending Messages</button>
-
+<hr>
 <div>
-    Import OPML File<br />
+    <label>Import OPML from URL</label>
+    <input id="importOpmlFromUrlInput" placeholder="http://example.com/podcasts.opml" size="30" />
+    <button ng-click="importOpmlFromUrl()">Import</button>
+</div>
+<hr>
+<div>
+    Import Colin's OPML File<br />
     <button ng-click="importColinsOpml()">Import Colin's OPML File</button>
     <!--
     File input fields don't work yet on FirefoxOS, see https://bugzilla.mozilla.org/show_bug.cgi?id=832923
     <input type="file" onchange="angular.element(this).scope().importOpmlFile(this)" />
     -->
 </div>
+
 <!--
 <br />
 List of ALarms
