@@ -240,4 +240,12 @@ function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBa
             opml.import(xml);
         });
     }
+    $scope.importOpmlFromUrl = function() {
+        var url = document.getElementById("importOpmlFromUrlInput").value;
+        var xmlPromise = downloaderBackend.downloadXml(url);
+
+        xmlPromise.then(function(xml) {
+            opml.import(xml);
+        });
+    }
 }
