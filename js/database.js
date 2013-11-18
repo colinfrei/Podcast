@@ -85,7 +85,7 @@ angular.module('podcasts.database', [])
             dbBackend.put(store, data, id, function(key) {
                 $rootScope.$apply(deferred.resolve(key));
             }, function() {
-                deferred.reject();
+                deferred.reject('"Put" to DB failed');
             });
 
             return deferred.promise;

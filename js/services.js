@@ -152,7 +152,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                     deferred.resolve(xmlParser.parse(xml));
                 })
                 .error(function(data, status, headers, config) {
-                    deferred.reject();
+                    deferred.reject('Could not download XML: ' + status);
                 })
             );
 
