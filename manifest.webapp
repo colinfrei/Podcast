@@ -1,25 +1,37 @@
 {
-    "name": "Podcast",
-    "version": "0.3.6",
-    "description": "Podcast Manager for Firefox OS",
-    "icons": {
-        "128": "/blaIcon128.png"
+  "name": "Podcast",
+  "version": "0.3.6",
+  "description": "Podcast Manager for Firefox OS",
+  "icons": {
+    "128": "/blaIcon128.png"
+  },
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "Colin Frei",
+    "url": "http://colinfrei.com"
+  },
+  "type": "privileged",
+  "permissions": {
+    "storage": {
+      "description": "Allow Podcast to store podcast information for offline use"
     },
-    "launch_path": "/index.html",
-    "developer": {
-        "name": "Colin Frei",
-        "url": "http://colinfrei.com"
+    "systemXHR": {
+      "description": "Allow Podcast to download podcast information"
     },
-    "type": "privileged",
-    "permissions": {
-        "storage": { "description": "Allow Podcast to store podcast information for offline use" },
-        "systemXHR": { "description": "Allow Podcast to download podcast information" },
-        "audio-channel-content": { "description": "Allow Podcast to play audio in the background" },
-        "alarms": { "description": "Allow Podcast to update in the background" }
+    "audio-channel-content": {
+      "description": "Allow Podcast to play audio in the background"
     },
-    "installs_allowed_from": ["*"],
-    "default_locale": "en",
-    "messages": [
-        { "alarm": "/index.html" }
-    ]
+    "alarms": {
+      "description": "Allow Podcast to update in the background"
+    }
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "en",
+  "messages": [
+    {
+      "alarm": "/index.html"
+    }
+  ]
 }
