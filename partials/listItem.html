@@ -1,6 +1,6 @@
 <div class="listItem">
-    <div class="playButton">
-        <span ng-click="playItem(item.id)"><i ng-class="{hasAudio: item.audio}" class="icon-play"></i></span>
+    <div class="playButton" ng-click="playItem(item.id)">
+        <span><i ng-class="{hasAudio: item.audio}" class="icon-play"></i></span>
     </div>
     <div class="feedItemContent" ng-click="showItemOptions(item.id)">
         <span class="feedItemTitle">{{ item.title }}</span>
