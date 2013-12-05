@@ -110,27 +110,28 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             db.delete("feed", id);
         }
 
-        /**
-         *
-         * @param updateStatus  function that gets called for each item it goes through
-         *                      Takes the feedItem as the argument
-         */
-        function _downloadAllItems(updateStatus) {
+        function _downloadAllItems() {
             var feedService = this,
-                feeds = db.get("feed");
+                feeds = db.get("feed"),
+                deferred = $q.defer();
 
             feeds.then(function(results) {
+                var promises = [];
                 angular.forEach(results, function(item) {
-                    feedService.downloadItems(item, updateStatus);
+                    promises.push(feedService.downloadItems(item));
                 });
 
-                updateStatus();
+                deferred.resolve($q.all(promises));
             });
+
+            return deferred.promise;
         }
 
-        function _downloadItems(feedItem, updateStatus) {
+        function _downloadItems(feedItem) {
             var promise = downloaderBackend.downloadXml(feedItem.url),
-                feedObjects = [];
+                feedObjects = [],
+                deferred = $q.defer(),
+                promises = [];
 
             promise.then(function(data) {
                 angular.forEach(
@@ -150,14 +151,15 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                         feedObject.queued = 0;
                     }
 
-                    feedItems.add(feedObject)
-                        .then(function(item) {
-                            if (typeof updateStatus === 'function') {
-                                updateStatus(item, feedItem);
-                            }
-                        });
+                    promises.push(feedItems.add(feedObject));
                 });
+
+                deferred.resolve($q.all(promises));
+            }, function(reason) {
+                deferred.reject(reason);
             });
+
+            return deferred.promise;
         }
 
         return {
@@ -207,8 +209,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         function _add(object) {
-            var deferred = $q.defer(),
-                newFeedItem = {
+            var newFeedItem = {
                     guid: object.guid,
                     feedId: object.feedId,
                     title: object.title,
@@ -217,21 +218,19 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                     description: object.description,
                     audioUrl: object.audioUrl,
                     queued: object.queued
-                },
-                promise = db.put("feedItem", newFeedItem);
+                };
 
-            promise.then(function() {
-                deferred.resolve(newFeedItem);
-            });
-
-            return deferred.promise;
+            // returning promise we received directly
+            return db.put("feedItem", newFeedItem);
         }
 
         function _save(object) {
+            var deferred = $q.defer();
+
             db.put("feedItem", object)
-                .then(function() {
-                    $rootScope.$broadcast('queueListRefresh');
-                });
+                .then(deferred.resolve);
+
+            return deferred.promise;
         }
 
         function _getNextInQueue(feedItem) {

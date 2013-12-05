@@ -265,7 +265,10 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                             item.audio = data;
                             item.duration = downloader.getAudioLength(data);
 
-                            feedItems.save(item);
+                            feedItems.save(item)
+                                .then(function() {
+                                    $rootScope.$broadcast('queueListRefresh');
+                                });
 
                             downloader.downloadFiles(itemsToDownload);
                         })

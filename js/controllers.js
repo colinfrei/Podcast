@@ -92,18 +92,20 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
     };
 }
 
-function QueueListCtrl($scope, pageSwitcher, feedItems, feeds, queueList) {
+function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queueList, $q) {
     $scope.queue = queueList.getQueueList();
 
-    $scope.downloadItems = function(updateStatus) {
-        feeds.downloadAllItems(feedItems, function(feedItem, feed) {
-            if (feedItem) {
-                $scope.queue.push(feedItem);
-            }
+    $scope.downloadItems = function() {
+        var deferred = $q.defer();
 
-            updateStatus(feed);
-            $scope.$broadcast('queueListRefresh');
-        });
+        feeds.downloadAllItems(feedItems)
+            .finally(function() {
+                $rootScope.$broadcast('queueListRefresh');
+
+                deferred.resolve();
+            });
+
+        return deferred.promise;
     };
 
     pageSwitcher.change('queue');

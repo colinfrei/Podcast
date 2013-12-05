@@ -92,7 +92,12 @@ angular.module('podcasts.player', [])
         {
             audio.addEventListener("pause", function(event) {
                 currentFeedItem.position = Math.floor(event.target.currentTime);
-                feedItems.save(currentFeedItem);
+                feedItems.save(currentFeedItem)
+                    .then(function() {
+                        if (event.target.duration <= event.target.currentTime) {
+                            $rootScope.$broadcast('queueListRefresh');
+                        }
+                    });
             });
         }
 
@@ -167,7 +172,10 @@ angular.module('podcasts.player', [])
             feedItem.queued = 0;
             feedItem.position = 0;
 
-            feedItems.save(feedItem);
+            feedItems.save(feedItem)
+                .then(function() {
+                    $rootScope.$broadcast('queueListRefresh');
+                });
         }
 
         function pause()

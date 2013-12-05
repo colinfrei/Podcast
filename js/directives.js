@@ -41,13 +41,10 @@ angular.module('podcast.directives', [])
                         pullDownEl.className = 'loading';
                         pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading...';
 
-                        scope.downloadItems(function(feedItem, feed) {
-                            if (undefined === feed) {
+                        scope.downloadItems()
+                            .then(function() {
                                 myScroll.refresh();
-                            } else {
-                                pullDownEl.querySelector('.pullDownLabel').innerHTML = 'Loading ' + feed.title + '...';
-                            }
-                        });
+                            });
                     }
                 }
             });
