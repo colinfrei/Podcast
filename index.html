@@ -25,9 +25,7 @@
     <div ng-click="currentInfo()" class="topBarItem">
         <div id="currentInfo">
             <span class="title-slider">{{ nowPlaying.title }}</span>
-            <span ng-show="audio.duration > 0">
-                <span id="position">{{ audio.currentTime|time:true }}</span>/<span id="duration">{{ audio.duration|time }}</span>
-            </span>
+            <span play-time="audio" />
         </div>
     </div>
     <div class="fullCurrentInfo topBarMenu" ng-show="showingFullCurrentInfo" ng-cloak>

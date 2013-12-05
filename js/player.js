@@ -58,6 +58,101 @@ angular.module('podcasts.player', [])
             scope: true
         };
     })
+    .directive('playTime', function($timeout) {
+        // return the directive link function. (compile function not needed)
+        return {
+            link: function(scope, element, attrs)
+            {
+                var timeoutId; // timeoutId, so that we can cancel the time updates
+
+                // used to update the UI
+                function updateTime() {
+                    var audioElement = scope.$eval(attrs.playTime),
+                        currentTime = audioElement.currentTime,
+                        duration = audioElement.duration,
+                        output,
+                        formatWithSeconds = false;
+
+                    if (!currentTime) {
+                        return;
+                    }
+
+                    if (duration < 120 || (!duration && currentTime < 120)) {
+                        formatWithSeconds = true;
+                    }
+
+                    output = formatTime(currentTime, formatWithSeconds);
+
+                    if (duration) {
+                        output += '/' + formatTime(duration, formatWithSeconds);
+                    }
+
+                    element.text(output);
+
+                    scope.$digest();
+                }
+
+                // schedule update in one second
+                function updateLater() {
+                    // save the timeoutId for canceling
+                    timeoutId = $timeout(function() {
+                        updateTime(); // update DOM
+                        updateLater(); // schedule another update
+                    }, 1000, false);
+                }
+
+                function formatTime(time, withSeconds) {
+                    var seconds, minutes, hours;
+                    seconds = Math.floor(time);
+
+                    if (seconds > 60 || (withSeconds && seconds < 120)) {
+                        minutes = Math.floor(seconds/60);
+
+                        seconds = seconds % 60;
+                        if (seconds < 10) {
+                            seconds = '0' + seconds;
+                        }
+                    }
+                    if (minutes > 60) {
+                        hours = Math.floor(minutes/60);
+
+                        minutes = minutes % 60;
+                        if (minutes < 10) {
+                            minutes = '0' + minutes;
+                        }
+                    }
+
+                    if (hours) {
+                        return hours + ':' + minutes + ':' + seconds;
+                    } else if (minutes) {
+                        return minutes + ':' + seconds;
+                    } else {
+                        var output = seconds;
+
+                        if (withSeconds) {
+                            output += 's';
+                        } else {
+                            if (output < 10) {
+                                output = "0" + output;
+                            }
+                            output = '0:' + output;
+                        }
+
+                        return output;
+                    }
+                }
+
+                // listen on DOM destroy (removal) event, and cancel the next UI update
+                // to prevent updating time after the DOM element was removed.
+                element.on('$destroy', function() {
+                    $timeout.cancel(timeoutId);
+                });
+
+                updateLater(); // kick off the UI update process.
+            },
+            scope: true
+        };
+    })
     .service('player', ['url', '$timeout', 'feedItems', '$rootScope', '$log', '$q', function(url, $timeout, feedItems, $rootScope, $log, $q) {
         var audio,
             currentFeedItem = null,

@@ -75,40 +75,6 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }
         }
     }])
-    .filter('time', function() {
-        return function(input, skip) {
-            var seconds, minutes, hours;
-            seconds = Math.floor(input);
-
-            if (seconds > 120) {
-                minutes = Math.floor(seconds/60);
-
-                seconds = seconds % 60;
-                if (seconds < 10) {
-                    seconds = '0' + seconds;
-                }
-            }
-            if (minutes > 60) {
-                hours = Math.floor(minutes/60);
-
-                minutes = minutes % 60;
-                if (minutes < 10) {
-                    minutes = '0' + minutes;
-                }
-            }
-
-            if (hours) {
-                return hours + ':' + minutes + ':' + seconds;
-            } else if (minutes) {
-                return minutes + ':' + seconds;
-            } else {
-                if (skip) {
-                    return seconds;
-                }
-                return seconds + 's';
-            }
-        }
-    })
     .filter('timeAgo', function() {
         return function(timestamp) {
             var diff = ((new Date().getTime()) - (new Date(timestamp).getTime())) / 1000,
