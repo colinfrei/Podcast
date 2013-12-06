@@ -186,21 +186,31 @@ angular.module('podcasts.player', [])
         function _addPauseEventListener()
         {
             audio.addEventListener("pause", function(event) {
-                currentFeedItem.position = Math.floor(event.target.currentTime);
-                feedItems.save(currentFeedItem)
-                    .then(function() {
-                        if (event.target.duration <= event.target.currentTime) {
-                            $rootScope.$broadcast('queueListRefresh');
-                        }
-                    });
+                updatePositionInDb(event.target, currentFeedItem);
             });
         }
 
-        function play(feedItem, context)
+        function updatePositionInDb(audioElement, feedItem)
+        {
+            feedItem.position = Math.floor(audioElement.currentTime);
+            feedItems.save(feedItem)
+                .then(function() {
+                    if (audioElement.duration <= audioElement.currentTime) {
+                        $rootScope.$broadcast('queueListRefresh');
+                    }
+                });
+        }
+
+        function play(feedItem)
         {
             var delayPlay = false;
             if (feedItem) {
                 $log.info('playing: ' + feedItem.title);
+
+                // pausing so that the position is saved
+                if (currentFeedItem) {
+                    updatePositionInDb(audio, currentFeedItem);
+                }
 
                 currentFeedItem = feedItem;
 
