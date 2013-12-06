@@ -234,12 +234,13 @@ function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBa
     $scope.setAlarmTmp = function() {
         updateFeedsAlarmManager.setAlarm();
     };
-    $scope.importColinsOpml = function() {
-        var url = 'https://raw.github.com/colinfrei/Podcast/master/podcasts.xml';
-        var xmlPromise = downloaderBackend.downloadXml(url);
+
+    $scope.opmlUrl = 'https://raw.github.com/colinfrei/Podcast/master/podcasts.xml';
+    $scope.importOpmlFromUrl = function() {
+        var xmlPromise = downloaderBackend.downloadXml($scope.opmlUrl);
 
         xmlPromise.then(function(xml) {
             opml.import(xml);
         });
-    }
+    };
 }

@@ -316,3 +316,7 @@ button {
     overflow: hidden;
     text-align: left;
 }
+
+.opml_url_input {
+    width: 90%;
+}

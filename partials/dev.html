@@ -4,7 +4,9 @@
 
 <div>
     Import OPML File<br />
-    <button ng-click="importColinsOpml()">Import Colin's OPML File</button>
+
+    <input type="text" ng-model="opmlUrl" class="opml_url_input" />
+    <button ng-click="importOpmlFromUrl()">Import OPML File</button>
     <!--
     File input fields don't work yet on FirefoxOS, see https://bugzilla.mozilla.org/show_bug.cgi?id=832923
     <input type="file" onchange="angular.element(this).scope().importOpmlFile(this)" />
