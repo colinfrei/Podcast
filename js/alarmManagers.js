@@ -5,12 +5,12 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
         updateFeedsAlarmManager.setAlarmListener();
         alarmManager.setAlarmListener();
     }])
-    .service('alarmManager', function() {
+    .service('alarmManager', ['$log', function($log) {
         var alarmManager = navigator.mozAlarms,
             alarmHandlers = [];
 
         if (!alarmManager) {
-            console.log('navigator.mozAlarms is not available');
+            $log.log('navigator.mozAlarms is not available');
             return {
                 setAlarmIn: angular.noop,
                 removeExistingAlarms: angular.noop,
@@ -26,10 +26,10 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
             //TODO: check how to set timezone-specific alarms
             var setAlarmRequest = alarmManager.add(alarmDate, "ignoreTimezone", data);
             setAlarmRequest.onsuccess = function () {
-                console.log("Alarm scheduled for " + alarmDate);
+                $log.log("Alarm scheduled for " + alarmDate);
             };
             setAlarmRequest.onerror = function () {
-                console.log("An error occurred when scheduling the alarm: " + e.target.error.name);
+                $log.log("An error occurred when scheduling the alarm: " + e.target.error.name);
             };
         }
 
@@ -70,7 +70,7 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
             addAlarmListener: addAlarmListener,
             setAlarmListener: setAlarmListener
         };
-    })
+    }])
     .service('updateFeedsAlarmManager', ['settings', 'alarmManager', 'downloader', function(settings, alarmManager, downloader) {
         var alarmType = "updateFeeds";
 

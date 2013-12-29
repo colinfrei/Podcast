@@ -10,7 +10,7 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
     };
 
     $scope.preFillField = function() {
-        if (angular.isUndefined($scope.newFeedUrl) || $scope.newFeedUrl == "") {
+        if (angular.isUndefined($scope.newFeedUrl) || $scope.newFeedUrl === "") {
             $scope.newFeedUrl = "http://";
         }
     };
@@ -28,7 +28,7 @@ function FeedListCtrl($scope, feeds, pageSwitcher, $location) {
     pageSwitcher.change('feeds');
 }
 
-function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
+function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher, $log, $window) {
     $scope.nrQueueItemsOptions = [1, 2, 3, 4, 5];
     $scope.feed = {};
     // show info at top and items underneath
@@ -37,12 +37,12 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher) {
             $scope.feed = feed;
 
         }, function() {
-            console.log('error fetching feed');
+            $log.log('error fetching feed');
         });
 
     $scope.delete = function(id) {
         //TODO: check we're not playing anything from this feed?
-        if (confirm('Are you sure you want to delete this feed?')) {
+        if ($window.confirm('Are you sure you want to delete this feed?')) {
             feeds.delete(id);
 
             $location.path('/feeds');
@@ -221,14 +221,14 @@ function ImportCtrl($scope, pageSwitcher, google)
 
 
 
-function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend)
+function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend, $log, $window)
 {
     $scope.downloadFiles = function() {
         downloader.downloadAll();
     };
 
     $scope.checkForPendingMessage = function() {
-        console.log('Has pending message: ' + navigator.mozHasPendingMessage('alarm'));
+        $log.log('Has pending message: ' + $window.navigator.mozHasPendingMessage('alarm'));
     };
 
     $scope.setAlarmTmp = function() {

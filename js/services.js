@@ -1,6 +1,5 @@
 'use strict';
 
-/* Services */
 angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList', 'podcasts.models', 'podcasts.player'])
     .service('url', ['$window', function($window) {
         return {
@@ -10,7 +9,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }
         };
     }])
-    .service('pageSwitcher', ['$location', '$route', function($location, $route) {
+    .service('pageSwitcher', ['$location', '$route', '$log', function($location, $route, $log) {
         return {
             //TODO: change these getElementById's to something else
             pageSwitcher: document.getElementById('pageSwitcher'),
@@ -54,7 +53,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                     }
                 });
                 if (!validRoute) {
-                    console.error('no valid route found for pageSwitcher: ' + nextPage);
+                    $log.error('no valid route found for pageSwitcher: ' + nextPage);
                 }
 
                 return nextPage;
@@ -73,14 +72,14 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
 
                 $location.path('/'+page);
             }
-        }
+        };
     }])
     .filter('timeAgo', function() {
         return function(timestamp) {
             var diff = ((new Date().getTime()) - (new Date(timestamp).getTime())) / 1000,
                 day_diff = Math.floor(diff / 86400);
 
-            return day_diff == 0 && (
+            return day_diff === 0 && (
                 diff < 60 && "just now" ||
                     diff < 120 && "1 minute ago" ||
                     diff < 3600 && Math.floor( diff / 60 ) + " minutes ago" ||
@@ -90,7 +89,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 day_diff < 7 && day_diff + " days ago" ||
                 day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago" ||
                 "older than a month";
-        }
+        };
     })
     .service('downloaderBackend', ['$http', '$q', 'xmlParser', '$rootScope', function($http, $q, xmlParser, $rootScope) {
         function downloadFile(url)
@@ -168,11 +167,11 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             downloadFile: downloadFile,
             downloadXml: downloadXml,
             downloadChunkedFile: downloadChunkedFile
-        }
+        };
     }]);
 
 angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities', 'podcasts.models'])
-    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', 'feedItems', function(db, url, $http, settings, $rootScope, feedItems) {
+    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', 'feedItems', '$log', function(db, url, $http, settings, $rootScope, feedItems, $log) {
         return {
             allowedToDownload: function(callback) {
                 callback(true);
@@ -195,7 +194,7 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                 var downloader = this;
                 this.allowedToDownload(function(value) {
                     if (!value) {
-                        console.log('Not Allowed to Download because not on Wifi');
+                        $log.log('Not Allowed to Download because not on Wifi');
                         if (!angular.isUndefined(silent) && !silent) {
                             alert('not Downloading because not on WiFi'); //TODO: nicer error message?
                         }
@@ -221,12 +220,12 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                     return;
                 }
 
-                console.log('downloading File for: ' + item.title);
+                $log.log('downloading File for: ' + item.title);
 
                 $rootScope.$apply(
                     $http.get(item.audioUrl, {'responseType': 'blob'})
                         .success(function(data) {
-                            console.log('downloaded audio file for saving');
+                            $log.log('downloaded audio file for saving');
 
                             item.audio = data;
                             item.duration = downloader.getAudioLength(data);
@@ -239,7 +238,7 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                             downloader.downloadFiles(itemsToDownload);
                         })
                         .error(function() {
-                            console.warn('Could not download file');
+                            $log.warn('Could not download file');
                         })
                 );
             },
@@ -306,7 +305,7 @@ angular.module('podcasts.settings', ['podcasts.database'])
 
             if (key) {
                 setting = {'id': key, 'name': name, 'value': value};
-                if (settings[name]['id'] === key) {
+                if (settings[name].id === key) {
                     settings[name] = setting;
                 } else {
                     //TODO: name changed, go through all settings and find the setting by id, and adjust it
@@ -390,9 +389,9 @@ angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services', 
                     }
                 });
             }
-        }
+        };
     }])
-    .service('google', ['$q', '$http', 'feeds', function($q, $http, feeds) {
+    .service('google', ['$q', '$http', 'feeds', '$log', function($q, $http, feeds, $log) {
         return {
             import: function(email, password) {
                 var google = this;
@@ -400,7 +399,7 @@ angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services', 
                 this.auth(email,
                         password)
                     .then(function(authId) {
-                        return google.fetchSubscriptions(authId)
+                        return google.fetchSubscriptions(authId);
                     }, function() {
                         //TODO: display error
                     })
@@ -426,7 +425,7 @@ angular.module('podcasts.importer', ['podcasts.utilities', 'podcasts.services', 
                         }
                     });
                 }).error(function(data, status, headers, config) {
-                    console.log(data, status, headers);
+                        $log.log(data, status, headers);
                     deferred.reject();
                 });
 

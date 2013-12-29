@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('podcasts.utilities', [])
     .service('utilities', function() {
         return {
@@ -12,7 +14,7 @@ angular.module('podcasts.utilities', [])
 
                 return cleanedUrl;
             }
-        }
+        };
     })
     .service('url', ['$window', function($window) {
         return {

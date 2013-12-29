@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('podcasts.player', [])
     .run(['player', function(player) {
         var acm = navigator.mozAudioChannelManager;

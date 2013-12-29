@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('podcasts.queueList', ['podcasts.database'])
     .run(['queueList', '$rootScope', function(queueList, $rootScope) {
         queueList.rebuildList();

@@ -54,7 +54,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                 }
 
             }, function() {
-                console.warn('Could not fetch XML for feed, adding just URL for now');
+                $log.warn('Could not fetch XML for feed, adding just URL for now');
                 var newFeed = {};
                 newFeed.url = cleanedUrl;
 
@@ -142,7 +142,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                     data.find('item'),
                     function(element, index) {
                         if (index < 3) { // TODO: this should be a global setting and/or a per-feed setting
-                            feedObjects.push(feedItems.getFeedItemFromXml(element))
+                            feedObjects.push(feedItems.getFeedItemFromXml(element));
                         }
                     }
                 );
@@ -208,7 +208,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                 .then(function(results) {
                     angular.forEach(results, function(item) {
                         this._delete(item.id);
-                    })
+                    });
                 });
         }
 
@@ -317,6 +317,6 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             listQueue: _listQueue,
             unQueue: _unQueue,
             addToQueue: _addToQueue
-        }
+        };
     }])
 ;

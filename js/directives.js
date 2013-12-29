@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('podcast.directives', [])
     .directive('pullToRefresh', ['$timeout', function($timeout) {
         return function(scope, element, attrs, feedItems) {
@@ -58,7 +60,7 @@ angular.module('podcast.directives', [])
                 },
                 true
             );
-        }
+        };
     }])
     .directive('hold', ['$timeout', function($timeout) {
         return function(scope, element, attrs) {
@@ -82,7 +84,7 @@ angular.module('podcast.directives', [])
                     element[0].click();
                 }
             });
-        }
+        };
     }])
     .directive('scroll', function() {
         return {
@@ -94,7 +96,7 @@ angular.module('podcast.directives', [])
                     setTimeout(function() {
                         var scroll = new iScroll(element[0], {vScrollbar: false});
                     }, 500);
-                }
+                };
             }
         };
     })

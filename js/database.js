@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('podcasts.database', [])
     .run(['dbBackend', function(dbBackend) {
         var dbConfig = (function () {
@@ -36,7 +38,7 @@ angular.module('podcasts.database', [])
 
                             // deferred.reject();
                         }
-                    }
+                    };
                 } else {
                     deferred.reject();
                 }
@@ -63,7 +65,7 @@ angular.module('podcasts.database', [])
 
                                 $rootScope.$apply(deferred.resolve(results));
                             }
-                        }
+                        };
                     } else {
                         deferred.reject();
                     }
