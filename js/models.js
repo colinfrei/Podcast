@@ -42,13 +42,17 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                 });
 
 
-                var file = downloaderBackend.downloadFile(imageUrl);
-                file.then(function(fileBlob) {
-                    newFeed.image = fileBlob;
+                if (imageUrl) {
+                    var file = downloaderBackend.downloadFile(imageUrl);
+                    file.then(function(fileBlob) {
+                        newFeed.image = fileBlob;
+                    }).finally(function() {
+                        finishSave(newFeed);
+                    });
+                } else {
                     finishSave(newFeed);
-                }, function() {
-                    finishSave(newFeed);
-                });
+                }
+
             }, function() {
                 console.warn('Could not fetch XML for feed, adding just URL for now');
                 var newFeed = {};
