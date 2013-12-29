@@ -86,28 +86,28 @@ angular.module('podcast.directives', [])
             });
         };
     }])
-    .directive('scroll', function() {
+    .directive('scroll', ['$timeout', function($timeout) {
         return {
             priority: -1000,
             compile: function compile(tElement, tAttrs) {
                 return function postLink(scope, element, attrs, feedItems) {
                     //TODO: this should probably work somehow without setting a timeout
                     // - need to be able to set the order of watchers?
-                    setTimeout(function() {
+                    $timeout(function() {
                         var scroll = new iScroll(element[0], {vScrollbar: false});
                     }, 500);
                 };
             }
         };
-    })
-    .directive('blob', function() {
+    }])
+    .directive('blob', ['$window', function($window) {
         return function postLink(scope, element, attrs) {
             var updateImage = function () {
                 var blob = scope.$eval(attrs.blob);
                 if (blob !== undefined) {
-                    var imgUrl = window.URL.createObjectURL(blob);
+                    var imgUrl = $window.URL.createObjectURL(blob);
                     element.attr('src', imgUrl);
-                    window.URL.revokeObjectURL(imgUrl);
+                    $window.URL.revokeObjectURL(imgUrl);
                 }
             };
 
@@ -117,7 +117,7 @@ angular.module('podcast.directives', [])
                 true
             );
         };
-    })
+    }])
     .directive('setting', function() {
         return {
             restrict: 'A',
