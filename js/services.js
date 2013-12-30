@@ -112,6 +112,10 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
         {
             var deferred = $q.defer();
 
+            if (url.indexOf("feeds.feedburner.com") != -1) {
+                url = url + '?format=xml';
+            }
+
             $rootScope.$apply($http.get(url)
                 .success(function(xml) {
                     deferred.resolve(xmlParser.parse(xml));
