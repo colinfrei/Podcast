@@ -5,7 +5,10 @@
         </form>
 
         <div ng-repeat="feed in feeds | orderBy:'title'" class="listItem" ng-click="goToFeed(feed.id)">
-            <img blob="feed.image" class="feedImageThumbnail" /> <span class="listItemTitle">{{ feed.title }}</span>
+            <img ng-if="feed.image" blob="feed.image" class="feedImageThumbnail" />
+            <img ng-if="!feed.image" src="missingimage.png" class="feedImageThumbnail" />
+            <!-- TODO: move this stuff to a directive -->
+            <span class="listItemTitle">{{ feed.title }}</span>
         </div>
     </div>
 </div>
