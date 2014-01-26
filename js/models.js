@@ -241,9 +241,10 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             var tempQueueList = { queue: [], addToQueue: function(item) { this.queue.push(item); } },
                 deferred = $q.defer();
 
-            this.listQueue(tempQueueList, function() {
+            _listQueue(tempQueueList, function() {
                 var returnNextValue = false,
                     didReturnValue = false;
+
                 angular.forEach(tempQueueList.queue, function(value, key) {
                     if (returnNextValue) {
                         deferred.resolve(value);
@@ -265,7 +266,6 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         /**
-         * Not sure if this is still used
          * @param queueList
          * @param done
          */
@@ -314,7 +314,6 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             add: _add,
             save: _save,
             getNextInQueue: _getNextInQueue,
-            listQueue: _listQueue,
             unQueue: _unQueue,
             addToQueue: _addToQueue
         };
