@@ -1,42 +1,48 @@
-<a href="http://github.com/angular/angular.js/tree/v1.2.0rc1/src/ng/directive/ngSwitch.js#L3" class="view-source btn btn-action"><i class="icon-zoom-in"> </i> View source</a><a href="http://github.com/angular/angular.js/edit/master/src/ng/directive/ngSwitch.js" class="improve-docs btn btn-primary"><i class="icon-edit"> </i> Improve this doc</a><h1><code ng:non-bindable="">ngSwitch</code>
+<a href="http://github.com/angular/angular.js/tree/v1.2.10/src/ng/directive/ngSwitch.js#L3" class="view-source btn btn-action"><i class="icon-zoom-in"> </i> View source</a><a href="http://github.com/angular/angular.js/edit/master/src/ng/directive/ngSwitch.js" class="improve-docs btn btn-primary"><i class="icon-edit"> </i> Improve this doc</a><h1><code ng:non-bindable="">ngSwitch</code>
 <div><span class="hint">directive in module <code ng:non-bindable="">ng</code>
 </span>
 </div>
 </h1>
-<div><h2 id="Description">Description</h2>
-<div class="description"><div class="ng-directive-page ng-directive-ngswitch-page"><p>The ngSwitch directive is used to conditionally swap DOM structure on your template based on a scope expression.
-Elements within ngSwitch but without ngSwitchWhen or ngSwitchDefault directives will be preserved at the location
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="ng-directive-page ng-directive-ngswitch-page"><p>The <code>ngSwitch</code> directive is used to conditionally swap DOM structure on your template based on a scope expression.
+Elements within <code>ngSwitch</code> but without <code>ngSwitchWhen</code> or <code>ngSwitchDefault</code> directives will be preserved at the location
 as specified in the template.</p>
 <p>The directive itself works similar to ngInclude, however, instead of downloading template code (or loading it
-from the template cache), ngSwitch simply choses one of the nested elements and makes it visible based on which element
+from the template cache), <code>ngSwitch</code> simply choses one of the nested elements and makes it visible based on which element
 matches the value obtained from the evaluated expression. In other words, you define a container element
-(where you place the directive), place an expression on the <strong>on=&quot;...&quot; attribute</strong>
-(or the <strong>ng-switch=&quot;...&quot; attribute</strong>), define any inner elements inside of the directive and place
+(where you place the directive), place an expression on the <strong><code>on=&quot;...&quot;</code> attribute</strong>
+(or the <strong><code>ng-switch=&quot;...&quot;</code> attribute</strong>), define any inner elements inside of the directive and place
 a when attribute per element. The when attribute is used to inform ngSwitch which element to display when the on
 expression is evaluated. If a matching expression is not found via a when attribute then an element with the default
 attribute is displayed.</p>
-</div></div>
-<h2 id="Usage">Usage</h2>
+<div class="alert alert-info">
+Be aware that the attribute values to match against cannot be expressions. They are interpreted
+as literal string values to match against.
+For example, <strong><code>ng-switch-when=&quot;someVal&quot;</code></strong> will match against the string <code>&quot;someVal&quot;</code> not against the
+value of the expression <code>$scope.someVal</code>.
+</div></div></div>
+<h2 id="usage">Usage</h2>
 <div class="usage"><p>This directive can be used as custom element, but be aware of <a href="guide/ie">IE restrictions</a>.</p><pre><code ng:non-bindable="">&lt;ANY ng-switch="expression"&gt;
 &lt;ANY ng-switch-when="matchValue1"&gt;...&lt;/ANY&gt;
 &lt;ANY ng-switch-when="matchValue2"&gt;...&lt;/ANY&gt;
 &lt;ANY ng-switch-default&gt;...&lt;/ANY&gt;
 &lt;/ANY&gt;</code>
 </pre>
-<h3 id="Directive.info">Directive info</h3>
+<h3 id="usage_directive-info">Directive info</h3>
 <div class="directive-info"><ul><li>This directive creates new scope.</li>
+<li>This directive executes at priority level 800.</li>
 </ul>
 </div>
-<h3 id="Animations">Animations</h3>
-<div class="animations"><ul><li>enter - happens after the ngSwtich contents change and the matched child element is placed inside the container</li><li>leave - happens just after the ngSwitch contents change and just before the former contents are removed from the DOM</li></ul></div>
-<a href="api/ngAnimate.$animate">Click here</a> to learn more about the steps involved in the animation.<h4 id="parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ngSwitch|on</td><td><a href="" class="label type-hint type-hint-object">*</a></td><td><div class="ng-directive-page ng-directive-ngswitch-page"><p>expression to match against <tt>ng-switch-when</tt>.</p>
+<h3 id="usage_animations">Animations</h3>
+<div class="animations"><ul><li>enter - happens after the ngSwitch contents change and the matched child element is placed inside the container</li><li>leave - happens just after the ngSwitch contents change and just before the former contents are removed from the DOM</li></ul></div>
+<a href="api/ngAnimate.$animate">Click here</a> to learn more about the steps involved in the animation.<h4 id="usage_animations_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ngSwitch|on</td><td><a href="" class="label type-hint type-hint-object">*</a></td><td><div class="ng-directive-page ng-directive-ngswitch-page"><p>expression to match against <tt>ng-switch-when</tt>.</p>
 </div></td></tr></tbody></table></div>
-<h2 id="Example">Example</h2>
-<div class="example"><div class="ng-directive-page ng-directive-ngswitch-page"><h4>Source</h2>
-<div source-edit="" source-edit-deps="angular.js angular-animate.js script.js" source-edit-html="index.html-97" source-edit-css="animations.css" source-edit-js="script.js-98" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-99"></div>
+<h2 id="example">Example</h2>
+<div class="example"><div class="ng-directive-page ng-directive-ngswitch-page"><h4 id="example_source">Source</h4>
+<div source-edit="" source-edit-deps="angular.js angular-animate.js script.js" source-edit-html="index.html-119" source-edit-css="animations.css" source-edit-js="script.js-120" source-edit-json="" source-edit-unit="" source-edit-scenario="scenario.js-121" source-edit-protractor=""></div>
 <div class="tabbable"><div class="tab-pane" title="index.html">
-<pre class="prettyprint linenums" ng-set-text="index.html-97" ng-html-wrap=" angular.js angular-animate.js script.js"></pre>
-<script type="text/ng-template" id="index.html-97">
+<pre class="prettyprint linenums" ng-set-text="index.html-119" ng-html-wrap=" angular.js angular-animate.js script.js"></pre>
+<script type="text/ng-template" id="index.html-119">
   <div ng-controller="Ctrl">
     <select ng-model="selection" ng-options="item for item in items">
     </select>
@@ -44,9 +50,9 @@ attribute is displayed.</p>
     <hr/>
     <div class="animate-switch-container"
       ng-switch on="selection">
-        <div ng-switch-when="settings">Settings Div</div>
-        <div ng-switch-when="home">Home Span</div>
-        <div ng-switch-default>default</div>
+        <div class="animate-switch" ng-switch-when="settings">Settings Div</div>
+        <div class="animate-switch" ng-switch-when="home">Home Span</div>
+        <div class="animate-switch" ng-switch-default>default</div>
     </div>
   </div>
 </script>
@@ -62,15 +68,12 @@ attribute is displayed.</p>
     overflow:hidden;
   }
 
-  .animate-switch-container > div {
+  .animate-switch {
     padding:10px;
   }
 
-  .animate-switch-container > .ng-enter,
-  .animate-switch-container > .ng-leave {
+  .animate-switch.ng-animate {
     -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-    -moz-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-    -o-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
     transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
 
     position:absolute;
@@ -80,33 +83,28 @@ attribute is displayed.</p>
     bottom:0;
   }
 
-  .animate-switch-container > .ng-enter {
+  .animate-switch.ng-leave.ng-leave-active,
+  .animate-switch.ng-enter {
     top:-50px;
   }
-  .animate-switch-container > .ng-enter.ng-enter-active {
+  .animate-switch.ng-leave,
+  .animate-switch.ng-enter.ng-enter-active {
     top:0;
-  }
-
-  .animate-switch-container > .ng-leave {
-    top:0;
-  }
-  .animate-switch-container > .ng-leave.ng-leave-active {
-    top:50px;
   }
 </style>
 </div>
 <div class="tab-pane" title="script.js">
-<pre class="prettyprint linenums" ng-set-text="script.js-98"></pre>
-<script type="text/ng-template" id="script.js-98">
+<pre class="prettyprint linenums" ng-set-text="script.js-120"></pre>
+<script type="text/ng-template" id="script.js-120">
   function Ctrl($scope) {
     $scope.items = ['settings', 'home', 'other'];
     $scope.selection = $scope.items[0];
   }
 </script>
 </div>
-<div class="tab-pane" title="End to end test">
-<pre class="prettyprint linenums" ng-set-text="scenario.js-99"></pre>
-<script type="text/ng-template" id="scenario.js-99">
+<div class="tab-pane" title="ngScenario e2e test">
+<pre class="prettyprint linenums" ng-set-text="scenario.js-121"></pre>
+<script type="text/ng-template" id="scenario.js-121">
   it('should start in settings', function() {
     expect(element('.doc-example-live [ng-switch]').text()).toMatch(/Settings Div/);
   });
@@ -120,7 +118,7 @@ attribute is displayed.</p>
   });
 </script>
 </div>
-</div><div class="pull-right"> <button class="btn btn-primary" ng-click="animationsOff=true" ng-hide="animationsOff">Animations on</button> <button class="btn btn-primary disabled" ng-click="animationsOff=false" ng-show="animationsOff">Animations off</button></div><h2>Demo</h4>
-<div class="well doc-example-live animate-container" ng-class="{'animations-off':animationsOff == true}" ng-embed-app="" ng-set-html="index.html-97" ng-eval-javascript="script.js-98"></div>
+</div><div class="pull-right"> <button class="btn btn-primary" ng-click="animationsOff=true" ng-hide="animationsOff">Animations on</button> <button class="btn btn-primary disabled" ng-click="animationsOff=false" ng-show="animationsOff">Animations off</button></div><h4 id="example_demo">Demo</h4>
+<div class="well doc-example-live animate-container" ng-class="{'animations-off':animationsOff == true}" ng-embed-app="" ng-set-html="index.html-119" ng-eval-javascript="script.js-120"></div>
 </div></div>
 </div>
