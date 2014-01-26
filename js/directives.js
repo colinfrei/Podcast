@@ -100,19 +100,23 @@ angular.module('podcast.directives', [])
             }
         };
     }])
-    .directive('blob', ['$window', function($window) {
+    .directive('feedImage', ['$window', function($window) {
         return function postLink(scope, element, attrs) {
             var updateImage = function () {
-                var blob = scope.$eval(attrs.blob);
-                if (blob !== undefined) {
-                    var imgUrl = $window.URL.createObjectURL(blob);
-                    element.attr('src', imgUrl);
-                    $window.URL.revokeObjectURL(imgUrl);
+                var blob = scope.$eval(attrs.feedImage);
+                if (blob === undefined) {
+                    element.attr('src', 'missingimage.png');
+
+                    return;
                 }
+
+                var imgUrl = $window.URL.createObjectURL(blob);
+                element.attr('src', imgUrl);
+                $window.URL.revokeObjectURL(imgUrl);
             };
 
             scope.$watch(
-                function() { return scope.$eval(attrs.blob); },
+                'attrs.feedImage',
                 function() { updateImage(); },
                 true
             );
