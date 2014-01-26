@@ -231,10 +231,8 @@ angular.module('podcasts.player', [])
 
                 if (feedItem.position) {
                     delayPlay = true;
-                    angular.element(audio).bind("canplay", function(event) {
+                    angular.element(audio).one("canplay", function(event) {
                         event.target.currentTime = feedItem.position;
-
-                        angular.element(this).unbind("canplay");
 
                         audio.play();
                     });
@@ -245,7 +243,7 @@ angular.module('podcasts.player', [])
                 audio.play();
             }
 
-            audio.addEventListener("ended", function(event) {
+            angular.element(audio).one("ended", function(event) {
                 continueToNextItem(feedItem)
                     .then(function(nextFeedItem) {
                         play(nextFeedItem);
@@ -256,8 +254,6 @@ angular.module('podcasts.player', [])
 
                         unQueueFeedItem(feedItem);
                     });
-
-                angular.element(this).unbind();
             });
         }
 
