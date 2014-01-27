@@ -131,37 +131,74 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             return deferred.promise;
         }
 
-        function _downloadItems(feedItem) {
-            var promise = downloaderBackend.downloadXml(feedItem.url),
-                feedObjects = [],
+        function _downloadItems(feed) {
+            var promise = downloaderBackend.downloadXml(feed.url),
+                feedItemObjects = [],
                 deferred = $q.defer(),
-                promises = [];
+                promises = [],
+                recountQueueItems = false;
 
             promise.then(function(data) {
                 angular.forEach(
                     data.find('item'),
                     function(element, index) {
-                        if (index < 3) { // TODO: this should be a global setting and/or a per-feed setting
-                            feedObjects.push(feedItems.getFeedItemFromXml(element));
+                        if (index < 3) { //For now, download at most 3 items per feed
+                            feedItemObjects.push(feedItems.getFeedItemFromXml(element));
                         }
                     }
                 );
 
-                angular.forEach(feedObjects, function(feedObject, index) {
-                    feedObject.feedId = feedItem.id;
-                    if (0 === index) {
-                        feedObject.queued = 1;
+                angular.forEach(feedItemObjects, function(feedItem, index) {
+                    feedItem.feedId = feed.id;
+                    if (feed.nrQueueItems > index) {
+                        feedItem.queued = 1;
+                        recountQueueItems = true;
                     } else {
-                        feedObject.queued = 0;
+                        feedItem.queued = 0;
                     }
 
-                    promises.push(feedItems.add(feedObject));
+                    promises.push(feedItems.add(feedItem));
                 });
 
-                deferred.resolve($q.all(promises));
+                var returnPromise = $q.all(promises)
+                    .finally(function() {
+                        if (recountQueueItems) {
+                            promises.push(_recountQueueItems(feed));
+                        }
+                    });
+
+                deferred.resolve(returnPromise);
             }, function(reason) {
                 deferred.reject(reason);
             });
+
+            return deferred.promise;
+        }
+
+        function _recountQueueItems(feed)
+        {
+            var queuedCount = 0,
+                promises = [],
+                deferred = $q.defer();
+
+            feedItems.getByFeedId(feed.id)
+                .then(function(results) {
+                    console.log(feedItems.orderFeedItemsByDate(results));
+                    angular.forEach(feedItems.orderFeedItemsByDate(results), function(item) {
+                        if (item.queued === 1 && ++queuedCount > feed.nrQueueItems) {
+                            item.queued = 0;
+
+                            promises.push(feedItems.save(item));
+                        }
+                    });
+
+                    deferred.resolve(
+                        $q.all(promises)
+                            .then(function() {
+                                $rootScope.$broadcast('queueListRefresh');
+                            })
+                    );
+                });
 
             return deferred.promise;
         }
@@ -199,16 +236,38 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
             return newFeedItem;
         }
 
+        function _getFeedItemsByFeedId(feedId) {
+            return db.get("feedItem", IDBKeyRange.only(feedId), "ixFeedId");
+        }
+
+        function _orderFeedItemsByDate(feedItems) {
+           return feedItems.sort(function(a, b) {
+                a = new Date(a.date);
+                b = new Date(b.date);
+                return a<b ? 1 : (a>b ? -1 : 0);
+            });
+        }
+
         function _delete(feedItemId) {
             db.delete("feedItem", feedItemId);
         }
 
         function _deleteByFeedId(feedId) {
-            db.get("feedItem", IDBKeyRange.only(feedId), "ixFeedId")
+            _getFeedItemsByFeedId(feedId)
                 .then(function(results) {
+                    var rebuildQueueList = false;
+
                     angular.forEach(results, function(item) {
-                        this._delete(item.id);
+                        if (item.queued > 0) {
+                            rebuildQueueList = true;
+                        }
+
+                        _delete(item.id);
                     });
+
+                    if (rebuildQueueList) {
+                        $rootScope.$broadcast('queueListRefresh');
+                    }
                 });
         }
 
@@ -309,13 +368,15 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         return {
             get: _get,
             getFeedItemFromXml: _getFeedItemFromXml,
+            getByFeedId: _getFeedItemsByFeedId,
             delete: _delete,
             deleteByFeedId: _deleteByFeedId,
             add: _add,
             save: _save,
             getNextInQueue: _getNextInQueue,
             unQueue: _unQueue,
-            addToQueue: _addToQueue
+            addToQueue: _addToQueue,
+            orderFeedItemsByDate: _orderFeedItemsByDate
         };
     }])
 ;
