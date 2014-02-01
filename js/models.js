@@ -368,7 +368,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
 
         function _addToQueue(feedItemId) {
             var feedItem = _get(feedItemId, function(feedItem) {
-                feedItem.queued = 1;
+                feedItem.queued = 2;
 
                 db.put("feedItem", feedItem)
                     .then(function() {

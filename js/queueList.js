@@ -18,7 +18,7 @@ angular.module('podcasts.queueList', ['podcasts.database'])
         function rebuildList() {
             queueList.length = 0;
 
-            db.get("feedItem", IDBKeyRange.only(1), "ixQueued")
+            db.get("feedItem", IDBKeyRange.lowerBound(1), "ixQueued")
                 .then(function(results) {
                     angular.forEach(results, function(item) {
                         if (item.queued) {
