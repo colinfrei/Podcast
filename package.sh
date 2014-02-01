@@ -1,2 +1,2 @@
 rm package.zip
-zip -r package.zip . -x "*.git*" "test/*" "scripts/*" "package.sh" "package.manifest" "lib/angular/docs/*" "*.DS_Store*" "config/*" ".idea*" "atlassian-ide-plugin.xml" "install.html" ".htaccess" "testcase.html" "lib/angular/angular-bootstrap-prettify.js" "lib/angular/angular-bootstrap-prettify.min.js" "lib/angular/angular-scenario.js" "lib/angular/angular.min.js"
+zip -r package.zip . -x "*.git*" "test/*" "scripts/*" "package.sh" "package.manifest" "lib/angular/docs/*" "*.DS_Store*" "config/*" ".idea*" "atlassian-ide-plugin.xml" "install.html" ".htaccess" "testcase.html" "lib/angular/angular-bootstrap-prettify.js" "lib/angular/angular-bootstrap-prettify.min.js" "lib/angular/angular-scenario.js" "lib/angular/angular.min.js" "testpodcast*" "mpthreetest.mp3"
