@@ -13,6 +13,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
 
                         feedService.feeds.push(newFeed);
                         feedService.downloadItems(newFeed);
+                        $rootScope.$broadcast('queueListRefresh');
                     });
             };
 
@@ -132,13 +133,14 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         function _downloadItems(feed) {
-            var promise = downloaderBackend.downloadXml(feed.url),
+            var getXmlFromUrl = downloaderBackend.downloadXml(feed.url),
                 feedItemObjects = [],
                 deferred = $q.defer(),
-                promises = [],
                 recountQueueItems = false;
 
-            promise.then(function(data) {
+            getXmlFromUrl.then(function(data) {
+                var currentFeedItems = feedItems.getByFeedId(feed.id);
+
                 angular.forEach(
                     data.find('item'),
                     function(element, index) {
@@ -148,22 +150,39 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                     }
                 );
 
-                angular.forEach(feedItemObjects, function(feedItem, index) {
-                    feedItem.feedId = feed.id;
-                    if (feed.nrQueueItems > index) {
-                        feedItem.queued = 1;
-                        recountQueueItems = true;
-                    } else {
-                        feedItem.queued = 0;
-                    }
+                var promise = currentFeedItems.then(function(currentFeedItems) {
+                    var promises = [];
 
-                    promises.push(feedItems.add(feedItem));
+                    angular.forEach(feedItemObjects, function(feedItem, index) {
+                        var feedItemExists = false;
+                        angular.forEach(currentFeedItems, function(currentFeedItem, index) {
+                            if (feedItem.guid === currentFeedItem.guid) {
+                                feedItemExists = true;
+                            }
+                        });
+
+                        if (feedItemExists) {
+                            return;
+                        }
+
+                        feedItem.feedId = feed.id;
+                        if (feed.nrQueueItems > index) {
+                            feedItem.queued = 1;
+                            recountQueueItems = true;
+                        } else {
+                            feedItem.queued = 0;
+                        }
+
+                        promises.push(feedItems.add(feedItem));
+                    });
+
+                    return $q.all(promises);
                 });
 
-                var returnPromise = $q.all(promises)
+                var returnPromise = promise
                     .finally(function() {
                         if (recountQueueItems) {
-                            promises.push(_recountQueueItems(feed));
+                            return _recountQueueItems(feed);
                         }
                     });
 
@@ -183,7 +202,6 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
 
             feedItems.getByFeedId(feed.id)
                 .then(function(results) {
-                    console.log(feedItems.orderFeedItemsByDate(results));
                     angular.forEach(feedItems.orderFeedItemsByDate(results), function(item) {
                         if (item.queued === 1 && ++queuedCount > feed.nrQueueItems) {
                             item.queued = 0;
@@ -192,12 +210,7 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                         }
                     });
 
-                    deferred.resolve(
-                        $q.all(promises)
-                            .then(function() {
-                                $rootScope.$broadcast('queueListRefresh');
-                            })
-                    );
+                    deferred.resolve($q.all(promises));
                 });
 
             return deferred.promise;
