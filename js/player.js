@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('podcasts.player', [])
-    .run(['player', function(player) {
-        var acm = navigator.mozAudioChannelManager;
+    .run(['player', '$window', function(player, $window) {
+        var acm = $window.navigator.mozAudioChannelManager;
         if (acm) {
             acm.addEventListener('headphoneschange', function onheadphoneschange() {
                 if (!acm.headphones && player.playing()) {

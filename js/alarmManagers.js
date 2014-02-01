@@ -5,8 +5,8 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
         updateFeedsAlarmManager.setAlarmListener();
         alarmManager.setAlarmListener();
     }])
-    .service('alarmManager', ['$log', function($log) {
-        var alarmManager = navigator.mozAlarms,
+    .service('alarmManager', ['$log', '$window', function($log, $window) {
+        var alarmManager = $window.navigator.mozAlarms,
             alarmHandlers = [];
 
         if (!alarmManager) {
@@ -28,7 +28,7 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
             setAlarmRequest.onsuccess = function () {
                 $log.log("Alarm scheduled for " + alarmDate);
             };
-            setAlarmRequest.onerror = function () {
+            setAlarmRequest.onerror = function (e) {
                 $log.log("An error occurred when scheduling the alarm: " + e.target.error.name);
             };
         }
@@ -61,7 +61,7 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
 
         function setAlarmListener()
         {
-            navigator.mozSetMessageHandler("alarm", handleAlarm);
+            $window.navigator.mozSetMessageHandler("alarm", handleAlarm);
         }
 
         return {
@@ -88,7 +88,7 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
         function changeAlarmInterval(newInterval)
         {
             alarmManager.removeExistingAlarms(alarmType);
-            this.setAlarm();
+            setAlarm();
         }
 
         function setAlarmListener()
