@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('podcast.directives', [])
-    .directive('pullToRefresh', ['$timeout', '$document', function($timeout, $document) {
+    .directive('pullToRefresh', ['$timeout', '$window', function($timeout, $window) {
         return function(scope, element, attrs, feedItems) {
             var myScroll,
                 pullDownEl, pullDownOffset,
@@ -13,7 +13,7 @@ angular.module('podcast.directives', [])
                 '<span class="pullDownIcon"></span><span class="pullDownLabel">Pull down to refresh...</span>' +
             '</div>');
 
-            pullDownEl = $document.getElementById('pullDown');
+            pullDownEl = $window.document.getElementById('pullDown');
             pullDownOffset = pullDownEl.offsetHeight;
 
             //TODO: get ID from context somehow?

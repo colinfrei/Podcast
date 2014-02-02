@@ -9,10 +9,10 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             }
         };
     }])
-    .service('pageSwitcher', ['$location', '$route', '$log', '$document', function($location, $route, $log, $document) {
+    .service('pageSwitcher', ['$location', '$route', '$log', '$window', function($location, $route, $log, $window) {
         return {
             //TODO: change these getElementById's to something else
-            pageSwitcher: $document.getElementById('pageSwitcher'),
+            pageSwitcher: $window.document.getElementById('pageSwitcher'),
             pages: ['queue', 'settings', 'feeds'],
             $route: $route,
             currentPage: null,
@@ -21,11 +21,11 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
                 this.currentPage = current;
                 var nextPage = this.getNextPage(this.currentPage);
 
-                angular.element($document.getElementById('pageswitch-icon-' + this.currentPage))
+                angular.element($window.document.getElementById('pageswitch-icon-' + this.currentPage))
                     .addClass('next').removeClass('next1 next2');
-                angular.element($document.getElementById('pageswitch-icon-' + nextPage))
+                angular.element($window.document.getElementById('pageswitch-icon-' + nextPage))
                     .addClass('next1').removeClass('next next2');
-                angular.element($document.getElementById('pageswitch-icon-' + this.getNextPage(nextPage)))
+                angular.element($window.document.getElementById('pageswitch-icon-' + this.getNextPage(nextPage)))
                     .addClass('next2').removeClass('next next1');
             },
             setBack: function(backPage) {
