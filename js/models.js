@@ -356,8 +356,16 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
         }
 
         function _unQueue(feedItemId) {
+            _updateQueueStatus(feedItemId, 0);
+        }
+
+        function _addToQueue(feedItemId) {
+            _updateQueueStatus(feedItemId, 2);
+        }
+
+        function _updateQueueStatus(feedItemId, status) {
             var feedItem = _get(feedItemId, function(feedItem) {
-                feedItem.queued = 0;
+                feedItem.queued = status;
 
                 var promise = db.put("feedItem", feedItem)
                     .then(function() {
@@ -365,18 +373,6 @@ angular.module('podcasts.models', ['podcasts.database', 'podcasts.utilities'])
                     });
             });
         }
-
-        function _addToQueue(feedItemId) {
-            var feedItem = _get(feedItemId, function(feedItem) {
-                feedItem.queued = 2;
-
-                db.put("feedItem", feedItem)
-                    .then(function() {
-                        $rootScope.$broadcast('queueListRefresh');
-                    });
-            });
-        }
-
 
         return {
             get: _get,

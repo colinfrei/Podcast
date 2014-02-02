@@ -69,6 +69,10 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
         feedItems.addToQueue(id);
     };
 
+    $scope.keepInQueue = function(id) {
+        feedItems.addToQueue(id);
+    };
+
     $scope.downloadFile = function(id) {
         feedItems.get(id, function(feedItem) {
             downloader.downloadFiles([feedItem]);

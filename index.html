@@ -13,15 +13,15 @@
 <div class="topBar" ng-controller="TopBarCtrl" ng-swipe-left="jumpAudioForward()" ng-swipe-right="jumpAudioBack()">
     <div progress-bar progress-bar-current="audio.currentTime" progress-bar-duration="audio.duration"></div>
     <div id="pageSwitcher" class="topBarItem" hold="showPageSwitchMenu()" ng-click="changePage()">
-        <i id="pageswitch-back-arrow" class="pageswitch-icon icon-chevron-left ng-cloak" ng-show="showBackLink()"></i>
-        <i id="pageswitch-icon-settings" class="pageswitch-icon next icon-cogs"></i>
-        <i id="pageswitch-icon-feeds" class="pageswitch-icon next1 icon-rss"></i>
-        <i id="pageswitch-icon-queue" class="pageswitch-icon next2 icon-th-list"></i>
-        <i id="pageswitch-icon-info" class="pageswitch-icon icon-info-sign" ng-show="showInfoIcon"></i>
+        <i id="pageswitch-back-arrow" class="pageswitch-icon fa fa-chevron-left ng-cloak" ng-show="showBackLink()"></i>
+        <i id="pageswitch-icon-settings" class="pageswitch-icon next fa fa-cogs"></i>
+        <i id="pageswitch-icon-feeds" class="pageswitch-icon next1 fa fa-rss"></i>
+        <i id="pageswitch-icon-queue" class="pageswitch-icon next2 fa fa-th-list"></i>
+        <i id="pageswitch-icon-info" class="pageswitch-icon fa fa-info-circle" ng-show="showInfoIcon"></i>
     </div>
     <div id="controlButton" class="topBarItem topBarButton" ng-click="playPause()">
-        <i class="icon-play" ng-class=""></i>
-        <i class="icon-pause" ng-class=""></i>
+        <i class="fa fa-play" ng-class=""></i>
+        <i class="fa fa-pause" ng-class=""></i>
     </div>
     <div ng-click="currentInfo()" class="topBarItem">
         <div id="currentInfo">
@@ -35,10 +35,10 @@
     </div>
     <div class="pageSwitchMenu topBarMenu" ng-show="showingPageSwitchMenu" ng-cloak>
         <ul>
-            <li ng-click="changePage('settings')" class="icon-cogs"> Settings</li>
-            <li ng-click="changePage('feeds')" class="icon-rss"> Feeds</li>
-            <li ng-click="changePage('queue')" class="icon-cogs"> Queue</li>
-            <li ng-click="changePage('info')" class="icon-info-sign"> <span class="normalFont">App Info</span></li>
+            <li ng-click="changePage('settings')" class="fa fa-cogs"> Settings</li>
+            <li ng-click="changePage('feeds')" class="fa fa-rss"> Feeds</li>
+            <li ng-click="changePage('queue')" class="fa fa-cogs"> Queue</li>
+            <li ng-click="changePage('info')" class="fa fa-info-circle"> <span class="normalFont">App Info</span></li>
         </ul>
     </div>
 </div>
