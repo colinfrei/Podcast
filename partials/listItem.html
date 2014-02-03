@@ -8,10 +8,10 @@
     </div>
 </div>
 <div ng-show="item.showOptions" class="feedItemOptions">
-    <a ng-hide="item.queued" ng-click="addToQueue(item.id)"><i class="fa fa-plus"></i> Add to Queue</a>
-    <a ng-show="item.queued == 1" ng-click="keepInQueue(item.id)"><i class="fa fa-thumb-tack"></i> Keep in Queue</a>
-    <a ng-hide="item.audio" ng-click="downloadFile(item.id)"><i class="fa fa-arrow-circle-o-down"></i> Download</a>
-    <a ng-show="item.audio" ng-click="reDownloadFile(item.id)"><i class="fa fa-arrow-circle-o-down"></i> Re-Download</a>
-    <a ng-hide="hideShowFeedOption" ng-click="goToFeed(item.feedId)"><i class="fa fa-list-ul"></i> Show Feed</a>
-    <a ng-show="item.queued" ng-click="removeFromQueue(item.id)"><i class="fa fa-times-circle-o"></i> Unqueue</a>
+    <a ng-hide="item.queued" ng-click="addToQueue(item.id)"><i class="fa fa-fw fa-plus"></i> Add to Queue</a>
+    <a ng-show="item.queued == 1" ng-click="keepInQueue(item.id)"><i class="fa fa-fw fa-thumb-tack"></i> Keep in Queue</a>
+    <a ng-hide="item.audio" ng-click="downloadFile(item.id)"><i class="fa fa-fw fa-arrow-circle-o-down"></i> Download</a>
+    <a ng-show="item.audio" ng-click="reDownloadFile(item.id)"><i class="fa fa-fw fa-arrow-circle-o-down"></i> Re-Download</a>
+    <a ng-hide="hideShowFeedOption" ng-click="goToFeed(item.feedId)"><i class="fa fa-fw fa-list-ul"></i> Show Feed</a>
+    <a ng-show="item.queued" ng-click="removeFromQueue(item.id)"><i class="fa fa-fw fa-times-circle-o"></i> Unqueue</a>
 </div>
