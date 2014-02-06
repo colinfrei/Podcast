@@ -143,7 +143,7 @@ function SettingsCtrl($scope, settings, pageSwitcher, updateFeedsAlarmManager) {
     pageSwitcher.change('settings');
 }
 
-function TopBarCtrl($scope, player, pageSwitcher)
+function PlayerCtrl($scope, player, pageSwitcher)
 {
     $scope.nowPlaying = player.nowPlaying;
     $scope.feedItem = player.feedItem;

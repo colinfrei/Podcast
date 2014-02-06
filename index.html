@@ -10,7 +10,7 @@
 </head>
 <body>
 <!-- TODO: move topBar into it's own partial -->
-<div id="topBar" class="topBar" ng-controller="TopBarCtrl" ng-swipe-left="jumpAudioForward()" ng-swipe-right="jumpAudioBack()">
+<div id="topBar" class="topBar" ng-controller="PlayerCtrl" ng-swipe-left="jumpAudioForward()" ng-swipe-right="jumpAudioBack()">
     <div progress-bar progress-bar-current="audio.currentTime" progress-bar-duration="audio.duration"></div>
     <div id="pageSwitcher" ng-controller="PageSwitchCtrl" class="topBarItem" hold="showPageSwitchMenu()" ng-click="changePage()">
         <i id="pageswitch-back-arrow" class="pageswitch-icon fa fa-chevron-left ng-cloak" ng-show="showBackLink()"></i>
