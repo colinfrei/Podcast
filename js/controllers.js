@@ -148,9 +148,6 @@ function TopBarCtrl($scope, player, pageSwitcher)
     $scope.nowPlaying = player.nowPlaying;
     $scope.feedItem = player.feedItem;
     $scope.audio = player.audio;
-    $scope.showingPageSwitchMenu = false;
-    $scope.showingFullCurrentInfo = false;
-    $scope.showInfoIcon = false;
     $scope.playing = player.playing;
 
     $scope.playPause = function() {
@@ -164,30 +161,6 @@ function TopBarCtrl($scope, player, pageSwitcher)
     $scope.$on('playItem', function(event, feedItem) {
         player.play(feedItem);
     });
-
-    $scope.currentInfo = function() {
-        $scope.showingFullCurrentInfo = !$scope.showingFullCurrentInfo;
-
-        // TODO: decide if I need to open or close
-        // Open
-        // uncollapse area
-        // fill area with content
-          // get currently playing item
-          //
-    };
-
-    $scope.showPageSwitchMenu = function() {
-        $scope.showingPageSwitchMenu = true;
-        $scope.$apply();
-    };
-
-    $scope.changePage = function(newPage) {
-        pageSwitcher.goToPage(newPage);
-        $scope.showingPageSwitchMenu = false;
-    };
-    $scope.showBackLink = function() {
-        return !!pageSwitcher.backPage;
-    };
 
     var lastForwardJump = 0,
         forwardJumpCount = 1;
@@ -205,6 +178,26 @@ function TopBarCtrl($scope, player, pageSwitcher)
     };
     $scope.jumpAudioBack = function(distance) {
         player.jumpAudio(distance);
+    };
+}
+
+function PageSwitchCtrl($scope, pageSwitcher)
+{
+    $scope.showingPageSwitchMenu = false;
+    $scope.showingFullCurrentInfo = false;
+    $scope.showInfoIcon = false;
+
+    $scope.showPageSwitchMenu = function() {
+        $scope.showingPageSwitchMenu = true;
+        $scope.$apply();
+    };
+
+    $scope.changePage = function(newPage) {
+        pageSwitcher.goToPage(newPage);
+        $scope.showingPageSwitchMenu = false;
+    };
+    $scope.showBackLink = function() {
+        return !!pageSwitcher.backPage;
     };
 }
 
