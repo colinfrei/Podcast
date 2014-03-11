@@ -60,7 +60,7 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
         });
     };
 
-    $scope.showItemOptions = function(id) {
+    $scope.toggleItemOptions = function(id) {
         //TODO: close all other options bars
         this.item.showOptions = !this.item.showOptions;
     };
