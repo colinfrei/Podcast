@@ -60,7 +60,8 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
         });
     };
 
-    $scope.toggleItemOptions = function(id) {
+    // TODO: rename this to toggleItemOptions (didn't work on first try)
+    $scope.showItemOptions = function() {
         //TODO: close all other options bars
         this.item.showOptions = !this.item.showOptions;
     };

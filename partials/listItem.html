@@ -2,7 +2,7 @@
     <div class="playButton" ng-click="playItem(item.id)">
         <span><i ng-class="{hasAudio: item.audio}" class="fa fa-play"></i></span>
     </div>
-    <div class="feedItemContent" ng-click="toggleItemOptions(item.id)">
+    <div class="feedItemContent" ng-click="showItemOptions()">
         <span class="feedItemTitle">{{ item.title }}</span>
         {{ item.date | timeAgo }}<span ng-show="item.duration">, {{ item.duration }}</span>
     </div>
