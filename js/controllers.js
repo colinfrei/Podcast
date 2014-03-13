@@ -54,6 +54,8 @@ function FeedCtrl($scope, $routeParams, $location, feeds, pageSwitcher, $log, $w
 
 function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
 {
+    $scope.downloading = false;
+
     $scope.playItem = function(id) {
         feedItems.get(id, function(feedItem) {
             $rootScope.$broadcast('playItem', feedItem);
@@ -75,11 +77,23 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
     };
 
     $scope.downloadFile = function(id) {
+        $scope.downloading = true;
+        var item = this.item;
+        hideItemOptions(item);
+
         feedItems.get(id, function(feedItem) {
-            downloader.downloadFiles([feedItem]);
+            var promise = downloader.downloadFile(feedItem);
+            promise.then(function() {
+                $scope.downloading = false;
+                item.audio = true;
+            });
         });
     };
 
+    function hideItemOptions(scopeItem)
+    {
+        scopeItem.showOptions = false;
+    }
 
     $scope.reDownloadFile = function(id) {
         feedItems.get(id, function(feedItem) {

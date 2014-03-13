@@ -175,7 +175,7 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
     }]);
 
 angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities', 'podcasts.models'])
-    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', 'feedItems', '$log', function(db, url, $http, settings, $rootScope, feedItems, $log) {
+    .service('downloader', ['db', 'url', '$http', 'settings', '$rootScope', 'feedItems', '$log', '$q', function(db, url, $http, settings, $rootScope, feedItems, $log, $q) {
         return {
             allowedToDownload: function(callback) {
                 callback(true);
@@ -245,6 +245,36 @@ angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database',
                             $log.warn('Could not download file');
                         })
                 );
+            },
+            downloadFile: function(item)
+            {
+                var downloader = this,
+                    deferred = $q.defer();
+
+                $log.log('downloading File for: ' + item.title);
+
+                $rootScope.$apply(
+                    $http.get(item.audioUrl, {'responseType': 'blob'})
+                        .success(function(data) {
+                            $log.log('downloaded audio file for saving');
+
+                            item.audio = data;
+                            item.duration = downloader.getAudioLength(data);
+
+                            feedItems.save(item)
+                                .then(function() {
+                                    deferred.resolve();
+
+                                    $rootScope.$broadcast('queueListRefresh');
+                                });
+                        })
+                        .error(function() {
+                            deferred.reject();
+                            $log.warn('Could not download file');
+                        })
+                );
+
+                return deferred.promise;
             },
             getAudioLength: function(audio) {
                 var tmpAudio = new Audio();

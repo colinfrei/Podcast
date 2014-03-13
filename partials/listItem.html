@@ -1,6 +1,9 @@
 <div class="listItem">
     <div class="playButton" ng-click="playItem(item.id)">
-        <span><i ng-class="{hasAudio: item.audio}" class="fa fa-play"></i></span>
+        <span>
+            <i ng-hide="downloading" ng-class="{hasAudio: item.audio}" class="fa fa-play play-button"></i>
+            <i ng-show="downloading" class="download-in-progress fa fa-download"></i>
+        </span>
     </div>
     <div class="feedItemContent" ng-click="showItemOptions()">
         <span class="feedItemTitle">{{ item.title }}</span>

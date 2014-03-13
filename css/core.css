@@ -178,6 +178,36 @@ div.progressBarCurrent {
     line-height: 40px;
     float: right;
 }
+.download-in-progress {
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    vertical-align: top;
+    color: #32cd32;
+    height: 0;
+    top: 10px;
+    animation-duration: 2s;
+    animation-name: animateDownload;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+@keyframes animateDownload {
+    from {
+        height: 0;
+    }
+
+    to {
+        height: 19px;
+    }
+}
+
+div {
+    animation-duration: 0.1s;
+    animation-name: changewidth;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
 
 #queueList, #scroller, #feedList {
     height: 100%;
