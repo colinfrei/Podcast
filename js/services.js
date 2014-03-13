@@ -311,10 +311,31 @@ angular.module('podcasts.updater', ['podcasts.settings', 'podcasts.alarmManager'
 ;
 
 angular.module('podcasts.settings', ['podcasts.database'])
+    .factory('serverHttpInterceptor', ['$q', 'settings', function($q, settings) {
+        var proxyUrl;
+
+        settings.get('proxyUrl').then(function(setting) {
+            proxyUrl = setting;
+        });
+
+        return {
+            'request': function(config) {
+                if (config.url.substring(0, 4) === 'http' && proxyUrl.value) {
+                    //TODO: could add some sort of version check and throw an error if
+                    config.url = proxyUrl.value + '/forward?url=' + encodeURIComponent(config.url);
+                }
+
+                return config || $q.when(config);
+            }
+        };
+    }])
+    .config(['$httpProvider', function($httpProvider) {
+        $httpProvider.interceptors.push('serverHttpInterceptor');
+    }])
     .run(['settings', function(settings) {
         settings.init();
     }])
-    .service('settings', ['db', function(db) {
+    .service('settings', ['db', '$q', function(db, $q) {
         var settings = {},
             initialized = false,
             waiting = [];
@@ -344,36 +365,44 @@ angular.module('podcasts.settings', ['podcasts.database'])
                 } else {
                     //TODO: name changed, go through all settings and find the setting by id, and adjust it
                 }
+
+                db.put("setting", setting);
             } else {
-                setting = {'name': name, 'value': value};
-                settings[name] = setting;
+                _get(name).then(function(existing) {
+                    if (existing) {
+                        _set(existing.name, value, existing.id);
+                    } else {
+                        setting = {'name': name, 'value': value};
+                        db.put("setting", setting);
+                    }
+                });
                 //TODO: get id after inserting into DB
             }
-
-            db.put("setting", setting);
         }
 
-        function _get(name, onSuccess, onFailure) {
+        function _get(name) {
+            var deferred = $q.defer();
+
             if (!initialized) {
                 waiting.push(function() {
-                    _get(name, onSuccess, onFailure);
+                    _get(name).then(function(response) {
+                        deferred.resolve(response);
+                    });
                 });
-
-                return;
             }
 
             if (!angular.isUndefined(settings[name])) {
-                onSuccess(settings[name]);
+                deferred.resolve(settings[name]);
             } else {
                 db.get("setting", IDBKeyRange.only(name), "ixName")
                     .then(function(results) {
-                        onSuccess(results[0]);
+                        deferred.resolve(results[0]);
                     }, function() {
-                        if (typeof onFailure === 'function') {
-                            onFailure();
-                        }
+                        deferred.reject();
                     });
             }
+
+            return deferred.promise;
         }
 
         function _setAllValuesInScope(scope) {

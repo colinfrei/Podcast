@@ -76,7 +76,7 @@ angular.module('podcasts.alarmManager', ['podcasts.settings', 'podcasts.download
 
         function setAlarm()
         {
-            settings.get('refreshInterval', function(value) {
+            settings.get('refreshInterval').then(function(value) {
                 if (value.value > 0) {
                     var refreshInterval = value.value;
 

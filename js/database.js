@@ -62,7 +62,6 @@ angular.module('podcasts.database', [])
 
                                 cursor.continue();
                             } else {
-
                                 $rootScope.$apply(deferred.resolve(results));
                             }
                         };

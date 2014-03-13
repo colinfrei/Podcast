@@ -233,8 +233,22 @@ function ImportCtrl($scope, pageSwitcher, google)
 
 
 
-function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend, $log, $window)
+function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend, $log, $window, settings)
 {
+    $scope.proxyUrl = '';
+    settings.get('proxyUrl').then(function(value) {
+        if (value) {
+            $scope.proxyUrl = value.value;
+        }
+    });
+
+    $scope.setProxyUrl = function() {
+        settings.set(
+            'proxyUrl',
+            $scope.proxyUrl
+        );
+    };
+
     $scope.downloadFiles = function() {
         downloader.downloadAll();
     };
@@ -247,7 +261,7 @@ function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBa
         updateFeedsAlarmManager.setAlarm();
     };
 
-    $scope.opmlUrl = 'https://raw.github.com/colinfrei/Podcast/master/podcasts.xml';
+    $scope.opmlUrl = 'https://raw.github.com/colinfrei/Podcast/master/podcasts.xml'; //TODO: change
     $scope.importOpmlFromUrl = function() {
         var xmlPromise = downloaderBackend.downloadXml($scope.opmlUrl);
 
