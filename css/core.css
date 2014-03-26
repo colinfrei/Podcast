@@ -350,3 +350,7 @@ button {
 .opml_url_input {
     width: 90%;
 }
+
+.proxy_url_input {
+    width: calc(100% - 80px);
+}

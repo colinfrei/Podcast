@@ -1,7 +1,10 @@
-<label for="proxyUrl">Proxy Url (<a href="#">More Info</a>)</label>
-<!-- TODO: link to github wiki page explaining it -->
-<input id="proxyUrl" type="text" ng-model="proxyUrl" class="opml_url_input" />
-<button ng-click="setProxyUrl()">Save</button>
+<div ng-if="isWebApp()">
+    <!-- TODO: link to github wiki page explaining it -->
+    <label for="proxyUrl">Proxy Url (<a href="#">More Info</a>)</label>
+
+    <input id="proxyUrl" type="text" ng-model="proxyUrl" class="proxy_url_input" ng-required="isWebApp()" />
+    <button ng-click="setProxyUrl(proxyUrl)">Save</button>
+</div>
 
 <button ng-click="downloadFiles()">Download Files</button>
 <button ng-click="setAlarmTmp()">Set Alarm in 10 Seconds</button>

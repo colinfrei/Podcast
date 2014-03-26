@@ -235,18 +235,37 @@ function ImportCtrl($scope, pageSwitcher, google)
 
 function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend, $log, $window, settings)
 {
-    $scope.proxyUrl = '';
     settings.get('proxyUrl').then(function(value) {
         if (value) {
             $scope.proxyUrl = value.value;
         }
     });
 
-    $scope.setProxyUrl = function() {
+    $scope.isWebApp = function() {
+        var app = $window.navigator.mozApps.getSelf();
+        if (app.type == 'privileged') {
+            return false;
+        }
+
+        return true;
+    };
+
+    $scope.setProxyUrl = function(proxyUrl) {
+        if (!proxyUrl) {
+            var app = $window.navigator.mozApps.getSelf();
+            if (!app.type || app.type == 'web') {
+                alert('Proxy url required for web app. See info URL');
+
+                return;
+            }
+        }
+
         settings.set(
             'proxyUrl',
-            $scope.proxyUrl
+            proxyUrl
         );
+
+        $scope.proxyUrl = proxyUrl;
     };
 
     $scope.downloadFiles = function() {

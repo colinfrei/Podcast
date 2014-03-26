@@ -10,7 +10,7 @@
     "name": "Colin Frei",
     "url": "http://colinfrei.com"
   },
-  "type": "privileged",
+  "type": "web",
   "permissions": {
     "storage": {
       "description": "Allow Podcast to store podcast information for offline use"
