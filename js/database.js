@@ -13,6 +13,7 @@ angular.module('podcasts.database', [])
             dbBackend.createObjStore("setting", "id", true);
             dbBackend.createIndex("setting", "ixName", "name", true);
             dbBackend.put("setting", {'name': "refreshInterval", 'value': "0"});
+            dbBackend.put("setting", {'name': "proxyUrl", 'value': "http://podcast.colinfrei.com"});
         });
 
         //Create or Open the local IndexedDB database via ixDbEz
