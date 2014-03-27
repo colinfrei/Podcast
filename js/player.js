@@ -107,7 +107,7 @@ angular.module('podcasts.player', [])
                     var seconds, minutes, hours;
                     seconds = Math.floor(time);
 
-                    if (seconds > 60 || (withSeconds && seconds < 120)) {
+                    if (seconds >= 60 || (withSeconds && seconds < 120)) {
                         minutes = Math.floor(seconds/60);
 
                         seconds = seconds % 60;
@@ -115,7 +115,7 @@ angular.module('podcasts.player', [])
                             seconds = '0' + seconds;
                         }
                     }
-                    if (minutes > 60) {
+                    if (minutes >= 60) {
                         hours = Math.floor(minutes/60);
 
                         minutes = minutes % 60;
