@@ -172,6 +172,38 @@ angular.module('podcasts.services', ['podcasts.utilities', 'podcasts.queueList',
             downloadXml: downloadXml,
             downloadChunkedFile: downloadChunkedFile
         };
+    }])
+    .service('cleanup', ['db', function(db) {
+        var _doCleanup = function() {
+            db.get("feedItem")
+                .then(function(feedItems) {
+                    angular.forEach(feedItems, function(feedItem) {
+                        if (_shouldBeDeleted(feedItem)) {
+                            db.delete("feedItem", feedItem.id);
+                        }
+                    })
+                });
+        };
+
+        var _shouldBeDeleted = function(feedItem) {
+            var cutoffDays = 14;
+            var cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - cutoffDays);
+
+            if (feedItem.queued = 0) {
+                return false;
+            }
+
+            if (feedItem.date > cutoffDate) {
+                return false;
+            }
+
+            return true;
+        };
+
+        return {
+            doCleanup: _doCleanup
+        };
     }]);
 
 angular.module('podcasts.downloader', ['podcasts.settings', 'podcasts.database', 'podcasts.utilities', 'podcasts.models'])

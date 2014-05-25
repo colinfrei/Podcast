@@ -233,7 +233,7 @@ function ImportCtrl($scope, pageSwitcher, google)
 
 
 
-function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend, $log, $window, settings)
+function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBackend, $log, $window, settings, cleanup)
 {
     settings.get('proxyUrl').then(function(value) {
         if (value) {
@@ -287,5 +287,9 @@ function DevCtrl($scope, downloader, updateFeedsAlarmManager, opml, downloaderBa
         xmlPromise.then(function(xml) {
             opml.import(xml);
         });
+    };
+
+    $scope.deleteOldQueueItems = function() {
+        cleanup.doCleanup();
     };
 }
