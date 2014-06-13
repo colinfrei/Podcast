@@ -111,7 +111,7 @@ function ListItemCtrl($scope, $rootScope, feedItems, downloader, pageChanger)
     };
 }
 
-function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queueList, $q) {
+function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queueList, cleanup, $q) {
     $scope.queue = queueList.getQueueList();
 
     $scope.downloadItems = function() {
@@ -122,6 +122,7 @@ function QueueListCtrl($scope, $rootScope, pageSwitcher, feedItems, feeds, queue
                 $rootScope.$broadcast('queueListRefresh');
 
                 deferred.resolve();
+                cleanup.doCleanup();
             });
 
         return deferred.promise;
